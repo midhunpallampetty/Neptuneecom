@@ -1,0 +1,141 @@
+
+<!-- userLogin.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email/Password Login</title>
+	<link rel="stylesheet" href="/css/loginStyle.css">
+</head>
+<body>
+    <h1>Email/Password Login</h1>
+	<div class="row">
+
+	
+        <form action="/userLogin" method="post" class="form-group" onsubmit="return validateForm()">
+            <input type="email" name="email" id="email" placeholder="Email" class="form__input" required>
+            <span id="emailError" class="error"></span>
+            <input type="password" name="password" id="password" placeholder="Password" class="form__input" required>
+            <span id="passwordError" class="error"></span>
+            <button type="submit" class="btn">Login</button>
+        </form>
+	<div class="row">
+		<p>Don't have an account? <a href="/userSignup">Register Here</a></p>
+	</div>
+	<!-- <div class="row">
+		<p>OTP Based Login? <a href="/user/userLoginOTP">Click Here</a></p>
+	</div> -->
+	<div class="row">
+		<p>Admin Login? <a href="/adminLogin">Click Here</a></p>
+	</div>
+ 
+</div>
+</body>
+<style>
+	/* Apply styles to the body and container */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    text-align: center;
+    padding: 20px;
+}
+
+.row {
+    margin: 10px;
+}
+
+/* Style the header */
+h1 {
+    color: #333;
+}
+
+/* Style the form container */
+.form-group {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+	
+    margin: 0 auto;
+}
+
+/* Style the form input fields and button */
+.form__input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+p{
+	color: white;
+	font-weight: 600;
+}
+h1{
+	color: white;
+	font-weight: 700;
+}
+
+.btn {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #1e87dc;
+}
+
+/* Style the registration and login links */
+p {
+    margin: 10px 0;
+}
+
+a {
+    text-decoration: none;
+    color: #e0c40c;
+}
+
+/* Style the links on hover */
+a:hover {
+    text-decoration: underline;
+}
+.error{
+    color: red;
+    font-weight: 500;
+}
+</style>
+<script>
+    function validateForm() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        // Email format validation
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!email.match(emailPattern)) {
+            document.getElementById("emailError").innerText = "Invalid email format";
+            return false;
+        } else {
+            document.getElementById("emailError").innerText = "";
+        }
+
+        // Password strength validation (at least one capital letter, one special character, and one digit)
+        const passwordPattern = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$/;
+        if (!password.match(passwordPattern)) {
+            document.getElementById("passwordError").innerText = "Password must contain one capital letter, one special character, one digit, and be at least 8 characters long";
+            return false;
+        } else {
+            document.getElementById("passwordError").innerText = "";
+        }
+
+        return true;
+    }
+</script>
+</html>
+

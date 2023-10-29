@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+    <link rel="icon" href="https://imgtr.ee/images/2023/10/23/c24e4a9284647ba00f11b5b54c1da1ce.png" type="image/x-icon">
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        form input[type="tel"],
+        form input[type="text"],
+        form input[type="email"],
+        form input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        form button[type="submit"] {
+            width: 100%;
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        form button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Registration</h1>
+    <form action="/send-otp" method="post" class="form-group">
+        <input type="tel" name="phone" placeholder="Phone Number" class="form__input" required>
+
+        <button type="submit" class="btn">Send OTP</button>
+    </form>
+
+   
+    <form action="/verify-otp" method="post" class="form-group">
+       
+        <input type="text" name="otp" placeholder="OTP" class="form__input" required>
+        <button type="submit" class="btn">Verify OTP</button>
+    </form>
+
+   
+</body>
+</html>
+
+
+
+
+
+<!-- userLogin.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email/Password Login</title>
+	<link rel="stylesheet" href="/css/loginStyle.css">
+</head>
+<body>
+   
+	<div class="row">
+
+        
+ 
+	<div class="row">
+		<p>Back To Login <a href="/userLogin">Login</a></p>
+	</div>
+	<!-- <div class="row">
+		<p>OTP Based Login? <a href="/user/userLoginOTP">Click Here</a></p>
+	</div> -->
+	
+ 
+</div>
+</body>
+<style>
+	/* Apply styles to the body and container */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    text-align: center;
+    padding: 20px;
+}
+
+.row {
+    margin: 10px;
+}
+
+/* Style the header */
+h1 {
+    color: #333;
+}
+
+/* Style the form container */
+.form-group {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+	
+    margin: 0 auto;
+}
+
+/* Style the form input fields and button */
+.form__input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+p{
+	color: white;
+	font-weight: 600;
+}
+h1{
+	color: white;
+	font-weight: 700;
+}
+
+.btn {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #1e87dc;
+}
+
+/* Style the registration and login links */
+p {
+    margin: 10px 0;
+}
+
+a {
+    text-decoration: none;
+    color: #e0c40c;
+}
+
+/* Style the links on hover */
+a:hover {
+    text-decoration: underline;
+}
+
+</style>
+
+</html>
+

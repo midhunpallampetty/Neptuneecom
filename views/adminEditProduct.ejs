@@ -1,0 +1,90 @@
+<!-- adminAddProduct.ejs -->
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            text-align: left;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        input[type="file"] {
+            width: 100%;
+        }
+
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .backbtn{
+            background-color:transparent;
+            text-decoration: none;
+            color: rgb(0, 0, 0);
+            padding: 10px 10px 10px 10px;
+            text-align: center;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <a class="backbtn" href="/adminDash">Back</a>
+    <h1>Edit Product</h1>
+    <form method="POST" action="/admin/products" enctype="multipart/form-data">
+        <label for="name">Product Name:</label>
+        <input type="text" id="name" name="name"  required>
+        
+        <label for="description">Product Description:</label>
+        <textarea id="description" value="Hai" name="description" required></textarea>
+        
+        <label for="price">Product Price:</label>
+        <input type="number" id="price" name="price" required>
+        
+        <label for="image">Product Image:</label>
+        <input type="file" id="image" name="image" accept="image/*" required>
+        
+        <input type="submit" value="Edit Product">
+    </form>
+
+    <script>
+        // You can add JavaScript for further interactivity here, such as form validation or handling form submission.
+        // For example, you can use JavaScript to validate that the required fields are not empty and the price is a valid number.
+    </script>
+</body>
+</html>

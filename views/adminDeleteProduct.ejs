@@ -1,0 +1,17 @@
+<!-- adminDeleteProduct.ejs -->
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Your HTML head content -->
+</head>
+<body>
+    <h1>Delete Product</h1>
+    <p>Are you sure you want to delete the product: <%= product.name %>?</p>
+    
+    <form method="POST" action="/admin/products/<%= product._id %>/delete">
+        <input type="submit" value="Delete">
+    </form>
+
+    <a href="/admin/products">Cancel</a>
+</body>
+</html>

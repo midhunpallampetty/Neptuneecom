@@ -1,0 +1,260 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Evara Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/theme/favicon.svg">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+
+    <!-- Template CSS -->
+    <link href="/admin/css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="index.html" class="brand-wrap">
+                <img src="https://imgtr.ee/images/2023/10/23/c24e4a9284647ba00f11b5b54c1da1ce.png" class="logo" alt="Evara Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item">
+                    <a class="menu-link" href="/adminDash"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="/admin/adminAddProduct"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="page-products-list.html">Product List</a>
+                        <a href="page-products-grid.html">Product grid</a>
+                        <a href="page-products-grid-2.html">Product grid 2</a>
+                        <a href="page-categories.html">Categories</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="page-orders-1.html"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="page-orders-1.html">Order list 1</a>
+                        <a href="page-orders-2.html">Order list 2</a>
+                        <a href="page-orders-detail.html">Order detail</a>
+                        <a href="page-orders-tracking.html">Order tracking</a>
+<a href="page-invoice.html">Invoice</a>
+                    </div>
+                </li>
+            
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="page-form-product-1.html"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Add product</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="page-form-product-1.html">Add product 1</a>
+                        <a href="page-form-product-2.html">Add product 2</a>
+                        <a href="page-form-product-3.html">Add product 3</a>
+                        <a href="page-form-product-4.html">Add product 4</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="page-transactions-1.html"> <i class="icon material-icons md-monetization_on"></i>
+                        <span class="text">Transactions</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="page-transactions-1.html">Transaction 1</a>
+                        <a href="page-transactions-2.html">Transaction 2</a>
+                        <a href="page-transactions-details.html">Transaction Details</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-person"></i>
+                        <span class="text">Account</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="page-account-login.html">User login</a>
+                        <a href="page-account-register.html">User registration</a>
+                        <a href="page-error-404.html">Error 404</a>
+                    </div>
+                </li>
+               
+             
+               
+            </ul>
+            <hr>
+          
+            <br>
+            <br>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+               
+            </div>
+        
+        </header>
+        <section class="content-main">
+           
+            <div class="card mb-4">
+                <header class="card-header">
+                    <div class="row gx-3">
+                        <div class="col-lg-4 col-md-6 me-auto">
+                            <input type="text" placeholder="Search..." class="form-control">
+                        </div>
+                   
+                      
+        </div>
+                </header> <!-- card-header end// -->
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Action</th>
+                                   
+                                    </tr>
+                            </thead>
+                            <tbody>
+                              <% users.forEach(user => { %>
+                                <tr>
+                                    <td width="60%">
+                                        <a href="#" class="itemside">
+                                            <div class="left">
+                                                <img src="https://cdn-icons-png.flaticon.com/512/5951/5951752.png" class="img-sm img-avatar" alt="Userpic">
+                                            </div>
+                                            <div class="info pl-3">
+                                                <h6 class="mb-0 title"><%= user.username %></h6>
+                                                <small class="text-muted">Seller ID: #439</small>
+                                            </div>
+                                        </a>
+                                    </td>
+                                    <td><%= user.email %> </td>
+                                    
+                                    <!-- <td class="text-end">
+                                        <a href="#" class="btn btn-sm btn-brand rounded font-sm mt-15">View details</a>
+                                    </td> -->
+                                    <td class="text-end">
+                                      <td>
+                                        <button class="btn btn-block
+                                            <% if (user.isBlocked) { %>
+                                                btn-danger unblock
+                                            <% } else { %>
+                                                btn-success block
+                                            <% } %>" title="<%= user.isBlocked ? 'Unblock' : 'Block' %>" data-userid="<%= user._id %>">
+                                            <%= user.isBlocked ? 'Unblock' : 'Block' %>
+                                        </button>
+                                    </td>
+                                    
+                                    
+                                    
+                                  </td>
+                                  
+                                </tr>
+                             
+                             
+                          
+                              
+                                <% }); %>
+                            
+                              
+                            </tbody>
+                        </table> <!-- table-responsive.// -->
+                    </div>
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+        
+        </section> <!-- content-main end// -->
+<style>
+  .btn{
+    width: 100px;
+    height: 40px;
+  }
+th{
+  justify-content: space-between;
+}
+  th:nth-child(1) {
+        width: 33%; /* Adjust the width as needed */
+    }
+
+    th:nth-child(2) {
+        width: 33%; /* Adjust the width as needed */
+    }
+
+    th:nth-child(3) {
+        width: 33%; /* Adjust the width as needed */
+    }
+
+
+</style>
+
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+              
+              
+            </div>
+        </footer>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+      $(document).ready(function () {
+          // Function to handle the block/unblock action
+          function handleBlockUnblock(userId, isBlocked) {
+              // Send a POST request to your server to block or unblock the user
+              $.post(`/blockUser/${userId}`, function (data) {
+ 
+                  if (data.message === `User ${isBlocked ? 'blocked' : 'unblocked'} successfully.`) {
+                      // Update the UI to reflect the change
+                      refreshUserTable();
+                  } else {
+                      alert('An error occurred.');
+                  }
+              });
+          }
+  
+          // Handle the block/unblock button click
+          $(document).on('click', '.block, .unblock', function () {
+              const userId = $(this).data('userid');
+              const isBlocked = $(this).hasClass('block'); // Determine if the user should be blocked or unblocked
+  
+              // Confirm the action with the user
+              const confirmMessage = isBlocked ? 'Block this user?' : 'Unblock this user?';
+              if (confirm(confirmMessage)) {
+                  handleBlockUnblock(userId, isBlocked);
+              }
+          });
+  
+          // Function to refresh the user table (replace with your actual logic)
+          function refreshUserTable() {
+              // You can use AJAX or any other method to reload or update the user table
+              // For example, you can fetch the latest user data and replace the existing table content
+              // Example AJAX request:
+              $.get('/fetchUserTable', function (newUserTableHTML) {
+                  // Replace the existing user table with the updated HTML
+                  $('.table-responsive').html(newUserTableHTML);
+              });
+          }
+      });
+  </script>
+  
+</body>
+
+</html>

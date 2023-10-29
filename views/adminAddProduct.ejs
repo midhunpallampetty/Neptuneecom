@@ -1,0 +1,185 @@
+<!-- adminAddProduct.ejs -->
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            max-width: 500px;
+            height: 500px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            text-align: left;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        input[type="file"] {
+            width: 100%;
+        }
+
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .backbtn{
+            background-color:transparent;
+            text-decoration: none;
+            color: rgb(0, 0, 0);
+            padding: 10px 10px 10px 10px;
+            text-align: center;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <a class="backbtn" href="/adminDash">Back</a>
+    <h1>Add Product</h1>
+    <form method="POST" action="/admin/products" enctype="multipart/form-data">
+        <label for="name">Product Name:</label>
+        <input type="text" id="name" name="name" required>
+        
+        <label for="description">Product Description:</label>
+        <textarea id="description" name="description" required></textarea>
+        
+        <label for="price">Product Price:</label>
+        <input type="number" id="price" name="price" required>
+ 
+ 
+  <label for="category">Product Category:</label>
+  
+<select id="category" name="category" required class="styled-select">
+  <option value="" disabled selected>Select a category</option>
+  <% categories.forEach(category => { %>
+    <% if (category.listed) { %>
+      <option value="<%= category._id %>"><%= category.name %></option>
+    <% } %>
+  <% }); %>
+</select>
+<!-- ... -->
+
+
+
+
+  
+        <label for="image">Product Image:</label>
+        <div class="custom-file-upload">
+            <label for="image" class="custom-file-label">
+              <img src="add-icon.png" alt="Add Icon" class="add-icon"> Choose an Image
+            </label>
+            <input type="file" id="image" name="image" accept="image/*" required>
+          </div>
+          
+          <input class="add-btn" type="submit" value="Add Product">
+       
+    </form>
+    
+
+    <script>
+      const fileInput = document.getElementById('image');
+const customLabel = document.querySelector('.custom-file-label');
+
+fileInput.addEventListener('change', () => {
+  customLabel.textContent = fileInput.files[0] ? fileInput.files[0].name : 'Choose an Image';
+});
+
+      // You can add JavaScript for further interactivity here, such as form validation or handling form submission.
+        // For example, you can use JavaScript to validate that the required fields are not empty and the price is a valid number.
+    </script>
+</body>
+<style>
+    /* Add this to your CSS file or style block in your HTML */
+.styled-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f8f8f8;
+  color: #333;
+  font-size: 16px;
+}
+
+.styled-select option {
+  background-color: #fff;
+  color: #333;
+  font-size: 16px;
+}
+
+/* Style the dropdown arrow (you may need to adjust this based on your design) */
+.styled-select::after {
+  content: '▼';
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 16px;
+  pointer-events: none;
+}
+
+/* Apply hover effect when selecting an option */
+.styled-select:hover {
+  border-color: #666;
+}
+/* Style the custom file input container */
+.custom-file-upload {
+  position: relative;
+  display: inline-block;
+}
+
+/* Style the label */
+.custom-file-label {
+  background-color: #007BFF; /* Background color for the label */
+  color: #fff; /* Text color for the label */
+  padding: 8px 12px; /* Spacing around the label */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Show a pointer cursor on hover */
+  display: flex; /* Display icon and text in a row */
+  align-items: center; /* Center vertically */
+}
+
+/* Style the add icon */
+.add-icon {
+  margin-right: 10px; /* Spacing between icon and text */
+  width: 20px; /* Icon width */
+  height: 20px; /* Icon height */
+}
+
+/* Hide the file input */
+.custom-file-upload input {
+  display: none;
+}
+
+</style>
+</html>
