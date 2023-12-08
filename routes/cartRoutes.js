@@ -1,20 +1,21 @@
 // routes/cartRoutes.js
 const express = require('express');
+const userAuth= require('../middleware/userAuth');
 const router = express.Router();
 const cartController = require('../controllers/cartController');
 
 // Add a product to the cart
-router.post('/add', cartController.addToCart);
+router.post('/add', userAuth.isUserLogged,cartController.addToCart);
 
-  
+
 // Increment the quantity of a product in the cart
-router.put('/increment/:productId', cartController.incrementCartItem);
+router.get('/increment', userAuth.isUserLogged,cartController.incrementCartItem);
 
 // Remove a product from the cart
-router.delete('/remove/:productId', cartController.removeItemFromCart);
+router.get('/remove', userAuth.isUserLogged,cartController.removeItemFromCart);
 
 // Get the user's cart
-router.get('/', cartController.getUserCart);
+router.get('/', userAuth.isUserLogged,cartController.getUserCart);
 
 module.exports = router;
 

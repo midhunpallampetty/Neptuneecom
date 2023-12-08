@@ -1,184 +1,439 @@
 <!DOCTYPE html>
 <html lang="en">
-    <link rel="icon" href="https://imgtr.ee/images/2023/10/23/c24e4a9284647ba00f11b5b54c1da1ce.png" type="image/x-icon">
-<head>
+  <link
+    rel="icon"
+    href="/imgs/logo.png"
+    type="image/x-icon"
+  />
+
+  <!-- Add these lines to include SweetAlert2 -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.7/dist/sweetalert2.min.css"
+  />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.7/dist/sweetalert2.all.min.js"></script>
+
+  <head>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
 
-        h1 {
-            text-align: center;
-            color: #333;
-        }
+      h1 {
+        text-align: center;
+        color: #333;
+      }
 
-        form {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            max-width: 400px;
-            width: 100%;
-        }
+      form {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        max-width: 400px;
+        width: 100%;
+      }
 
-        form input[type="tel"],
-        form input[type="text"],
-        form input[type="email"],
-        form input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
+      form input[type="tel"],
+      form input[type="text"],
+      form input[type="email"],
+      form input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
 
-        form button[type="submit"] {
-            width: 100%;
-            background-color: #007BFF;
-            color: #fff;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+      form button[type="submit"] {
+        width: 100%;
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
 
-        form button[type="submit"]:hover {
-            background-color: #0056b3;
-        }
+      form button[type="submit"]:hover {
+        background-color: #0056b3;
+      }
     </style>
-</head>
-<body>
-    <h1>User Registration</h1>
-    <form action="/send-otp" method="post" class="form-group">
-        <input type="tel" name="phone" placeholder="Phone Number" class="form__input" required>
+  </head>
+  <body>
+    <form action="#">
+      <h1 style="color: rgb(0, 0, 0)">User Registration</h1>
+      <div id="otpNum">
+        <input
+          type="tel"
+          id="phoneNumber"
+          name="phone"
+          placeholder="Phone Number"
+          value=""
+          class="form__input"
+        />
+        <span id="phoneNumberError" style="color: red"></span>
+        <button type="button" onclick="sendNum()" class="btn">Send OTP</button>
+      </div>
+      <!-- <button type="button" id="resendButton" style="background-color: #f2f2f2;border: black;" onclick="resendOtp()" class="btn">
+          
+      </button> -->
+      <div style="display: none" id="remainingDiv">
+        
+        <button id="resendBtn" type="button" onclick="sendNum()" class="btn">
+          Resend OTP
+        </button>
+        
+      <button  onmousemove="checkMouseMove()" style="background-color: #ffffff; color: #ffffff; border: transparent;">
+        &nbsp;.
+      </button>
+      <script>
+        let lastMoveTime = 0;
+const cooldownDuration = 60000; 
 
-        <button type="submit" class="btn">Send OTP</button>
+function checkMouseMove() {
+  const currentTime = new Date().getTime();
+
+ 
+  if (currentTime - lastMoveTime >= cooldownDuration) {
+    resendOtp();
+    lastMoveTime = currentTime; 
+  }
+}
+      </script>
+          
+        
+        
+
+        <p id="countdownTimer" style="color: red"></p>
+
+        <div id="successMessage"></div>
+
+        <input
+          type="text"
+          name="otp"
+          placeholder="OTP"
+          id="otp"
+          class="form__input"
+          value=""
+        />
+        <span id="otpError" style="color: red"></span>
+        <button type="button" onclick="verifyOtp()" class="btn">
+          Verify OTP
+        </button>
+      </div>
     </form>
+  </body>
+  <script>
+    async function verifyOtp() {
+      let otp = document.getElementById("otp").value;
+      if (!isNaN(otp)) {
+        if (otp.length === 6) {
+          let response = await fetch("/verify-otp", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ otp }),
+          });
+          if (response.status === 200) {
+            window.location.href = "/registration";
+          } else if (response.status === 201) {
+            document.getElementById("otpError").innerHTML =
+              "!! Incorrect OTP !!";
+          }
+        } else {
+          document.getElementById("otpError").innerHTML =
+            "!! OTP should contain 6 Numbers !!";
+        }
+      } else {
+        document.getElementById("otpError").innerHTML =
+          "!! Enter OTP Properly !!";
+      }
+    }
 
-   
-    <form action="/verify-otp" method="post" class="form-group">
-       
-        <input type="text" name="otp" placeholder="OTP" class="form__input" required>
-        <button type="submit" class="btn">Verify OTP</button>
-    </form>
+    function validateForm() {
+      // Reset previous error messages
+      clearErrorMessages();
 
-   
-</body>
+      const phoneNumberInput = document.getElementById("phoneNumber");
+      const otpInput = document.querySelector('input[name="otp"]');
+
+      let isValid = true;
+
+      // Phone number validation
+      const phoneNumber = phoneNumberInput.value.trim();
+      if (Number(phoneNumber) < 1) {
+        showError("phoneNumberError", "Phone number should not be all Zero's");
+        isValid = false;
+      } else {
+        if (phoneNumber.length < 9) {
+          showError(
+            "phoneNumberError",
+            "Phone number should be at least 10 digits."
+          );
+          isValid = false;
+        } else {
+          if (!/^\+?\d{10,}$/.test(phoneNumber)) {
+            showError(
+              "phoneNumberError",
+              "Enter a valid phone number, including an optional country code."
+            );
+            isValid = false;
+          } else {
+            return true;
+          }
+        }
+      }
+
+      return isValid; // Return false to prevent form submission if there are errors
+    }
+
+    function showError(fieldId, errorMessage) {
+      const errorSpan = document.getElementById(fieldId);
+      errorSpan.textContent = errorMessage;
+    }
+
+    function clearErrorMessages() {
+      const errorSpans = document.querySelectorAll(".error-message");
+      errorSpans.forEach((span) => (span.textContent = ""));
+    }
+    async function sendNewOtp() {
+      
+  clearInterval(countdown); // Clear previous countdown interval
+
+  let num = document.getElementById("phoneNumber").value;
+  let countdown = 60; // Set the countdown time in seconds
+
+  if (!isNaN(num)) {
+    // Replace the following code with your OTP generation logic
+    let newOtp = generateOtp();
+
+    // Replace the following code with your OTP sending logic
+    try {
+      const response = await fetch("/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ num, otp: newOtp }),
+      });
+
+      if (response.status === 200) {
+        // Display a success message
+        await Swal.fire(
+          "Success",
+          "New OTP has been sent successfully",
+          "success"
+        );
+alert('working')
+        // Start the countdown timer for the new OTP
+        startCountdown(countdown);
+      } else if (response.status === 400) {
+        // Handle errors if the new OTP couldn't be sent
+        await Swal.fire(
+          "Error!",
+          "New OTP could not be sent. Please try again.",
+          "error"
+        );
+      }
+    } catch (error) {
+      await Swal.fire(
+        "Error!",
+        "An error occurred while sending the new OTP. Please try again.",
+        "error"
+      );
+
+      console.error("Error sending new OTP:", error);
+      // Handle any other errors that may occur during OTP sending
+    }
+  } else {
+    // Display an error message for an invalid number
+    await Swal.fire("Error!", "Enter a valid number", "error");
+  }
+}
+
+
+    // Replace this with your OTP generation logic
+    function generateOtp() {
+      // Generate a random 6-digit OTP (You can customize the logic as per your requirements)
+      return Math.floor(100000 + Math.random() * 900000).toString();
+    }
+
+    let countdown; // A variable to store the countdown interval ID
+
+    let phoneNumber; // Declare a variable to store the phone number
+
+async function sendNum() {
+  // Get the phone number value
+  phoneNumber = document.getElementById("phoneNumber").value;
+
+  if (validateForm()) {
+    if (!isNaN(phoneNumber)) {
+      let response = await fetch("/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ num: phoneNumber }),
+      });
+
+      if (response.status === 200) {
+        await Swal.fire(
+          "Success",
+          "OTP has been sent successfully",
+          "success"
+        );
+        document.getElementById("otpNum").remove();
+        document.getElementById("remainingDiv").style.display = "block";
+        startOTPTimer(60);
+      }
+    } else {
+      await Swal.fire("Error!", "Enter a valid number", "error");
+    }
+  }
+}
+
+async function resendOtp() {
+  // Use the stored phone number value
+  if (!isNaN(phoneNumber)) {
+    let response = await fetch("/send-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ num: phoneNumber }),
+    });
+
+    if (response.status === 200) {
+      await Swal.fire(
+        "Success",
+        "OTP has been resent successfully",
+        "success"
+      );
+      startOTPTimer(60);
+    }
+  } else {
+    await Swal.fire("Error!", "Enter a valid number", "error");
+  }
+}
+
+    function startOTPTimer(duration) {
+      let timerElement = document.getElementById("countdownTimer"); // Change the ID to match the HTML
+      let timer = duration;
+      countdown = setInterval(function () {
+        if (timer === 0) {
+          // Timer has expired
+          timerElement.textContent = "OTP Expired";
+          clearInterval(countdown);
+        } else {
+          // Display the remaining time in seconds
+          timerElement.textContent = `OTP Expires in ${timer} seconds`;
+          timer--;
+        }
+      }, 1000); // Update the timer every second
+    }
+
+  
+
+  </script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </html>
-
-
-
-
 
 <!-- userLogin.ejs -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Email/Password Login</title>
-	<link rel="stylesheet" href="/css/loginStyle.css">
-</head>
-<body>
-   
-	<div class="row">
-
-        
- 
-	<div class="row">
-		<p>Back To Login <a href="/userLogin">Login</a></p>
-	</div>
-	<!-- <div class="row">
+    <link rel="stylesheet" href="/css/loginStyle.css" />
+  </head>
+  <body>
+    <div class="row">
+      <div class="row">
+        <p style="color: rgb(0, 0, 0)">
+          Back To Login <a style="color: red" href="/userLogin">Login</a>
+        </p>
+      </div>
+      <!-- <div class="row">
 		<p>OTP Based Login? <a href="/user/userLoginOTP">Click Here</a></p>
 	</div> -->
-	
- 
-</div>
-</body>
-<style>
-	/* Apply styles to the body and container */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    text-align: center;
-    padding: 20px;
-}
+    </div>
+  </body>
+  <style>
+    /* Apply styles to the body and container */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      text-align: center;
+      padding: 20px;
+    }
 
-.row {
-    margin: 10px;
-}
+    .row {
+      margin: 10px;
+    }
 
-/* Style the header */
-h1 {
-    color: #333;
-}
+    /* Style the header */
+    h1 {
+      color: #333;
+    }
 
-/* Style the form container */
-.form-group {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
-	
-    margin: 0 auto;
-}
+    /* Style the form container */
+    .form-group {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 300px;
 
-/* Style the form input fields and button */
-.form__input {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-p{
-	color: white;
-	font-weight: 600;
-}
-h1{
-	color: white;
-	font-weight: 700;
-}
+      margin: 0 auto;
+    }
 
-.btn {
-    background-color: #3498db;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
+    /* Style the form input fields and button */
+    .form__input {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    p {
+      color: white;
+      font-weight: 600;
+    }
+    h1 {
+      color: white;
+      font-weight: 700;
+    }
 
-.btn:hover {
-    background-color: #1e87dc;
-}
+    .btn {
+      background-color: #3498db;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
 
-/* Style the registration and login links */
-p {
-    margin: 10px 0;
-}
+    .btn:hover {
+      background-color: #1e87dc;
+    }
 
-a {
-    text-decoration: none;
-    color: #e0c40c;
-}
+    /* Style the registration and login links */
+    p {
+      margin: 10px 0;
+    }
 
-/* Style the links on hover */
-a:hover {
-    text-decoration: underline;
-}
+    a {
+      text-decoration: none;
+      color: #e0c40c;
+    }
 
-</style>
-
+    /* Style the links on hover */
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </html>
-

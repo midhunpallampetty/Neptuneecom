@@ -1,95 +1,100 @@
-// profileController.js
-const Profile = require('../models/profileModel');
+const express = require("express");
+const User = require("../models/userModel");
+const session = require("express-session");
+const profileController={
 
-// Create a new profile for the user
-const createProfile = async (req, res) => {
-  try {
-    const { userId } = req.body;
-    const profile = new Profile({ user: userId });
-    await profile.save();
-    res.status(201).json(profile);
-  } catch (error) {
-    res.status(500).json({ error: 'Unable to create a profile' });
-  }
-};
 
-// Get the user's profile
-
-// GET user profile
-const getProfile = async (req, res) => {
+viewProfile: async (req, res) => {
     try {
-      const userId = req.params.userId;
-      const user = await User.findById(userId).exec();
+      console.log("profile view");
+
+      const userId = req.session.userId;
+
+      // Check if the user is logged in (userId exists in the session)
+      if (!userId) {
+        res.status(404).render("404"); // Redirect to the 404 error page
+        return;
+      }
+
+      const user = await User.findById(userId);
+
+      // If the user is not found, display a 404 error page
       if (!user) {
-        return res.status(404).json({ error: 'User not found' });
+        res.status(404).render("404");
+        return;
       }
-      res.render('profile', { user });
-    } catch (error) {
-      res.status(500).json({ error: 'Unable to get the user profile' });
-    }
-  };
 
-// Add an address to the user's profile
-const addAddress = async (req, res) => {
+      res.render("profile", { user });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error"); // Handle other errors with a 500 error page
+    }
+  },
+
+  // Add new user details
+  addDetail: async (req, res) => {
     try {
-      const userId = req.params.userId;
-      const { address, city, state, postalCode } = req.body;
-      const profile = await Profile.findOne({ user: userId }).exec();
-      if (profile) {
-        profile.addresses.push({ address, city, state, postalCode });
-        await profile.save();
-        res.redirect(`/api/profiles/${userId}`);
-      } else {
-        res.status(404).json({ error: 'Profile not found' });
-      }
+      const { email, FullName, Phone, HouseName, Pincode } = req.body;
+      // Create a new detail and add it to the user's profile
+      const userId = req.session.userId;
+      console.log(req.body, FullName);
+      // Use await with findOneAndUpdate
+      await User.findByIdAndUpdate(userId, {
+        $set: {
+          email,
+          FullName,
+          Phone,
+          HouseName,
+          Pincode,
+        },
+      });
+
+      res.redirect("/profile");
     } catch (error) {
-      res.status(500).json({ error: 'Unable to add an address' });
+      // Handle any errors here
+      console.error(error);
+      res.status(500).send("Internal Server Error");
     }
-  }
+  },
 
-// Add an image to the user's profile
-const addImage = async (req, res) => {
-    try {
-      const userId = req.params.userId;
-      const { imageUrl } = req.body;
-      const profile = await Profile.findOne({ user: userId }).exec();
-      if (profile) {
-        profile.images.push(imageUrl);
-        await profile.save();
-        res.redirect(`/api/profiles/${userId}`);
-      } else {
-        res.status(404).json({ error: 'Profile not found' });
+  // Update user details
+  updateDetail: (req, res) => {
+    const username = req.user.username; // Assuming you have user authentication implemented
+    const { fieldToUpdate, newValue } = req.body;
+
+    // Implement the logic to update user details here
+    userModel.findOneAndUpdate(
+      { username, "details.fieldToUpdate": fieldToUpdate },
+      { $set: { "details.$.fieldToUpdate": newValue } },
+      (err, result) => {
+        if (err) {
+          console.error(err);
+          res.status(500).send("Error updating user details");
+        } else {
+          res.redirect("/profile");
+        }
       }
-    } catch (error) {
-      res.status(500).json({ error: 'Unable to add an image' });
-    }
-  }
+    );
+  },
 
-// Add a phone number to the user's profile
-const addPhoneNumber = async (req, res) => {
-  try {
-    const userId = req.params.userId;
-    const { phoneNumber } = req.body;
-    const profile = await Profile.findOne({ user: userId }).exec();
-    if (profile) {
-      profile.phoneNumbers.push(phoneNumber);
-      await profile.save();
-      res.json(profile);
-    } else {
-      res.status(404).json({ error: 'Profile not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ error: 'Unable to add a phone number' });
-  }
-};
+  // Delete user details
+  deleteDetail: (req, res) => {
+    const username = req.user.username; // Assuming you have user authentication implemented
+    const { fieldToDelete } = req.body;
 
-// Other profile-related controller functions
-
-module.exports = {
-  createProfile,
-  getProfile,
-  addAddress,
-  addImage,
-  addPhoneNumber,
-  // Export other profile-related controller functions
-};
+    // Implement the logic to delete user details here
+    userModel.findOneAndUpdate(
+      { username },
+      { $pull: { details: { fieldToDelete } } },
+      (err, result) => {
+        if (err) {
+          console.error(err);
+          res.status(500).send("Error deleting user details");
+        } else {
+          res.redirect("/profile");
+        }
+      }
+    );
+  },
+}
+module.exports=profileController;

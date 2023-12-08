@@ -5,6 +5,7 @@
 	<meta name="author" content="Yinka Enoch Adedokun">
 	<title>Login Page</title>
     <link rel="stylesheet" href="/css/loginStyle.css">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 	<!-- Main Content -->
@@ -23,18 +24,49 @@
 					</div>
 				<!-- ... (previous HTML code) ... -->
 <div class="row">
-	<form action="/admin/adminLogin" method="POST" class="form-group">
-	  <div class="row">
-		<input type="email" name="email" id="email" class="form__input" placeholder="Email">
-	  </div>
-	  <div class="row">
-		<input type="password" name="password" id="password" class="form__input" placeholder="Password">
-	  </div>
-	
-	  <div class="row">
-		<input type="submit" value="Submit" class="btn">
-	  </div>
+	<form action="/admin/adminLogin" method="POST" class="form-group" onsubmit="return validateForm()" novalidate>
+		<div class="row">
+			<input type="email" name="email" id="email" class="form__input" placeholder="Email" oninput="validateEmail()">
+			<span id="emailError" class="error-text"></span>
+		</div>
+		<div class="row">
+			<input type="password" name="password" id="password" class="form__input" placeholder="Password" oninput="validatePassword()">
+			<span id="passwordError" class="error-text"></span>
+		</div>
+		<div class="row">
+			<input type="submit" value="Submit" class="btn">
+		</div>
+		
+			<% if (message && message.length > 0) { %>
+			  <script>
+				var alertMessage = '<%= message[0] %>';
+				Swal.fire(alertMessage);;
+		  
+			  // Hide the alert after 5 seconds
+			  setTimeout(function() {
+				var alertElement = document.querySelector('.alert'); // Adjust the selector based on your HTML structure
+				if (alertElement) {
+				  alertElement.style.display = 'none';
+				}
+			  }, 5000);
+			</script>
+			<% } %>
+		
+		  
 	</form>
+	
+	
+	<style>
+		.alert {
+  transition: opacity 1s ease-in-out;
+}
+
+.alert-hidden {
+  opacity: 0;
+}
+
+	</style>
+	  
   </div>
   
  
@@ -56,6 +88,75 @@
 			</div>
 		</div>
 	</div>
+	<script>
+	function validateForm() {
+  // Reset previous error messages
+  document.getElementById('emailError').style.display = 'none';
+  document.getElementById('passwordError').style.display = 'none';
+
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+
+  const emailError = document.getElementById('emailError');
+  const passwordError = document.getElementById('passwordError');
+
+  let isValid = true;
+
+  // Email validation
+  const emailValue = emailInput.value.trim();
+  if (emailValue === '') {
+    emailError.textContent = 'Email is required.';
+    emailError.style.display = 'block';
+    isValid = false;
+  } else if (!isValidEmail(emailValue)) {
+    emailError.textContent = 'Invalid email format.';
+    emailError.style.display = 'block';
+    isValid = false;
+  }
+
+  // Password validation
+  const passwordValue = passwordInput.value.trim();
+  if (passwordValue === '') {
+    passwordError.textContent = 'Password is required.';
+    passwordError.style.display = 'block';
+    isValid = false;
+  } else if (!isValidPassword(passwordValue)) {
+    passwordError.textContent = 'Invalid password format.Password must be 6 digit long ,include one special char one number minimum';
+    passwordError.style.display = 'block';
+    isValid = false;
+  }
+
+  // Hide error messages after 5 seconds
+  setTimeout(() => {
+    emailError.style.display = 'none';
+    passwordError.style.display = 'none';
+  }, 5000);
+
+  return isValid; // Return false to prevent form submission if there are errors
+}
+
+function isValidEmail(email) {
+  // Simple email validation regex
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+function isValidPassword(password) {
+  // Password validation: At least one uppercase letter, one special character, one number, and minimum length of 6
+  const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{6,}$/;
+  return passwordRegex.test(password);
+}
+
+	  </script>
+	  
+		
+	  
 	<!-- Footer -->
+	<style>.error-text {
+		color: red;
+		font-size: 14px;
+		display: none; /* Initially hide error messages */
+	  }
+	  </style>
 	
 </body>

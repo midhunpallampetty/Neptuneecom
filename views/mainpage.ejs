@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 
@@ -13,9 +14,26 @@
     <meta property="og:image" content="">
     <!-- Favicon -->
    <!-- Font Awesome -->
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <link
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
 rel="stylesheet"
+/>
+<!-- Font Awesome -->
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+  rel="stylesheet"
+/>
+<!-- Google Fonts -->
+<link
+  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+  rel="stylesheet"
+/>
+<!-- MDB -->
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.css"
+  rel="stylesheet"
 />
 <!-- Google Fonts -->
 <link
@@ -27,10 +45,12 @@ rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.css"
 rel="stylesheet"
 />
-    <link rel="icon" href="https://imgtr.ee/images/2023/10/23/c24e4a9284647ba00f11b5b54c1da1ce.png" type="image/x-icon">
+    <link rel="icon" href="/imgs/logo.png" type="image/x-icon">
 
     <!-- Template CSS -->
     <link rel="stylesheet" href="css/main.css?v=3.4">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 <body>
@@ -108,79 +128,29 @@ rel="stylesheet"
             <div class="container">
                 <div class="header-wrap">
                     <div class="logo logo-width-1">
-                        <a href="index.html"><img src="https://imgtr.ee/images/2023/10/23/c24e4a9284647ba00f11b5b54c1da1ce.png" alt="logo"></a>
+                        <a href="index.html"><img src="/imgs/logo.png" alt="logo"></a>
+                        <span style="color: gainsboro;font-size: small;margin-left: 20px;">ver5.0 Stable</span>
                     </div>
                     <div class="header-right">
                         <div class="search-style-2">
                             
                               
-                            <form action="#">
-                                <select class="select-active">
-                                    <option>All Categories</option>
-                                    <option>Women's</option>
-                                    <option>Men's</option>
-                                    <option>Cellphones</option>
-                                    <option>Computer</option>
-                                    <option>Electronics</option>
-                                    <option> Accessories</option>
-                                    <option>Home & Garden</option>
-                                    <option>Luggage</option>
-                                    <option>Shoes</option>
-                                    <option>Mother & Kids</option>
-                                </select>
-                                <input type="text" placeholder="Search for items...">
-                            </form>
+                      
                         </div>
                         <div class="header-action-right">
                             <div class="header-action-2">
                                 <div class="header-action-icon-2">
-                                    <a href="shop-wishlist.html">
+                                    <a href="/wishlist">
                                         <img class="svgInject" alt="Evara" src="imgs/theme/icons/icon-heart.svg">
                                         <span class="pro-count blue">4</span>
                                     </a>
                                 </div>
                                 <div class="header-action-icon-2">
-                                    <a class="mini-cart-icon" href="shop-cart.html">
+                                    <a class="mini-cart-icon" href="/cart">
                                         <img alt="Evara" src="imgs/theme/icons/icon-cart.svg">
-                                        <span class="pro-count blue">2</span>
+                                        <!-- <span class="pro-count blue">2</span> -->
                                     </a>
-                                    <div class="cart-dropdown-wrap cart-dropdown-hm2">
-                                        <ul>
-                                            <li>
-                                                <div class="shopping-cart-img">
-                                                    <a href="shop-product-right.html"><img alt="Evara" src="imgs/shop/thumbnail-3.jpg"></a>
-                                                </div>
-                                                <div class="shopping-cart-title">
-                                                    <h4><a href="shop-product-right.html">Daisy Casual Bag</a></h4>
-                                                    <h4><span>1 × </span>$800.00</h4>
-                                                </div>
-                                                <div class="shopping-cart-delete">
-                                                    <a href="#"><i class="fi-rs-cross-small"></i></a>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="shopping-cart-img">
-                                                    <a href="shop-product-right.html"><img alt="Evara" src="imgs/shop/thumbnail-2.jpg"></a>
-                                                </div>
-                                                <div class="shopping-cart-title">
-                                                    <h4><a href="shop-product-right.html">Corduroy Shirts</a></h4>
-                                                    <h4><span>1 × </span>$3200.00</h4>
-                                                </div>
-                                                <div class="shopping-cart-delete">
-                                                    <a href="#"><i class="fi-rs-cross-small"></i></a>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        <div class="shopping-cart-footer">
-                                            <div class="shopping-cart-total">
-                                                <h4>Total <span>$4000.00</span></h4>
-                                            </div>
-                                            <div class="shopping-cart-button">
-                                                <a href="/cart" class="outline">View cart</a>
-                                                <a href="shop-checkout.html">Checkout</a>
-                                            </div>
-                                        </div>
-                                    </div>
+                                  
                                 </div>
                             </div>
                         </div>
@@ -197,7 +167,7 @@ rel="stylesheet"
                     <div class="header-nav d-none d-lg-flex">
                         <div class="main-categori-wrap d-none d-lg-block">
                             <a class="categori-button-active open" href="#">
-                                <span ><svg xmlns="http://www.w3.org/2000/svg" fill="red"height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M0 224c0 53 43 96 96 96h47.2L290 202.5c17.6-14.1 42.6-14 60.2 .2s22.8 38.6 12.8 58.8L333.7 320H352h64c53 0 96-43 96-96s-43-96-96-96c-.5 0-1.1 0-1.6 0c1.1-5.2 1.6-10.5 1.6-16c0-44.2-35.8-80-80-80c-24.3 0-46.1 10.9-60.8 28C256.5 24.3 219.1 0 176 0C114.1 0 64 50.1 64 112c0 7.1 .7 14.1 1.9 20.8C27.6 145.4 0 181.5 0 224zm330.1 3.6c-5.8-4.7-14.2-4.7-20.1-.1l-160 128c-5.3 4.2-7.4 11.4-5.1 17.8s8.3 10.7 15.1 10.7h70.1L177.7 488.8c-3.4 6.7-1.6 14.9 4.3 19.6s14.2 4.7 20.1 .1l160-128c5.3-4.2 7.4-11.4 5.1-17.8s-8.3-10.7-15.1-10.7H281.9l52.4-104.8c3.4-6.7 1.6-14.9-4.2-19.6z"/></svg> </span> Browse Categories
+                                <span ><svg xmlns="http://www.w3.org/2000/svg" fill="red"height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M0 224c0 53 43 96 96 96h47.2L290 202.5c17.6-14.1 42.6-14 60.2 .2s22.8 38.6 12.8 58.8L333.7 320H352h64c53 0 96-43 96-96s-43-96-96-96c-.5 0-1.1 0-1.6 0c1.1-5.2 1.6-10.5 1.6-16c0-44.2-35.8-80-80-80c-24.3 0-46.1 10.9-60.8 28C256.5 24.3 219.1 0 176 0C114.1 0 64 50.1 64 112c0 7.1 .7 14.1 1.9 20.8C27.6 145.4 0 181.5 0 224zm330.1 3.6c-5.8-4.7-14.2-4.7-20.1-.1l-160 128c-5.3 4.2-7.4 11.4-5.1 17.8s8.3 10.7 15.1 10.7h70.1L177.7 488.8c-3.4 6.7-1.6 14.9 4.3 19.6s14.2 4.7 20.1 .1l160-128c5.3-4.2 7.4-11.4 5.1-17.8s-8.3-10.7-15.1-10.7H281.9l52.4-104.8c3.4-6.7 1.6-14.9-4.2-19.6z"/></svg> </span> Browse Categorie
                             </a>
                             <div class="categori-dropdown-wrap categori-dropdown-active-large open">
                                 <ul>
@@ -313,76 +283,20 @@ rel="stylesheet"
                                     <li><a class="active" href="index.html">Home <svg xmlns="http://www.w3.org/2000/svg" fill="violet" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M349.4 44.6c5.9-13.7 1.5-29.7-10.6-38.5s-28.6-8-39.9 1.8l-256 224c-10 8.8-13.6 22.9-8.9 35.3S50.7 288 64 288H175.5L98.6 467.4c-5.9 13.7-1.5 29.7 10.6 38.5s28.6 8 39.9-1.8l256-224c10-8.8 13.6-22.9 8.9-35.3s-16.6-20.7-30-20.7H272.5L349.4 44.6z"/></svg></a>
                                      
                                     </li>
-                                    <li><a class="active" href="/profile">Profile<svg xmlns="http://www.w3.org/2000/svg" fill="violet" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M349.4 44.6c5.9-13.7 1.5-29.7-10.6-38.5s-28.6-8-39.9 1.8l-256 224c-10 8.8-13.6 22.9-8.9 35.3S50.7 288 64 288H175.5L98.6 467.4c-5.9 13.7-1.5 29.7 10.6 38.5s28.6 8 39.9-1.8l256-224c10-8.8 13.6-22.9 8.9-35.3s-16.6-20.7-30-20.7H272.5L349.4 44.6z"/></svg></a>
+                                    <li><a href="/profile">My Profile<svg xmlns="http://www.w3.org/2000/svg" fill="violet" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M349.4 44.6c5.9-13.7 1.5-29.7-10.6-38.5s-28.6-8-39.9 1.8l-256 224c-10 8.8-13.6 22.9-8.9 35.3S50.7 288 64 288H175.5L98.6 467.4c-5.9 13.7-1.5 29.7 10.6 38.5s28.6 8 39.9-1.8l256-224c10-8.8 13.6-22.9 8.9-35.3s-16.6-20.7-30-20.7H272.5L349.4 44.6z"/></svg></a>
+                                     
+                                    </li>
+                                    <li><a href="/ordersuser/user">Orders<svg xmlns="http://www.w3.org/2000/svg" fill="violet" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M349.4 44.6c5.9-13.7 1.5-29.7-10.6-38.5s-28.6-8-39.9 1.8l-256 224c-10 8.8-13.6 22.9-8.9 35.3S50.7 288 64 288H175.5L98.6 467.4c-5.9 13.7-1.5 29.7 10.6 38.5s28.6 8 39.9-1.8l256-224c10-8.8 13.6-22.9 8.9-35.3s-16.6-20.7-30-20.7H272.5L349.4 44.6z"/></svg></a>
                                      
                                     </li>
                                   
-                                      
+
                                     
-                                    <li><a href="shop-grid-right.html">Shop <svg xmlns="http://www.w3.org/2000/svg" fill="red" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M349.4 44.6c5.9-13.7 1.5-29.7-10.6-38.5s-28.6-8-39.9 1.8l-256 224c-10 8.8-13.6 22.9-8.9 35.3S50.7 288 64 288H175.5L98.6 467.4c-5.9 13.7-1.5 29.7 10.6 38.5s28.6 8 39.9-1.8l256-224c10-8.8 13.6-22.9 8.9-35.3s-16.6-20.7-30-20.7H272.5L349.4 44.6z"/></svg></a>
-                                        <ul class="sub-menu">
-                                            
-                                            
-                                            
-                                            </li>
-                                            <li><a href="shop-filter.html">Shop – Filter</a></li>
-                                            <li><a href="shop-wishlist.html">Shop – Wishlist</a></li>
-                                            <li><a href="shop-cart.html">Shop – Cart</a></li>
-                                            <li><a href="shop-checkout.html">Shop – Checkout</a></li>
-                                            <li><a href="shop-compare.html">Shop – Compare</a></li>
-                                        </ul>
+                                    <li><a href="/shopping">Shop <svg xmlns="http://www.w3.org/2000/svg" fill="red" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M349.4 44.6c5.9-13.7 1.5-29.7-10.6-38.5s-28.6-8-39.9 1.8l-256 224c-10 8.8-13.6 22.9-8.9 35.3S50.7 288 64 288H175.5L98.6 467.4c-5.9 13.7-1.5 29.7 10.6 38.5s28.6 8 39.9-1.8l256-224c10-8.8 13.6-22.9 8.9-35.3s-16.6-20.7-30-20.7H272.5L349.4 44.6z"/></svg></a>
+                                   
                                     </li>
                                     <li class="position-static"><a href="#">Mega menu <svg xmlns="http://www.w3.org/2000/svg" fill="green" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M349.4 44.6c5.9-13.7 1.5-29.7-10.6-38.5s-28.6-8-39.9 1.8l-256 224c-10 8.8-13.6 22.9-8.9 35.3S50.7 288 64 288H175.5L98.6 467.4c-5.9 13.7-1.5 29.7 10.6 38.5s28.6 8 39.9-1.8l256-224c10-8.8 13.6-22.9 8.9-35.3s-16.6-20.7-30-20.7H272.5L349.4 44.6z"/></svg></a>
-                                        <ul class="mega-menu">
                                        
-                                            <li class="sub-mega-menu sub-mega-menu-width-22">
-                                                <a class="menu-title" href="#">Men's Fashion</a>
-                                                <ul>
-                                                    <li><a href="shop-product-right.html">Jackets</a></li>
-                                                    <li><a href="shop-product-right.html">Casual Faux Leather</a></li>
-                                                    <li><a href="shop-product-right.html">Genuine Leather</a></li>
-                                                    <li><a href="shop-product-right.html">Casual Pants</a></li>
-                                                    <li><a href="shop-product-right.html">Sweatpants</a></li>
-                                                    <li><a href="shop-product-right.html">Harem Pants</a></li>
-                                                </ul>
-                                            </li>
-                                            <li class="sub-mega-menu sub-mega-menu-width-22">
-                                                <a class="menu-title" href="#">Technology</a>
-                                                <ul>
-                                                    <li><a href="shop-product-right.html">Gaming Laptops</a></li>
-                                                    <li><a href="shop-product-right.html">Ultraslim Laptops</a></li>
-                                                    <li><a href="shop-product-right.html">Tablets</a></li>
-                                                    <li><a href="shop-product-right.html">Laptop Accessories</a></li>
-                                                    <li><a href="shop-product-right.html">Tablet Accessories</a></li>
-                                                </ul>
-                                            </li>
-                                        
-                                    <li><a href="blog-category-grid.html">Blog <i class="fi-rs-angle-down"></i></a>
-                                        <ul class="sub-menu">
-                                            <li><a href="blog-category-grid.html">Blog Category Grid</a></li>
-                                            <li><a href="blog-category-list.html">Blog Category List</a></li>
-                                            <li><a href="blog-category-big.html">Blog Category Big</a></li>
-                                            <li><a href="blog-category-fullwidth.html">Blog Category Wide</a></li>
-                                            <li><a href="#">Single Post <i class="fi-rs-angle-right"></i></a>
-                                                <ul class="level-menu level-menu-modify">
-                                                    <li><a href="blog-post-left.html">Left Sidebar</a></li>
-                                                    <li><a href="blog-post-right.html">Right Sidebar</a></li>
-                                                    <li><a href="blog-post-fullwidth.html">No Sidebar</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="#">Pages <i class="fi-rs-angle-down"></i></a>
-                                        <ul class="sub-menu">
-                                            <li><a href="page-about.html">About Us</a></li>
-                                            <li><a href="page-contact.html">Contact</a></li>
-                                            <li><a href="page-account.html">My Account</a></li>
-                                            <li><a href="page-login-register.html">login/register</a></li>
-                                            <li><a href="page-purchase-guide.html">Purchase Guide</a></li>
-                                            <li><a href="page-privacy-policy.html">Privacy Policy</a></li>
-                                            <li><a href="page-terms.html">Terms of Service</a></li>
-                                            <li><a href="page-404.html">404 Page</a></li>
-                                        </ul>
                                     </li>
                                     <li>
                                         <a href="/logout">Logout</a>
@@ -608,60 +522,25 @@ rel="stylesheet"
         </div>
     </div>
     <main class="main">
+   
+          
         <div class="carousel-container">
             <div class="carousel-text">
-                <h3 class="banner-text">Great Musical Days 2023</h3>
-                <p class="banner-slogan">UnBeatable Price Drop</p>
+              <% console.log("Banners:", banners); %>
+              <h3 class="banner-text"><%= banners[0].slogan %></h3>
             </div>
             <div class="carousel">
+              <% for (let i = 0; i < banners.length; i++) { %>
                 <div class="carousel-slide">
-                    <img src="imgs/slider/Banner1.jpg" alt="Image 1">
+                  <img src="<%= banners[i].image %>" alt="Image <%= i + 1 %>">
                 </div>
-                <div class="carousel-slide">
-                    <img src="imgs/slider/Banner2.jpg" alt="Image 2">
-                </div>
-                <div class="carousel-slide">
-                    <img src="imgs/slider/Banner3.jpg" alt="Image 3">
-                </div>
+              <% } %>
             </div>
-        </div>
-
-        <section class="banners mb-20">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-4 col-md-6">
-                        <div class="banner-img wow fadeIn animated">
-                            <img src="imgs/banner/banner-1.png" alt="">
-                            <div class="banner-text">
-                                <span>Smart Offer</span>
-                                <h4>Save 20% on <br>Woman Bag</h4>
-                                <a href="shop-grid-right.html">Shop Now <i class="fi-rs-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="banner-img wow fadeIn animated">
-                            <img src="imgs/banner/banner-2.png" alt="">
-                            <div class="banner-text">
-                                <span>Sale off</span>
-                                <h4>Great Summer <br>Collection</h4>
-                                <a href="shop-grid-right.html">Shop Now <i class="fi-rs-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 d-md-none d-lg-flex">
-                        <div class="banner-img wow fadeIn animated  mb-sm-0">
-                            <img src="imgs/banner/banner-3.png" alt="">
-                            <div class="banner-text">
-                                <span>New Arrivals</span>
-                                <h4>Shop Today’s <br>Deals & Offers</h4>
-                                <a href="shop-grid-right.html">Shop Now <i class="fi-rs-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+          </div>
+          
+          
+      
+        
         <section class="product-tabs pt-25 pb-20 wow fadeIn animated">
             <div class="container">
                 <div class="row">
@@ -669,20 +548,20 @@ rel="stylesheet"
                         <div class="widget-category mb-30">
                             <h5 class="section-title style-1 mb-30 wow fadeIn animated">Category</h5>
                             <ul class="categories">
-                                <li><a href="shop-grid-right.html">Shoes & Bags</a></li>
-                                <li><a href="shop-grid-right.html">Blouses & Shirts</a></li>
-                                <li><a href="shop-grid-right.html">Dresses</a></li>
-                                <li><a href="shop-grid-right.html">Swimwear</a></li>
-                                <li><a href="shop-grid-right.html">Beauty</a></li>
-                                <li><a href="shop-grid-right.html">Jewelry & Watch</a></li>
-                                <li><a href="shop-grid-right.html">Accessories</a></li>
+                                
+                                <ul>
+                                    <% for (let i = 0; i < categories.length; i++) { %>
+                                      <li><a href="/mainpage?categoryId=<%= categories[i]._id %>"><%= categories[i].name %></a></li>
+                                    <% } %>
+                                  </ul>
+                                  
+                               
                             </ul>
                         </div>
                         <div class="widget-category mb-30">
                             <h5 class="section-title style-1 mb-30 wow fadeIn animated">Sort by</h5>
                             <ul class="categories">
-                                <li><a href="shop-grid-right.html">Popularity</a></li>
-                                <li><a href="shop-grid-right.html">Average rating</a></li>
+                                
                                 <li><a href="shop-grid-right.html">Price: Low to High</a></li>
                                 <li><a href="shop-grid-right.html">Price: High to Low</a></li>
                             </ul>
@@ -728,65 +607,136 @@ rel="stylesheet"
                                     </div>
                                   
                                    
-                                    <!-- <% products.forEach((product) => { %>
-                                        
-                                        <div class="col-lg-4 col-md-4 col-12 col-sm-6">
-                                          <div class="product-cart-wrap">
-                                            <div class="product-img-action-wrap">
-                                              <div class="product-img product-img-zoom">
-                                                <a href="/admin/product/<%= product._id %>">
-                                                  <img class="default-img" src="<%= product.image %>" alt="<%= product.name %>" style="width: 200px; height: 200px;">
-                                                </a>
-                                              </div>
-                                            </div>
-                                            <div class="product-content-wrap">
-                                              <h2><a href="/admin/product/<%= product._id %>"><%= product.name %></a></h2>
-                                              <p>
-                                                <span class="short-description"><%= product.description.substring(0, 100) %></span>
-                                                <span class="full-description" style="display: none;"><%= product.description %></span>
-                                              </p>
-                                              <div class="product-price">
-                                                <span>$<%= product.price %></span>
-                                              </div>
-                                              <div class="product-action-1 show">
-                                                
-                                                <button class="action-btn hover-up add-to-cart" data-id="<%= product._id %>">Add To Cart</button>
-                                              </div>
-                                            </div>
+                                    
+                            
+                                      <form action="/mainpage" method="GET">
+                                        <input type="text" name="search" style="border-radius: 50px;" placeholder="Search products">
+                                        <div class="input-group mb-3">
+                                            <select name="sort" style="border-radius: 50px;margin-top: 10px; background-color: rgb(107, 107, 107,0.2);color: white;font-size: medium;font-weight: 700;" class="custom-select">
+                                              <option style="background-color: #132436; height: 30px;" value="lowToHigh">Low to High</option>
+                                              <option style="background-color: #132436; height: 30px;" value="highToLow">High to Low</option>
+                                            </select>
                                           </div>
-                                        </div>
                                         
-                                      <% }); %> -->
-                                      
+                                        
+                                        <button type="submit">Filter</button>
+                                      </form>
+                                      <!-- Add this form to your mainpage.ejs or equivalent template -->
+
+  
+  <!-- Display products as before -->
+  <div id="products">
+    <!-- Your existing product rendering logic here -->
+  </div>
+  
                                       <section style="background-color: #ffffff;">
                                         <div class="container py-5">
                                           <div class="row">
-                                            <% products.forEach((product) => { %>
+                                            <% if (products.length > 0) { %>
+                                            <% products.forEach((product,index) => { %>
                                                 <div class="col-md-6 col-lg-4 mb-4 mb-md-0 mt-6 pt-5">
-                                                  <div class="card">
-                                                    <!-- Wrap the product card in an anchor tag with the product ID in the URL -->
-                                                    <a href="/product/<%= product._id %>">
-                                                      <div class="d-flex justify-content-between p-3">
-                                                        <p class="lead mb-0">Today's Combo Offer</p>
-                                                        <div class="bg-info rounded-circle d-flex align-items-center justify-content-center shadow-1-strong" style="width: 35px; height: 35px;">
-                                                          <p class="">
-                                                            <button class="action-btn hover-up add-to-cart" data-id="<%= product._id %>">
-                                                              <svg xmlns="http://www.w3.org/2000/svg" fill="white" height="1em" viewBox="0 0 576 512">
-                                                                <!-- Your SVG code here -->
-                                                              </svg>
+                                                   <!-- Add the anchor tag with the product ID in the URL -->
+                                                   
+                                                    <div class="card">
+                                                      <div class="d-flex justify-content-between p-3"> 
+                                                        <div
+                                                        class="bg-info rounded-circle d-flex align-items-center justify-content-center shadow-1-strong"
+                                                        style="width: 35px; height: 35px;">
+                                                        <p class="">
+                                                          <button class="action-btn hover-up add-to-cart" data-id="<%= product._id %>">
+                                                              <svg xmlns="http://www.w3.org/2000/svg"  fill="white"  height="1em" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96zM252 160c0 11 9 20 20 20h44v44c0 11 9 20 20 20s20-9 20-20V180h44c11 0 20-9 20-20s-9-20-20-20H356V96c0-11-9-20-20-20s-20 9-20 20v44H272c-11 0-20 9-20 20z"/></svg>
+                                                              <!-- Your SVG code here -->
+                                                            </svg>
+                                                          </button>
+                                                        </p>
+                                                      </div>
+                                                      
+                                                      <div class="bg-info rounded-circle d-flex align-items-center justify-content-center shadow-1-strong" style="width: 35px; height: 35px;">
+                                                        <p class="">
+                                                          <button class="action-btn hover-up" id="showSweetAlertButton" onclick="showProductAlert('<%= product.name %>', '<%= product.description %>','<%= index %>','<%= product._id %>','<%= product.brand%>','<%= product.stock %>','<%= product.color%>')">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="white" height="1em" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z"/></svg>
+                                                          </button>
+                                                        </p>
+                                                      </div>
+                                                      
+                                                      
+                                                                                                          
+                                                    <div class="bg-info rounded-circle d-flex align-items-center justify-content-center shadow-1-strong" style="width: 35px; height: 35px;">
+                                                        <p class="">
+                                                            <button class="action-btn hover-up add-to-wishlist" data-id="<%= product._id %>">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" fill="white" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/></svg>
+                                                                    <!-- Your SVG code here -->
+                                                                </svg>
                                                             </button>
-                                                          </p>
-                                                        </div>
+                                                        </p>
+                                                    </div>
                                                       </div>
-                                                      <img src="<%= product.image %>" class="card-img-top" alt="Gaming Laptop" style="width: 200px; height: 200px;" />
-                                                      <div class="card-body">
-                                                        <!-- Your product details here -->
+                                                      
+                                                     <div>
+                                                        
+                                                        <a href="/product/<%= product._id %>">
+                                                            <img src="<%= product.mainImage%>"
+                                                            class="card-img-top product-image" alt="Gaming Laptop" style="width: 200px; height: 200px;" id="image<%= index %>" />
+                                                            
+                                                          <div class="card-body">
+                                                            <div class="d-flex justify-content-between">
+                                                              <p class="small"><a href="#!" class="text-muted">Music</a></p>
+                                                            </div>
+                                                            <div class="d-flex justify-content-between mb-3">
+                                                              <h5 class="mb-0"><%= product.name %></h5>
+                                                              <h5 class="text-dark mb-0">₹<%= product.price %></h5>
+                                                            
+                                                            </div>
+                                                            <div class="d-flex justify-content-between mb-2">
+                                                              <p class="text-muted mb-0">Available: <span class="fw-bold"><%= product.stock %></span></p>
+                                                              <div class="ms-auto text-warning">
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fas fa-star"></i>
+                                                                <i class="fas fa-star"></i>
+                                                                <i class="fas fa-star"></i>
+                                                                <i class="fas fa-star-half-alt"></i>
+                                                              </div>
+                                                            </div>
+                                                        </a>
+                                                     </div>
+                                                     
                                                       </div>
-                                                    </a> <!-- Close the anchor tag -->
-                                                  </div>
+                                                    </div>
+                                                  </a> <!-- Close the anchor tag -->
                                                 </div>
+
+
+                                                
                                               <% }); %>
-                                              
+                                              <% } else { %>
+                                                <div class="col-12 text-center">
+                                                  <h4>No products found</h4>
+                                                </div>
+                                              <% } %>
+                                        <!-- Pagination Controls -->
+                                        <nav aria-label="Page navigation example pt-5">
+                                            <ul class="pagination pt-5">
+                                              <li class="page-item <% if (currentPage === 1) { %>disabled<% } %>">
+                                                <a class="page-link" href="?page=<%= currentPage - 1 %>" aria-label="Previous">
+                                                  <span aria-hidden="true">&laquo;</span>
+                                                </a>
+                                              </li>
+                                          
+                                              <% for (let i = 1; i <= totalPages; i++) { %>
+                                                <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                                  <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                                                </li>
+                                              <% } %>
+                                          
+                                              <li class="page-item <% if (currentPage === totalPages) { %>disabled<% } %>">
+                                                <a class="page-link" href="?page=<%= currentPage + 1 %>" aria-label="Next">
+                                                  <span aria-hidden="true">&raquo;</span>
+                                                </a>
+                                              </li>
+                                            </ul>
+                                          </nav>
+                                          
+  
                                           </div>
                                         </div>
                                       </section>
@@ -1447,6 +1397,7 @@ rel="stylesheet"
                 </div>
             </div>
         </section>
+        <p></p>
         <section class="banner-2 section-padding pb-0">
             <div class="container">
                 <div class="banner-img banner-big wow fadeIn animated f-none">
@@ -1564,16 +1515,16 @@ rel="stylesheet"
                     <div class="slider-arrow slider-arrow-2 carausel-6-columns-arrow" id="carausel-6-columns-2-arrows"></div>
                     <div class="carausel-6-columns carausel-arrow-center" id="carausel-6-columns-2">
 
-
+                    
                        
-                        
-
+                       
+                         
                             <% products.forEach((product) => { %>
                         <div class="product-cart-wrap small hover-up">
                             <div class="product-img-action-wrap">
                                 <div class="product-img product-img-zoom">
                                     <a href="shop-product-right.html">
-                                        <img class="default-img" src="<%= product.image %>" alt="">
+                                        <img class="default-img" src="<%= product.mainImage %>" alt="">
                                         <img class="hover-img" src="imgs/shop/product-2-2.jpg" alt="">
                                     </a>
                                 </div>
@@ -2557,38 +2508,13 @@ rel="stylesheet"
         </section>
     </main>
     <footer class="main">
-        <section class="newsletter p-30 text-white wow fadeIn animated">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-7 mb-md-3 mb-lg-0">
-                        <div class="row align-items-center">
-                            <div class="col flex-horizontal-center">
-                                <img class="icon-email" src="https://imgtr.ee/images/2023/10/23/c24e4a9284647ba00f11b5b54c1da1ce.png" alt="">
-                                <h4 class="font-size-20 mb-0 ml-3">Sign up to Newsletter</h4>
-                            </div>
-                            <div class="col my-4 my-md-0 des">
-                                <h5 class="font-size-15 ml-4 mb-0">...and receive <strong>$25 coupon for first shopping.</strong></h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-5">
-                        <!-- Subscribe Form -->
-                        <form class="form-subcriber d-flex wow fadeIn animated">
-                            <input type="email" class="form-control bg-white font-small" placeholder="Enter your email">
-                            <button class="btn bg-dark text-white" type="submit">Subscribe</button>
-                        </form>
-                        <!-- End Subscribe Form -->
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="section-padding footer-mid">
+        <section class="section-padding footer-mid" style="background-color:rgb(86, 85, 87,0.2);">
             <div class="container pt-15 pb-20">
                 <div class="row">
                     <div class="col-lg-4 col-md-6">
                         <div class="widget-about font-md mb-md-5 mb-lg-0">
                             <div class="logo logo-width-1 wow fadeIn animated">
-                                <a href="index.html"><img src="https://imgtr.ee/images/2023/10/23/c24e4a9284647ba00f11b5b54c1da1ce.png" alt="logo"></a>
+                                <a href="index.html"><img src="/imgs/logo.png" alt="logo"></a>
                             </div>
                             <h5 class="mt-20 mb-10 fw-600 text-grey-4 wow fadeIn animated">Contact</h5>
                             <p class="wow fadeIn animated">
@@ -2632,7 +2558,7 @@ rel="stylesheet"
                             <li><a href="#">Order</a></li>
                         </ul>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4" >
                         <h5 class="widget-title wow fadeIn animated">Install App</h5>
                         <div class="row">
                             <div class="col-md-8 col-lg-12">
@@ -2651,21 +2577,7 @@ rel="stylesheet"
                 </div>
             </div>
         </section>
-        <div class="container pb-20 wow fadeIn animated">
-            <div class="row">
-                <div class="col-12 mb-20">
-                    <div class="footer-bottom"></div>
-                </div>
-                <div class="col-lg-6">
-                    <p class="float-md-left font-sm text-muted mb-0">&copy; 2022, <strong class="text-brand">Evara</strong> - HTML Ecommerce Template </p>
-                </div>
-                <div class="col-lg-6">
-                    <p class="text-lg-end text-start font-sm text-muted mb-0">
-                        Designed by <a href="http://alithemes.com" target="_blank">Alithemes.com</a>. All rights reserved
-                    </p>
-                </div>
-            </div>
-        </div>
+
     </footer>
     <!-- Preloader Start -->
     <div id="preloader-active">
@@ -2684,7 +2596,9 @@ rel="stylesheet"
     </div>
     <style>
 
-
+.product-image:hover{
+    transform: scale(1.1);
+}
 .default-img{
     max-height: 180px;
 }
@@ -2744,6 +2658,23 @@ max-height: 250px;
   color: white;
 }
 
+  /* Style the select element */
+  .custom-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #f0f0f0; /* Background color when the select is closed */
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  /* Style the selected option */
+  .custom-select option:checked {
+    background-color: #007bff; /* Background color when the option is selected */
+    color: #fff; /* Text color when the option is selected */
+  }
+
     </style>
     <!-- Vendor JS-->
     <script src="js/vendor/modernizr-3.6.0.min.js"></script>
@@ -2771,44 +2702,136 @@ max-height: 250px;
     <script src="./js/shop.js?v=3.4"></script>
   
     <script>
-        // Get all the "Add to Cart" buttons
-        const addToCartButtons = document.querySelectorAll('.add-to-cart');
-      
-        // Add a click event listener to each button
-        addToCartButtons.forEach(button => {
-          button.addEventListener('click', (event) => {
-            // Prevent the default form submission
-            event.preventDefault();
-      
-            // Get the product ID from the data-id attribute
-            const productId = button.getAttribute('data-id');
-      
-            // Send an AJAX request to your server to add the product to the cart
-            // You can use the fetch API or any JavaScript library you prefer for AJAX
-      
-            // Example using fetch:
-            fetch('/cart/add', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ productId, user: 'user_id' }), // Replace 'user_id' with the actual user ID
-            })
-              .then(response => response.json())
-              .then(data => {
-                // Handle the response, e.g., show a success message or update the cart count
-                alert(data.message); // You can customize this part
-              })
-              .catch(error => {
-                console.error(error);
-                alert('Error adding to cart');
-              });
-          });
+        function escapeRegex(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}
+
+const currentPage = parseInt(new URLSearchParams(window.location.search).get("page")) || 1;
+
+// Fetch products for the current page
+fetch(`/getProducts?page=${currentPage}`)
+  .then((response) => response.json())
+  .then((data) => {
+    // Handle data and render products
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+
+
+
+
+  // Get all the "Add to Cart" buttons
+const addToCartButtons = document.querySelectorAll('.add-to-cart');
+
+// Add a click event listener to each button
+addToCartButtons.forEach(button => {
+  button.addEventListener('click', (event) => {
+    // Prevent the default form submission
+    event.preventDefault();
+
+    // Get the product ID from the data-id attribute
+    const productId = button.getAttribute('data-id');
+
+    // Send an AJAX request to your server to add the product to the cart
+    // You can use the fetch API or any JavaScript library you prefer for AJAX
+
+    // Example using fetch:
+    fetch('/cart/add', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ productId, user: 'user_id' }), // Replace 'user_id' with the actual user ID
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response using SweetAlert 2
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: data.message,
         });
+      })
+      .catch(error => {
+        console.error(error);
+        // Display an error message using SweetAlert 2
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error adding to cart',
+        });
+      });
+  });
+});
+
+        
       </script>
+   <script>
+
+
+
+function showProductAlert(name, description,index,id,brand,stock ,color) {
+
+    let image = document.getElementById('image'+index)
+    Swal.fire({
+  title: name,
+  html: `
+    <div style="width: 400px; overflow: hidden;">
+      <p>Description: ${description}</p>
+      <img src="${image.src}" alt="${name}" style="max-width: 65%; height: 60%;">
+      <p>Brand: ${brand}</p>
+      <p>Available: ${stock}</p>
+      <p>Color: ${color}</p>
+      <a href="/product/${id}">More</a>
+    </div>
+  `,
+  confirmButtonText: 'OK'
+});
+
+
+  }
+
+
+
+    $(document).ready(function() {
+      $('.add-to-wishlist').click(function() {
+        const productId = $(this).data('id');
+        // Make an AJAX POST request to add the product to the wishlist
+        $.ajax({
+          type: 'POST',
+          url: '/wishlist/add',
+          data: { productId: productId },
+          success: function(response) {
+            // Display a success message using SweetAlert 2
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: 'Product added to your wishlist',
+            });
+          },
+          error: function(error) {
+            // Display an error message using SweetAlert 2
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Error adding the product to your wishlist',
+            });
+          }
+        });
+      });
+    });
+  </script>
+  
+      
       
 </body>
 <script>
+
+
+
+
+
     let currentSlide = 0;
         const slides = document.querySelectorAll('.carousel-slide');
         
@@ -2874,6 +2897,16 @@ max-height: 250px;
         text-align: center;
         box-sizing: border-box;
     }
+
+  .scaling-image {
+    width: 15%;
+    height: 10%;
+    transition: transform 0.3s; /* Set the animation duration here */
+  }
+
+  .scaling-image:hover {
+    transform: scale(1.2); /* Increase the scale factor for the animation */
+  }
     
     .large-link {
         font-size: 18px; /* Adjust the font size as needed */
@@ -2882,4 +2915,5 @@ max-height: 250px;
     
     
         </style>
+        
 </html>

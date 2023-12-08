@@ -1,55 +1,70 @@
 // userRoutes.js
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const User = require('../models/userModel');
-const bcrypt = require('bcrypt');
-const session = require('express-session');
-const flash = require('connect-flash');
-
-const randomstring = require('randomstring');
-// const Cart = require('../models/Cart'); // Import your Cart model
-
-const userController = require('../controllers/userController');
-const Product = require('../models/Product');
-
-
-
-const twilio = require('twilio');
-
+const User = require("../models/userModel");
+const bcrypt = require("bcrypt");
+const userAuth= require('../middleware/userAuth');
+const flash = require("connect-flash");
+const userCouponController = require('../controllers/userCouponController');
+const Banner = require('../models/bannerModel');
+require("dotenv").config();
+const bannerController=require('../controllers/bannerController');
+const randomstring = require("randomstring");
+const cartRoutes=require('./cartRoutes');
+const checkoutRoutes=require('./checkoutRoutes');
+const userController = require("../controllers/userController");
+const Product = require("../models/Product");
+const orderManagemnetRoutes=require('./orderManagementRoutes');
+const twilio = require("twilio");
+const wishlistController = require("../controllers/wishlistController");
+const profileController = require("../controllers/profileController");
+const banenrController=require('../controllers/bannerController');
+const addressController=require('../controllers/addressController');
 // Create a Twilio client
-const accountSid = 'ACa46dba17ac0e44e04353b02210d1c95c';
-const authToken = '87cb986fc6a51b1966aea5fadef48bc8';
+const accountSid = process.env.ACCOUNTSID;
+const authToken = process.env.AUTHTOKEN;
 const client = twilio(accountSid, authToken);
-const twilioPhoneNumber = '+17075023738';
+const twilioPhoneNumber = "+12053950807";
 
 // Function to send OTP via Twilio
 function sendOTP(phoneNumber, otp) {
-    return client.messages.create({
-        body: `Your OTP is: ${otp}`,
-        from: +17075023738,
-        to: phoneNumber
-    });
+  return client.messages.create({
+    body: `Your OTP is: ${otp}`,
+    from: +12053950807,
+    to: phoneNumber,
+  });
 }
 
 // Route for sending OTP
-router.post('/send-otp', async (req, res) => {
-  const phoneNumber = req.body.phone; // The recipient's phone number
+router.post("/send-otp", async (req, res) => {
+  console.log(req.body);
+  const phoneNumber = req.body.num; // The recipient's phone number
   const otp = generateOTP(); // Implement your OTP generation logic
   req.session.otp = otp;
   try {
     const message = await sendOTP(phoneNumber, otp);
-    const successMessage = 'Otp successfully!';
-    res.send(`
-      <script>
-        alert('${successMessage}');
-        window.location.href = '/userSignup'; // Redirect to the desired page
-      </script>
-    `);
+    const successMessage = "Otp successfully!";
+    res.status(200).json({ status: true });
     // Respond with a success message
-    
   } catch (error) {
-    console.error('Error sending OTP:', error);
-    const errorMessage = 'Error Sending OTP!';
+    console.error("Error sending OTP:", error);
+    const errorMessage = "Error Sending OTP!";
+    res.status(400).json({ status: true });
+  }
+});
+router.post("/resend-otp", async (req, res) => {
+  console.log(req.body);
+  const phoneNumber = req.body.num; // The recipient's phone number
+  const otp = generateOTP(); // Implement your OTP generation logic
+  req.session.otp = otp; // Store the new OTP in the session
+  try {
+    const message = await sendOTP(phoneNumber, otp); // Send the new OTP
+    const successMessage = "OTP successfully resent!";
+    res.status(200).json({ status: true });
+    // Respond with a success message
+  } catch (error) {
+    console.error("Error resending OTP:", error);
+    const errorMessage = "Error Resending OTP!";
     res.send(`
       <script>
         alert('${errorMessage}');
@@ -58,9 +73,6 @@ router.post('/send-otp', async (req, res) => {
     `);
   }
 });
-
-
-
 
 // Function to verify OTP (simplified; adapt as needed)
 // A simple OTP verification function
@@ -68,26 +80,25 @@ function verifyOTP(storedOTP, enteredOTP) {
   return storedOTP === enteredOTP;
 }
 
-
 // Route for verifying OTP
 // Your Express route for user registration with OTP verification
 // Route for verifying OTP
 // Your Express route for user registration with OTP verification
-router.post('/register', async (req, res) => {
+router.post("/register", async (req, res) => {
   // This code does not check for the existence of a user with the provided email
 
   // Get the email, phone, or other user details from the request body
-  const { email,password } = req.body;
+  const { email, password } = req.body;
 
   try {
     // Create a new user record with the provided details
-    const newUser = new User({ email,password });
+    const newUser = new User({ email, password, wallet: 0 });
 
     // Save the new user to the database
     await newUser.save();
 
-    console.log('User registered successfully');
-    const successMessage = 'User Registration Success!';
+    console.log("User registered successfully");
+    const successMessage = "User Registration Success!";
     res.send(`
       <script>
         alert('${successMessage}');
@@ -95,291 +106,249 @@ router.post('/register', async (req, res) => {
       </script>
     `);
   } catch (error) {
-    console.error('Error registering user:', error);
-    res.status(500).json({ message: 'Error registering user' });
+    console.error("Error registering user:", error);
+    res.status(500).json({ message: "Error registering user" });
   }
 });
-
-
-
 
 // Implement your OTP generation logic here
 function generateOTP() {
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  console.log('Generated OTP:', otp);
+  console.log("Generated OTP:", otp);
   return otp;
 }
 
-
-
-
-
-
-
-
-
 // Display all products
-session({
-  secret: 'your-secret-key',
-  resave: false,
-  saveUninitialized: true,
-  maxAge: 24 * 60 * 60 * 1000, // 24 hours
-})
-
-router.get('/mainpage', userController.getProducts);
-
-// router.get('/userprofile', (req, res) => {
-//   // Check if the user is authenticated. You might use a middleware for this.
-//   if (!req.user) {
-//       return res.redirect('/admin/userLogin'); // Redirect to the login page if not authenticated
-//   }
-
-//   // Retrieve the user's information from the database using their ID or another unique identifier
-//   const userId = req.user.id; // Replace with how you identify users
-
-//   // Assuming you have a User model with properties like 'address', 'gender', and 'phone'
-//   User.findById(userId, (err, user) => {
-//       if (err) {
-//           // Handle any errors, e.g., render an error page
-//           return res.render('error', { error: err });
-//       }
-
-//       if (!user) {
-//           // Handle the case where the user doesn't exist
-//           return res.render('error', { error: 'User not found' });
-//       }
-
-//       // Render the 'userprofile.ejs' view with the user's information
-//       res.render('userprofile',{username:user.username,email:user.email});
-//   });
-// });
-router.post('/verify-otp', (req, res) => {
+router.use("/checkout",checkoutRoutes);
+router.get("/mainpage", userController.getProducts); //thisone
+router.get('/registration'),userController.registrationUser;
+router.post("/verify-otp", (req, res) => {
   const userEnteredOtp = req.body.otp;
   const storedOtp = req.session.otp;
-  console.log('Stored OTP:', storedOtp);
-  console.log('User Entered OTP:', userEnteredOtp);
   if (userEnteredOtp === storedOtp) {
-   
-
-    // OTP verification successful
-    res.redirect('/registration'); // Redirect to the registration form
+    res.status(200).json({ status: true });
   } else {
-    // Invalid OTP
-    const errorMessage = 'Invalid OTP!';
-    res.send(`
-      <script>
-        alert('${errorMessage}');
-        window.location.href = '/userSignup'; // Redirect to the desired page
-      </script>
-    `);
+    res.status(201).json({ status: true });
   }
 });
-router.get('/userSignup', userController.renderUserSignup);
-
+router.get("/userSignup", userController.renderUserSignup);
+//user Profile Routes
+// router.get('/banner',bannerController.renderMainPage);//this two
 // Handle user registration
-router.post('/userSignup', userController.handleUserSignup);
+router.post("/userSignup", userController.handleUserSignup);
 // Handle user registration
-router.post('/userSignup', async (req, res) => {
+router.post("/userSignup", async (req, res) => {
   try {
-      const { username, email, password } = req.body;
-console.log(req.body);
-      // Check if the user already exists
-      const existingUser = await User.findOne({ email });
+    const { username, email, password } = req.body;
+    console.log(req.body);
+    // Check if the user already exists
+    const existingUser = await User.findOne({ email });
 
-      if (existingUser) {
-          // User with the same email already exists
-          const errorMessage = 'User With This Email already reggitered!';
-          res.send(`
+    if (existingUser) {
+      // User with the same email already exists
+      const errorMessage = "User With This Email already reggitered!";
+      res.send(`
             <script>
               alert('${errorMessage}');
               window.location.href = '/userSignup'; // Redirect to the desired page
             </script>
           `);
-      }
+    }
 
-      // If the user does not exist, create a new user in the database
-      const user = await User.create({ username, email, password });
+    // If the user does not exist, create a new user in the database
+    const user = await User.create({ username, email, password });
 
-      // You can add more actions here if needed, e.g., sending a confirmation email
- const successMessage = 'User registered successfully!';
+    // You can add more actions here if needed, e.g., sending a confirmation email
+    const successMessage = "User registered successfully!";
     res.send(`
       <script>
         alert('${successMessage}');
         window.location.href = '/userLogin'; // Redirect to the desired page
       </script>
     `);
-      
   } catch (error) {
-      console.error(error.message);
-      res.status(500).json({ success: false, error: error.message });
+    console.error(error.message);
+    res.status(500).json({ success: false, error: error.message });
   }
 });
 
-
-
 router.use(flash());
 
-// Helper function to generate OTP
-// function generateOTP() {
-//   return randomstring.generate({
-//     length: 6,
-//     charset: 'numeric',
-//   });
-// }
-
 // Render the homepage
-router.get('/', (req, res) => {
-  const data = {
-    title: 'My Express App',
-    message: 'Welcome to my Express app with EJS!',
-  };
-  
-  res.render('index', data);
+router.get("/", async (req, res) => {
+  try {
+    // Retrieve a list of products from your database
+    const products = await Product.find();
+    const totalProducts = await Product.countDocuments();
+
+    // Render the index.ejs template and pass the products and totalProducts data to it
+    const data = {
+      title: "My Express App",
+      message: "Welcome to my Express app with EJS!",
+      products: products, // Pass the products array
+      totalProducts: totalProducts, // Pass the totalProducts count
+    };
+
+    res.render("index", data);
+  } catch (err) {
+    // Handle any errors
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching products." });
+  }
 });
+// Profile page route
+router.post('/users/:userId/additional-addresses/profile', addressController.addAdditionalAddress);
 
-
-
-
-
-
-
-   
-
-
-
-
-
-// // Display user profile page
-// router.get('/admin/userprofile', userController.getUserProfile);
-
-// Update user information
-// router.post('/user/update', userController.updateUser);
-
-// Delete user
-// router.post('/user/delete', userController.deleteUser);
-
+// Checkout page route
+router.post('/checkoutAddress', addressController.addAdditionalAddress);
+//Profile add Address and Update/delete
 
 // Inside your route handler for the login route (e.g., /userLogin)
-router.get('/userLogin', (req, res) => {
-  const error = req.flash('error')[0]; // Get the error message from flash (if any)
-  res.render('userLogin', { error }); // Pass the error variable to the template
+router.get("/userLogin", (req, res) => {
+  const error = req.flash("error")[0]; // Get the error message from flash (if any)
+  res.render("userLogin", { error }); // Pass the error variable to the template
 });
 
 // Handle User Login
-router.post('/userLogin', async (req, res) => {
+router.post("/userLogin", async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
+
     if (!user) {
-      return res.render('userLogin', { error: 'User not found' });
+      return res.render("userLogin", { error: "User not found." });
     }
 
     // Check if the user is blocked
     if (user.isBlocked) {
-      return res.render('userLogin', { error: 'Your account has been blocked.' });
+      return res.render("userLogin", { error: "Account is blocked." });
     }
 
     // Check if the user has isadmin set to true
     if (user.isadmin) {
-      return res.render('userLogin', { error: 'Admins are not allowed to log in' });
+      return res.render("userLogin", { error: "Admin login not allowed." });
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (passwordMatch) {
       // Store the authenticated user in the session
       req.session.user = user;
-     
-      console.log(req.session.user)
-      let products = await Product.find()
+      req.session.userId = user._id;
+
+      console.log(user, "Authentication successful");
+      console.log(req.session.user._id, "User ID stored in session");
+
+      let products = await Product.find();
+
       // Redirect to mainpage with the user data
-    
-    
-      return res.render('mainpage', { user,products });
-      
-      console.log(products);
+      return res.redirect("/mainpage");
     } else {
-      return res.render('userLogin', { error: 'Incorrect password' });
+      return res.render("userLogin", { error: "Incorrect password." });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).send('Login failed.');
+    res.status(500).send("Login failed.");
   }
 });
 
 // Add a new route for blocking/unblocking users
-router.post('/blockUser/:userId', async (req, res) => {
+router.post("/blockUser/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
     const user = await User.findById(userId);
 
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     // Toggle the isBlocked field (block/unblock)
     user.isBlocked = !user.isBlocked;
     await user.save();
 
-    const message = user.isBlocked ? 'User blocked successfully.' : 'User unblocked successfully.';
+    const message = user.isBlocked
+      ? "User blocked successfully."
+      : "User unblocked successfully.";
     res.status(200).json({ message });
   } catch (error) {
-    
-    res.status(500).json({ error: 'An error occurred while blocking/unblocking the user.' });
+    res
+      .status(500)
+      .json({ error: "An error occurred while blocking/unblocking the user." });
   }
 });
 
 // Product details route with image zoom
-router.get('/admin/product/:productId', async (req, res) => {
+router.get("/admin/product/:productId", async (req, res) => {
   try {
-   
     const product = await Product.findById(req.params.productId);
     if (!product) {
       // Handle product not found
-      res.status(404).render('product-not-found', { productId: req.params.productId });
+      res
+        .status(404)
+        .render("product-not-found", { productId: req.params.productId });
     } else {
       // Render the product details view with image zoom
-      res.render('/admin/productdetails', { product });
+      res.render("/admin/productdetails", { product });
     }
   } catch (error) {
     // Handle errors
     console.error(error);
-    res.status(500).send('Internal Server Error');
+    res.status(500).send("Internal Server Error");
   }
 });
 
-
-router.get('/adminSignup', (req, res) => {
-  res.render('adminSignup');
+router.get("/adminSignup", (req, res) => {
+  res.render("adminSignup");
 });
 
 // Handle User Logout
-router.get('/logout', (req, res) => {
+router.get("/logout", (req, res) => {
   // Clear the session (assuming you are using sessions)
   req.session.destroy((err) => {
     if (err) {
-      console.error('Error destroying session:', err);
+      console.error("Error destroying session:", err);
     }
 
     // Clear cache by setting appropriate response headers
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", "0");
 
-    res.redirect('/');
+    res.redirect("/");
   });
 });
 
-
-
-
-
-
-
-
-
 // User Login Page
-router.get('/userLogin', (req, res) => {
-  res.render('userLogin');
+router.get("/userLogin", (req, res) => {
+  res.render("userLogin");
 });
+router.use("/cart", userAuth.isUserLogged,cartRoutes);
+
+//Wishlist Routes
+router.post("/wishlist/add", userAuth.isUserLogged,wishlistController.addToWishlist);
+
+router.get("/wishlist-cart/add", userAuth.isUserLogged,wishlistController.addToCartFromWishlist);
+
+router.get("/wishlist", userAuth.isUserLogged,wishlistController.showWishlist);
+router.post(
+  "/wishlist/remove/:productId",
+  userAuth.isUserLogged,wishlistController.removeFromWishlist
+);
+  router.use("/ordersuser", userAuth.isUserLogged,orderManagemnetRoutes);
+  router.post('/apply-coupon', userCouponController.applyCoupon);
+
+
+//Profile Routes
+router.get("/profile", userAuth.isUserLogged,profileController.viewProfile);
+
+router.post("/profile/add", userAuth.isUserLogged,profileController.addDetail);
+
+router.put("/update", userAuth.isUserLogged,profileController.updateDetail);
+
+router.delete("/delete", userAuth.isUserLogged,profileController.deleteDetail);
+router.get("/shopping", userController.displayShoppingPage);
+router.use('/api/orders', userAuth.isUserLogged,orderManagemnetRoutes);
+router.use("/ordersuser", userAuth.isUserLogged,orderManagemnetRoutes);
+
 
 module.exports = router;

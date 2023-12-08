@@ -3,7 +3,7 @@
   <!-- Footer -->
   <!DOCTYPE html>
   <html lang="en">
-    <link rel="icon" href="https://imgtr.ee/images/2023/10/23/c24e4a9284647ba00f11b5b54c1da1ce.png" type="image/x-icon">
+    <link rel="icon" href="/imgs/logo.png" type="image/x-icon">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +13,8 @@
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
   rel="stylesheet"
 />
+<script src="https://unpkg.com/fslightbox" defer async></script>
+
 <!-- Google Fonts -->
 <link
   href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
@@ -23,6 +25,8 @@
   href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.css"
   rel="stylesheet"
 />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <body>
     
 <header>
@@ -33,7 +37,7 @@
           <!-- Left elements -->
           <div class="col-lg-2 col-sm-4 col-4">
             <a href="https://mdbootstrap.com/" target="_blank" class="float-start">
-              <img src="https://imgtr.ee/images/2023/10/23/c24e4a9284647ba00f11b5b54c1da1ce.png" height="65" />
+              <img src="/imgs/logo.png" height="65" />
             </a>
           </div>
           <!-- Left elements -->
@@ -42,7 +46,7 @@
           <div class="order-lg-last col-lg-5 col-sm-8 col-8">
             <div class="d-flex float-end">
 
-              <a href="https://github.com/mdbootstrap/bootstrap-material-design" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank"> <i class="fas fa-heart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Wishlist</p> </a>
+              <a href="/wishlist" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank"> <i class="fas fa-heart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Wishlist</p> </a>
               <a href="/cart" class="border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank"> <i class="fas fa-shopping-cart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">My cart</p> </a>
 
               <a href="/logout" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank"> <i class="fas fa-user-alt m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Log Out</p> </a>
@@ -87,6 +91,17 @@
     </div>
     <!-- Heading -->
   </header>
+  <script>
+    function showMainImage(imageUrl) {
+  const mainImage = document.getElementById('myimage');
+  mainImage.src = imageUrl;
+}
+
+  </script>
+ 
+  
+
+  
   
   <!-- content -->
   <section class="py-5">
@@ -94,27 +109,31 @@
       <div class="row gx-5">
         <aside class="col-lg-6">
           <div class="border rounded-4 mb-3 d-flex justify-content-center">
-            <a data-fslightbox="mygalley" class="rounded-4" target="_blank" data-type="image" href="<%= product.image %>" alt="<%= product.name %>">
-              <img style="max-width: 100%; max-height: 100vh; margin: auto;" class="rounded-4 fit zoomable-image" src="<%= product.image %>" alt="<%= product.name %>" />
+            <a data-fslightbox="mygalley" class="rounded-4" target="_blank" data-type="image" href="c" alt="<%= product.name %>">
+              <div class="img-magnifier-container">
+
+              <img id="myimage" src="<%= product.mainImage %>" width="600" height="400">
+  </div>
 
             </a>
           </div>
           <div class="d-flex justify-content-center mb-3">
-            <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image" href="<%= product.image %>" class="item-thumb">
-              <img width="60" height="60" class="rounded-2" src="<%= product.image %>" />
-            </a>
-            <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image" href="<%= product.image %>" class="item-thumb">
-              <img width="60" height="60" class="rounded-2" src="<%= product.image %>" />
-            </a>
-            <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image" href="<%= product.image %>" class="item-thumb">
-              <img width="60" height="60" class="rounded-2" src="<%= product.image %>" />
-            </a>
-            <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image" href="<%= product.image %>" class="item-thumb">
-              <img width="60" height="60" class="rounded-2" src="<%= product.image %>" />
-            </a>
-            <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image" href="<%= product.image %>" class="item-thumb">
-              <img width="60" height="60" class="rounded-2" src="<%= product.image %>" />
-            </a>
+            
+            <% if (product.additionalImages && product.additionalImages.length > 0) { %>
+              <% product.additionalImages.forEach((imageUrl, index) => { %>
+                <a
+                  data-fslightbox="mygallery"
+                  class="border mx-1 rounded-2"
+                  target="_blank"
+                  data-type="image"
+                  href="<%= imageUrl %>"
+                  class="item-thumb"
+                  onclick="showMainImage('<%= imageUrl %>')"
+                >
+                  <img width="60" height="60" class="rounded-2" src="<%= imageUrl %>" />
+                </a>
+              <% }); %>
+            <% } %>
           </div>
           <!-- thumbs-wrap.// -->
           <!-- gallery-wrap .end// -->
@@ -140,7 +159,7 @@
             </div>
   
             <div class="mb-3">
-              <span class="h5">$<%= product.price %></span>
+              <span class="h5"> ₹<%= product.price %></span>
               
             </div>
   
@@ -177,7 +196,10 @@
             <a href="#" class="btn btn-warning shadow-0"> Buy now </a>
 
             <a href="#"  data-id="<%= product._id %>"class="btn btn-primary shadow-0  action-btn hover-up add-to-cart"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </a>
-            <a href="#" class="btn btn-light border border-secondary py-2 icon-hover px-3"> <i class="me-1 fa fa-heart fa-lg"></i> Save </a>
+            <a href="#" class="btn btn-light border border-secondary py-2 icon-hover px-3 add-to-wishlist" data-id="<%= product._id %>">
+              <i class="me-1 fa fa-heart fa-lg"></i> Save
+            </a>
+            
           </div>
         </main>
       </div>
@@ -211,9 +233,7 @@
             <div class="tab-content" id="ex1-content">
               <div class="tab-pane fade show active" id="ex1-pills-1" role="tabpanel" aria-labelledby="ex1-tab-1">
                 <p>
-                  With supporting text below as a natural lead-in to additional content. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                  enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                  pariatur.
+                  <%= product.description %>
                 </p>
                 <div class="row mb-2">
                   <div class="col-12 col-md-6">
@@ -234,24 +254,24 @@
                 </div>
                 <table class="table border mt-3 mb-2">
                   <tr>
-                    <th class="py-2">Display:</th>
-                    <td class="py-2">13.3-inch LED-backlit display with IPS</td>
+                    <th class="py-2">Brand:</th>
+                    <td class="py-2"><%= product.brand %></td>
                   </tr>
                   <tr>
-                    <th class="py-2">Processor capacity:</th>
-                    <td class="py-2">2.3GHz dual-core Intel Core i5</td>
+                    <th class="py-2">Material:</th>
+                    <td class="py-2"><%= product.material %></td>
                   </tr>
                   <tr>
-                    <th class="py-2">Camera quality:</th>
-                    <td class="py-2">720p FaceTime HD camera</td>
+                    <th class="py-2">Weight:</th>
+                    <td class="py-2"><%= product.weight %></td>
                   </tr>
                   <tr>
-                    <th class="py-2">Memory</th>
-                    <td class="py-2">8 GB RAM or 16 GB RAM</td>
+                    <th class="py-2">Color:</th>
+                    <td class="py-2"><%= product.color %></td>
                   </tr>
                   <tr>
-                    <th class="py-2">Graphics</th>
-                    <td class="py-2">Intel Iris Plus Graphics 640</td>
+                    <th class="py-2">Instock</th>
+                    <td class="py-2"><%= product.stock %></td>
                   </tr>
                 </table>
               </div>
@@ -425,8 +445,7 @@
   </body>
 
   
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/zoom.js/2.3.2/zoom.min.js"></script>
-  <script src="https://unpkg.com/fs-lightbox@3/dist/fslightbox.js"></script>
+
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const gallery = new FSLightbox({
@@ -435,66 +454,166 @@
     });
   </script>
   
-  <style>.icon-hover:hover {
-    border-color: #3b71ca !important;
-    background-color: white !important;
-    color: #3b71ca !important;
-  }
-  rounded-4 fit:hover{
-transform: scale(1.5);
-  }
-  .icon-hover:hover i {
-    color: #3b71ca !important;
-  }
-  .icon-hover:hover {
-    border-color: #3b71ca !important;
-    background-color: white !important;
-    color: #3b71ca !important;
-  }
-
-  .zoomable-image:hover {
-    transform: scale(1.5); /* Adjust the scale factor as needed */
-  }
-
-  .icon-hover:hover i {
-    color: #3b71ca !important;
-  }
-  </style>
+  
   <script>
-    // Get all the "Add to Cart" buttons
-    const addToCartButtons = document.querySelectorAll('.add-to-cart');
+ // Get all the "Add to Cart" buttons
+const addToCartButtons = document.querySelectorAll('.add-to-cart');
+
+// Add a click event listener to each button
+addToCartButtons.forEach(button => {
+  button.addEventListener('click', (event) => {
+    // Prevent the default form submission
+    event.preventDefault();
+ const productId = button.getAttribute('data-id');
+    fetch('/cart/add', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ productId, user: 'user_id' }), // Replace 'user_id' with the actual user ID
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Handle the response using SweetAlert
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: data.message,
+      });
+    })
+    .catch(error => {
+      console.error(error);
+      // Display an error message using SweetAlert
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error adding to cart',
+      });
+    });
+  });
+});
+
+  </script>
+  <style>
+* {box-sizing: border-box;}
+
+.img-magnifier-container {
+  position:relative;
+}
+
+.img-magnifier-glass {
+  position: absolute;
+
+
+  cursor: pointer;
+  /*Set the size of the magnifier glass:*/
+  width: 180px;
+  height: 180px;
+}
+</style>
+<script>
+  function magnify(imgID, zoom) {
+    var img, glass, w, h, bw;
+    img = document.getElementById(imgID);
+    /*create magnifier glass:*/
+    glass = document.createElement("DIV");
+    glass.setAttribute("class", "img-magnifier-glass");
+    /*insert magnifier glass:*/
+    img.parentElement.insertBefore(glass, img);
+    /*set background properties for the magnifier glass:*/
+    glass.style.backgroundImage = "url('" + img.src + "')";
+    glass.style.backgroundRepeat = "no-repeat";
+    glass.style.backgroundSize = (img.width * zoom) + "px " + (img.height * zoom) + "px";
+    bw = 3;
+    w = glass.offsetWidth / 2;
+    h = glass.offsetHeight / 2;
+    /*execute a function when someone moves the magnifier glass over the image:*/
+    glass.addEventListener("mousemove", moveMagnifier);
+    img.addEventListener("mousemove", moveMagnifier);
+    /*and also for touch screens:*/
+    glass.addEventListener("touchmove", moveMagnifier);
+    img.addEventListener("touchmove", moveMagnifier);
+    function moveMagnifier(e) {
+      var pos, x, y;
+      /*prevent any other actions that may occur when moving over the image*/
+      e.preventDefault();
+      /*get the cursor's x and y positions:*/
+      pos = getCursorPos(e);
+      x = pos.x;
+      y = pos.y;
+      /*prevent the magnifier glass from being positioned outside the image:*/
+      if (x > img.width - (w / zoom)) {x = img.width - (w / zoom);}
+      if (x < w / zoom) {x = w / zoom;}
+      if (y > img.height - (h / zoom)) {y = img.height - (h / zoom);}
+      if (y < h / zoom) {y = h / zoom;}
+      /*set the position of the magnifier glass:*/
+      glass.style.left = (x - w) + "px";
+      glass.style.top = (y - h) + "px";
+      /*display what the magnifier glass "sees":*/
+      glass.style.backgroundPosition = "-" + ((x * zoom) - w + bw) + "px -" + ((y * zoom) - h + bw) + "px";
+    }
+    function getCursorPos(e) {
+      var a, x = 0, y = 0;
+      e = e || window.event;
+      /*get the x and y positions of the image:*/
+      a = img.getBoundingClientRect();
+      /*calculate the cursor's x and y coordinates, relative to the image:*/
+      x = e.pageX - a.left;
+      y = e.pageY - a.top;
+      /*consider any page scrolling:*/
+      x = x - window.pageXOffset;
+      y = y - window.pageYOffset;
+      return {x : x, y : y};
+    }
+  }
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const addToWishlistLinks = document.querySelectorAll('.add-to-wishlist');
   
-    // Add a click event listener to each button
-    addToCartButtons.forEach(button => {
-      button.addEventListener('click', (event) => {
-        // Prevent the default form submission
-        event.preventDefault();
+      addToWishlistLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+          event.preventDefault(); // Prevent the default link behavior
   
-        // Get the product ID from the data-id attribute
-        const productId = button.getAttribute('data-id');
+          const productId = link.getAttribute('data-id');
   
-        // Send an AJAX request to your server to add the product to the cart
-        // You can use the fetch API or any JavaScript library you prefer for AJAX
-  
-        // Example using fetch:
-        fetch('/cart/add', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ productId, user: 'user_id' }), // Replace 'user_id' with the actual user ID
-        })
+          // Send an AJAX request to add the product to the wishlist
+          fetch('/wishlist/add', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ productId }),
+          })
           .then(response => response.json())
           .then(data => {
-            // Handle the response, e.g., show a success message or update the cart count
-            alert(data.message); // You can customize this part
+            // Handle the response using SweetAlert 2
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: data.message,
+            });
           })
           .catch(error => {
             console.error(error);
-            alert('Error adding to cart');
+            // Display an error message using SweetAlert 2
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Error adding the product to your wishlist',
+            });
           });
+        });
       });
     });
   </script>
+  
+  
+  <script>
+    /* Initiate Magnify Function
+    with the id of the image, and the strength of the magnifier glass:*/
+    magnify("myimage", 2);
+    </script>
+    
   </html>
   

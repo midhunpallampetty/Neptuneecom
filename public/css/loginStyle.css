@@ -1,8 +1,5 @@
 body {
-    background-image: url('https://imgtr.ee/images/2023/10/04/d4af378a164fd57a67e06a827470b231.jpeg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+  background-color: grey;
     height: 100vh; /* Ensure the background covers the entire viewport height */
     margin: 0; /* Remove default body margin */
     font-family: Arial, sans-serif; /* Use a fallback font */

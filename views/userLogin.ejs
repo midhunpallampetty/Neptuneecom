@@ -7,27 +7,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Email/Password Login</title>
 	<link rel="stylesheet" href="/css/loginStyle.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 </head>
 <body>
-    <h1>Email/Password Login</h1>
+    <link rel="stylesheet" href="css/main.css">
+<header class="header-area header-style-5 bg-white">
+      
+    <div class="header-bottom sticky-bar sticky-white-bg">
+        <div class="container">
+            <div class="header-wrap header-space-between position-relative">
+                <div class="logo logo-width-1">
+                    <a href="index.html"><img src="/imgs/logo.png" alt="logo"></a>
+                </div>
+                <div class="main-menu main-menu-grow main-menu-padding-1 main-menu-lh-1 main-menu-mrg-1 hm3-menu-padding d-none d-lg-block hover-boder">
+                    <nav>
+                        <ul>
+                            <li><a class="active" href="/">Home </a>
+                            
+                            </li>
+                     <h1 class="text-dark">Login</h1>
+                        
+                          
+                          
+                         
+                        </ul>
+                    </nav>
+                </div>
+                <div class="header-action-right">
+                    <div class="search-style-2">
+                
+                    </div>
+                    <div class="header-action-2">
+                        <div class="header-action-icon-2">
+                            <a href="sh">
+                                <img class="svgInject" alt="Evara" src="imgs/theme/icons/icon-heart.svg">
+                                
+                            </a>
+                        </div>
+                        <div class="header-action-icon-2">
+                            <a class="mini-cart-icon" href="/profile">
+                                <img alt="Evara" src="imgs/theme/icons/icon-cart.svg">
+                               
+                            </a>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+  
 	<div class="row">
 
 	
-        <form action="/userLogin" method="post" class="form-group" onsubmit="return validateForm()">
-            <input type="email" name="email" id="email" placeholder="Email" class="form__input" required>
+        <form action="/userLogin" method="post" class="form-group" onsubmit="return validateForm()" novalidate>
+            <input type="email" name="email" id="email" placeholder="Email" class="form__input">
             <span id="emailError" class="error"></span>
-            <input type="password" name="password" id="password" placeholder="Password" class="form__input" required>
+            <input type="password" name="password" id="password" placeholder="Password" class="form__input">
             <span id="passwordError" class="error"></span>
             <button type="submit" class="btn">Login</button>
         </form>
 	<div class="row">
-		<p>Don't have an account? <a href="/userSignup">Register Here</a></p>
+		<p style="color: rgb(0, 0, 0);">Don't have an account? <a style="color: red;" href="/userSignup">Register Here</a></p>
 	</div>
 	<!-- <div class="row">
 		<p>OTP Based Login? <a href="/user/userLoginOTP">Click Here</a></p>
 	</div> -->
 	<div class="row">
-		<p>Admin Login? <a href="/adminLogin">Click Here</a></p>
+		<p style="color: rgb(0, 0, 0);">Admin Login? <a href="/adminLogin">Click Here</a></p>
 	</div>
  
 </div>
@@ -137,5 +184,39 @@ a:hover {
         return true;
     }
 </script>
+<input type="text" value="<%= error %>" id="error" hidden>
+<script>
+    let error = document.getElementById('error')
+    
+    if(error.value !== "") {
+        Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: error.value,
+      });
+    }
+    
+  </script>
+<script src="js/vendor/modernizr-3.6.0.min.js"></script>
+<script src="js/vendor/jquery-3.6.0.min.js"></script>
+<script src="js/vendor/jquery-migrate-3.3.0.min.js"></script>
+<script src="js/vendor/bootstrap.bundle.min.js"></script>
+<script src="js/plugins/slick.js"></script>
+<script src="js/plugins/jquery.syotimer.min.js"></script>
+<script src="js/plugins/wow.js"></script>
+<script src="js/plugins/jquery-ui.js"></script>
+<script src="js/plugins/perfect-scrollbar.js"></script>
+<script src="js/plugins/magnific-popup.js"></script>
+<script src="js/plugins/select2.min.js"></script>
+<script src="js/plugins/waypoints.js"></script>
+<script src="js/plugins/counterup.js"></script>
+<script src="js/plugins/jquery.countdown.min.js"></script>
+<script src="js/plugins/images-loaded.js"></script>
+<script src="js/plugins/isotope.js"></script>
+<script src="js/plugins/scrollup.js"></script>
+<script src="js/plugins/jquery.vticker-min.js"></script>
+<script src="js/plugins/jquery.theia.sticky.js"></script>
+<!-- Template  JS -->
+<script src="./js/main.js?v=3.4"></script>
 </html>
 

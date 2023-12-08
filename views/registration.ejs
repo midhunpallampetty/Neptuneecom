@@ -1,152 +1,219 @@
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email/Password Login</title>
-	<link rel="stylesheet" href="/css/loginStyle.css">
-</head>
-<body>
-    <h1>Email/Password Login</h1>
-	<div class="row">
-
-	
-        <form action="/userSignup" method="post" class="form-group" onsubmit="return validateForm()">
-            <input type="text" name="username" id="username" placeholder="Username" class="form__input" required>
-            <span id="usernameError" class="error"></span>
-            <input type="email" name="email" id="email" placeholder="Email" class="form__input" required>
-            <span id="emailError" class="error"></span>
-            <input type="password" name="password" id="password" placeholder="Password" class="form__input" required>
-            <span id="passwordError" class="error"></span>
-            <button type="submit" class="btn">Register</button>
-        </form>
-	<div class="row">
-		<p>Have an Account? <a href="/userLogin">Login</a></p>
-	</div>
-	<!-- <div class="row">
-		<p>OTP Based Login? <a href="/user/userLoginOTP">Click Here</a></p>
-	</div> -->
-	<div class="row">
-		<p>Admin Login? <a href="/adminLogin">Click Here</a></p>
-	</div>
- 
-</div>
-</body>
-<style>
-	/* Apply styles to the body and container */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    text-align: center;
-    padding: 20px;
-}
-
-.row {
-    margin: 10px;
-}
-
-/* Style the header */
-h1 {
-    color: #333;
-}
-
-/* Style the form container */
-.form-group {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
-	
-    margin: 0 auto;
-}
-
-/* Style the form input fields and button */
-.form__input {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-p{
-	color: white;
-	font-weight: 600;
-}
-h1{
-	color: white;
-	font-weight: 700;
-}
-
-.btn {
-    background-color: #3498db;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.btn:hover {
-    background-color: #1e87dc;
-}
-
-/* Style the registration and login links */
-p {
-    margin: 10px 0;
-}
-
-a {
-    text-decoration: none;
-    color: #e0c40c;
-}
-
-/* Style the links on hover */
-a:hover {
-    text-decoration: underline;
-}
-.error{
-    color: red;
-    font-weight: 500;
-}
-</style>
-<script>
-    function validateForm() {
-        const username = document.getElementById("username").value;
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-
-        // Username validation (starts with a capital letter and minimum length of 4 characters)
-        const usernamePattern = /^[A-Z][a-zA-Z0-9]{3,}$/;
-        if (!username.match(usernamePattern)) {
-            document.getElementById("usernameError").innerText = "Username must start with a capital letter and be at least 4 characters long";
-            return false;
-        } else {
-            document.getElementById("usernameError").innerText = "";
+<!-- Font Awesome -->
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+  rel="stylesheet"
+/>
+<!-- Google Fonts -->
+<link
+  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+  rel="stylesheet"
+/>
+<!-- MDB -->
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.css"
+  rel="stylesheet"
+/>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#"><img src="/imgs/logo.png" alt="logo" style="height: 50px;"></a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-mdb-toggle="collapse"
+      data-mdb-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link active" style="color:#046963;font-weight: 700;" aria-current="page" href="/">Home</a>
+       
+        
+      </div>
+    </div>
+  </div>
+</nav>
+<div class="container">
+    <div class="form-container" id="signup-form">
+      <h1>Sign Up</h1>
+      <form action="/userSignup" method="post" id="registration-form">
+        <label for="new-username">Username</label>
+        <input type="text" id="new-username" name="username" placeholder="Your username">
+        <span class="error" id="username-error"></span>
+        
+        <label for="new-email">Email</label>
+        <input type="email" id="new-email" name="email" placeholder="Your Email">
+        <span class="error" id="email-error"></span>
+        
+        <label for="new-password">Password</label>
+        <input type="password" placeholder="Your Secure Password" id="new-password" name="password">
+        <span class="error" id="password-error"></span>
+        
+        <button type="submit">Sign Up</button>
+      </form>
+      
+ <button class="btn-already login-option" onclick="window.location.href='/userLogin'">Already Have Account Click Here</button>
+    </div>
+  </div>
+  
+      <style>
+        .error{
+            color: red;
         }
-
-        // Email format validation
-        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if (!email.match(emailPattern)) {
-            document.getElementById("emailError").innerText = "Invalid email format";
-            return false;
-        } else {
-            document.getElementById("emailError").innerText = "";
+        .btn-already{
+            background-color: transparent;
+            font-size: small;
+            color: #b38bff;
         }
-
-        // Password strength validation (at least one capital letter, one special character, and one digit)
-        const passwordPattern = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$/;
-        if (!password.match(passwordPattern)) {
-            document.getElementById("passwordError").innerText = "Password must contain one capital letter, one special character, one digit, and be at least 8 characters long";
-            return false;
-        } else {
-            document.getElementById("passwordError").innerText = "";
+        .btn-already:hover{
+            background-color: transparent;
         }
-
-        return true;
+        * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
-</script>
-</html>
 
+    body {
+      font-family: 'Open Sans', sans-serif;
+    
+    
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 90vh;
+
+    }
+
+    .form-container {
+      width: 400px;
+      margin: 0 auto;
+      padding: 40px;
+      background-color:none ;
+      border: 5px solid rgba(128, 128, 128, 0.4);
+
+    
+   border-radius: 20px;
+      color: #fff;
+    }
+.login-option{
+  color: rgba(128, 128, 128, 0.7);
+  border: none;
+  font-size: medium;
+}
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 36px;
+      color: #000000;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    input {
+      padding: 12px;
+      border: none;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      font-size: 16px;
+      color: #000000;
+      border: 3px solid rgba(128, 128, 128, 0.4); /* 50% opacity grey border */
+
+      background-color:transparent;
+    }
+
+    button {
+      padding: 10px;
+      background-color:#046963;
+      color: #fff;
+      border:3px solid #0c4f49;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    button:hover {
+      background-color:#05413d;
+    }
+
+    a {
+      text-decoration: none;
+      color: #b38bff;
+      font-size: 18px;
+      transition: color 0.2s ease-in-out;
+    }
+
+    a:hover {
+      color: #8c5fb2;
+    }
+
+    p {
+      text-align: center;
+      margin: 8px;
+    }
+      </style>
+      <script>
+document.getElementById('registration-form').addEventListener('submit', function (event) {
+  // Reset previous error messages
+  document.getElementById('username-error').textContent = '';
+  document.getElementById('email-error').textContent = '';
+  document.getElementById('password-error').textContent = '';
+
+  // Validation logic
+  const username = document.getElementById('new-username').value;
+  const email = document.getElementById('new-email').value;
+  const password = document.getElementById('new-password').value;
+
+  let isValid = true;
+
+  // Username validation
+  const usernameRegex = /^[A-Z][a-zA-Z]{3,}$/; // Start with capital letter, at least 4 characters
+  if (!username.match(usernameRegex)) {
+    isValid = false;
+    document.getElementById('username-error').textContent =
+      'Username must start with a capital letter, be at least 4 characters long, and contain no special characters or numbers.';
+  }
+
+  // Email validation (basic format check)
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!email.match(emailRegex)) {
+    isValid = false;
+    document.getElementById('email-error').textContent = 'Invalid email format.';
+  }
+
+  // Password validation
+  const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/; // At least 1 capital letter, 1 special character, 8 characters
+  if (!password.match(passwordRegex)) {
+    isValid = false;
+    document.getElementById('password-error').textContent =
+      'Password must contain at least one capital letter, one special character, and be at least 8 characters long.';
+  }
+
+  if (!isValid) {
+    event.preventDefault(); // Prevent form submission if there are errors
+
+    // Clear error messages after 5 seconds
+    setTimeout(function () {
+      document.getElementById('username-error').textContent = '';
+      document.getElementById('email-error').textContent = '';
+      document.getElementById('password-error').textContent = '';
+    }, 5000);
+  }
+});
+
+      </script>

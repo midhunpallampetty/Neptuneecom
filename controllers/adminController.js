@@ -1,313 +1,309 @@
-const express = require('express');
-const bcrypt = require('bcrypt');
-const multer=require('multer');
-const session = require('express-session');
-const flash = require('connect-flash');
-const Admin = require('../models/adminModel'); // Import Admin Model
-const User = require('../models/userModel'); // Make sure the path is correct
-const Product = require('../models/Product');
-
+const express = require("express");
+const bcrypt = require("bcrypt");
+const multer = require("multer");
+const flash = require("connect-flash");
+const Admin = require("../models/adminModel");
+const User = require("../models/userModel");
+const Product = require("../models/Product");
+const Order=require('../models/order');
 const router = express.Router();
-
-
-  
-  // Handle product creation with image upload
- let postAddProduct = async (req, res) => {
-    const { name, description, price } = req.body;
-    let newPath = req.file.path;
-    const image = newPath.replace("public", "")
-    console.log(image);
-    try {
-      const newProduct = new Product({ name, description, price, image });
-      const savedProduct = await newProduct.save();
-      res.status(201).json(savedProduct);
-    } catch (error) {
-      res.status(500).json({ error: 'Product creation failed' });
-    }
-  };
-
-
-
-// Configure express-session middleware
-router.use(
-  session({
-    secret: 'your-secret-key', // Change this to a secret key for session encryption
-    resave: false,
-    saveUninitialized: true,
-  })
-);
-// Create a method for handling the product creation
-const addProduct = async (req, res) => {
-  try {
-    // Extract data from the request (e.g., req.body, req.file)
-    const { name, description, price,category } = req.body;
-    
-    console.log(req.body);
-    const newPath = req.file.path;
-    const image = newPath.replace("public", "");
-    // Create a new Product model
-    const newProduct = new Product({ name, description, price, image,category });
-
-    // Save the product to the database
-    const savedProduct = await newProduct.save();
-
-    // Respond with a success alert and redirect
-    const successMessage = 'Product added successfully!';
-    res.send(`
-      <script>
-        alert('${successMessage}');
-        window.location.href = '/adminDash'; // Redirect to the desired page
-      </script>
-    `);
-  } catch (error) {
-    // Handle errors and respond with an error alert
-    const errorMessage = 'Product creation failed';
-    res.send(`
-      <script>
-        alert('${errorMessage}');
-        window.location.href = '/'; // Redirect to the desired page
-      </script>
-    `);
-  }
-};
+const Category=require('../models/Category');
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, 'public/uploads/'); // Store uploads in 'public/uploads' folder
-    },
-    filename: (req, file, cb) => {
-      cb(null, Date.now() + '-' + file.originalname);
-    }
-  });
-  
-  const upload = multer({ storage });
-  
+  destination: (req, file, cb) => {
+    cb(null, "public/uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
 
-// Use connect-flash middleware
+const upload = multer({ storage });
+
 router.use(flash());
 
 // Render the homepage
 const renderHomepage = (req, res) => {
   const data = {
-    title: 'My Express App',
-    message: 'Welcome to my Express app with EJS!',
+    title: "My Express App",
+    message: "Welcome to my Express app with EJS!",
   };
-  res.render('index', data);
+  res.render("index", data);
 };
 
 // Admin Login Page
 const renderAdminLoginPage = (req, res) => {
-  res.render('adminLogin', { message: req.flash('message') }); // Pass any flash messages to the view
+  res.render("adminLogin", { message: req.flash("message") }); // Pass any flash messages to the view
 };
 
 // Handle Admin Login
-const handleAdminLogin = async (req, res) => {
-  const { email, password } = req.body;
+  const handleAdminLogin = async (req, res) => {
+    const { email, password } = req.body;
 
-  try {
-    // Find the admin by email
-    const admin = await Admin.findOne({ email });
+    try {
+      const admin = await Admin.findOne({ email });
 
-    if (!admin) {
-      // Admin not found
-      req.flash('message', 'Admin not found'); // Flash error message
-      return res.redirect('adminLogin'); // Redirect back to login page
+      if (!admin) {
+        req.flash("message", "Admin not found");
+        return res.redirect("/adminLogin");
+      }
+
+      const passwordMatch = await bcrypt.compare(password, admin.password);
+
+      if (passwordMatch) {
+        req.session.admin = admin;
+        return res.redirect("/adminDash");
+      } else {
+        // Incorrect password
+        req.flash("message", "Incorrect password");
+        return res.redirect("/admin/adminLogin");
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Login failed.");
     }
+  };
 
-    // Compare the provided password with the hashed password
-    const passwordMatch = await bcrypt.compare(password, admin.password);
-
-    if (passwordMatch) {
-      // Passwords match, redirect to adminDash
-      req.session.admin = admin; // Store admin in session
-      return res.redirect('/adminDash');
-    } else {
-      // Incorrect password
-      req.flash('message', 'Incorrect password'); // Flash error message
-      return res.redirect('/admin/adminLogin'); // Redirect back to login page
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Login failed.');
-  }
-};
-
-// Add this route in your Express.js code
-// Example route handler
 const renderUserManager = async (req, res) => {
   try {
-    const users = await User.find(); // Query all users from the database
+    const users = await User.find();
 
-    res.render('userManager', { users });
+    res.render("userManager", { users });
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error fetching user data.');
-  }
-};
-// Controller function for rendering the adminAddProduct page
-const renderAdminAddProduct = async (req, res) => {
-  try {
-    const products = await Product.find();
-    // You can include any necessary data fetching or processing here if needed
-    res.render('adminAddProduct',{ products });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Error rendering the adminAddProduct page.');
+    res.status(500).send("Error fetching user data.");
   }
 };
 
-// Render the product creation page
-const renderAddProduct = (req, res) => {
-  // Render the 'adminAddProduct.ejs' view for adding new products
-  res.render('adminAddProduct',{catego});
-};
-// Handle blocking a user
 const blockUser = async (req, res) => {
   const userId = req.params.userId;
-  
+
   try {
-    // Find the user by userId in the database
     const user = await User.findById(userId);
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found.' });
+      return res.status(404).json({ message: "User not found." });
     }
 
-    // Set the isBlocked property to true to block the user
     user.isBlocked = true;
 
-    // Save the updated user document
     await user.save();
 
-    // Send a success response
-    res.json({ message: 'User blocked successfully.' });
+    res.json({ message: "User blocked successfully." });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Error blocking user.' });
+    res.status(500).json({ message: "Error blocking user." });
   }
 };
 
-// Handle unblocking a user
 const unblockUser = async (req, res) => {
   const userId = req.params.userId;
   try {
-    // Find the user by userId in the database
     const user = await User.findById(userId);
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found.' });
+      return res.status(404).json({ message: "User not found." });
     }
 
-    // Set the isBlocked property to false to unblock the user
     user.isBlocked = false;
 
-    // Save the updated user document
     await user.save();
 
-    // Send a success response
-    res.json({ message: 'User unblocked successfully.' });
+    res.json({ message: "User unblocked successfully." });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Error unblocking user.' });
+    res.status(500).json({ message: "Error unblocking user." });
   }
 };
 
-// Render Admin Signup Page
 const renderAdminSignupPage = (req, res) => {
-  res.render('adminSignup');
+  res.render("adminSignup");
+};
+const adminDashReport = async (req, res) => {
+const orderDetail=await Order.find();
+console.log(orderDetail);
+  res.render("adminDash",{orderDetail});
 };
 
-// Handle Admin Signup
+
+
 const handleAdminSignup = async (req, res) => {
   const { email, password, isAdmin } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create a new admin document in the database
     const newAdmin = new Admin({
       email,
       password: hashedPassword,
-      isAdmin: isAdmin === 'on', // Check if isAdmin checkbox is checked
+      isAdmin: isAdmin === "on",
     });
 
     await newAdmin.save();
 
-    console.log('Admin signup successful');
-    res.render('adminLogin', { success: 'Admin signup successful. You can now login.' });
+    console.log("Admin signup successful");
+    res.render("adminLogin", {
+      success: "Admin signup successful. You can now login.",
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).send('Signup failed.');
+    res.status(500).send("Signup failed.");
   }
 };
-
-
-const listProducts = async (req, res) => {
-  try {
+const getAdminDashboard=async(req,res)=>{
+if (!req.session.admin) {
+      res.status(404).render("adminError");
+    } else {
+      const Products = await Product.find();
+  
+      const Orders = await Order.find();
+      const deliveredOrders = await Order.find({ status: "delivered" });
+      const aggregationResult = await Order.aggregate([
+        { $match: { status: "delivered" } },
+        { $group: { _id: null, totalPrice: { $sum: "$totalPrice" } } },
+      ]);
+      function countOrdersForDay(orders) {
+        const dayCounts = {
+          0: 0, // Sunday
+          1: 0, // Monday
+          2: 0, // Tuesday
+          3: 0, // Wednesday
+          4: 0, // Thursday
+          5: 0, // Friday
+          6: 0, // Saturday
+        };
+  
+        orders.forEach((order) => {
+          const orderDate = new Date(order.orderDate);
+          const dayOfWeek = orderDate.getDay();
+          dayCounts[dayOfWeek]++;
+        });
+  
+        return dayCounts;
+      }
+  
+      // Example usage to get counts for each day
+      function countOrdersForMonths(orders) {
+        const monthCounts = {
+          0: 0, // January
+          1: 0, // February
+          2: 0, // March
+          3: 0, // April
+          4: 0, // May
+          5: 0, // June
+          6: 0, // July
+          7: 0, // August
+          8: 0, // September
+          9: 0, // October
+          10: 0, // November
+          11: 0, // December
+        };
+        // Function to generate the PDF report
+  
+        orders.forEach((order) => {
+          const orderDate = new Date(order.orderDate);
+          const month = orderDate.getMonth();
+          monthCounts[month]++;
+        });
+  
+        return monthCounts;
+      }
+  
+      // Example usage to get the count of orders for each month
+      const ordersCountForMonths = countOrdersForMonths(Orders);
+  
+      // Log the count of orders for each month (replace this with your actual code to display or use the counts)
+      console.log("Orders count per month:", ordersCountForMonths);
+      const canceledOrdersCount = await Order.countDocuments({
+        status: "canceled",
+      });
+      const deliveredOrdersCount = await Order.countDocuments({
+        status: "delivered",
+      });
+      const pendingOrdersCount = await Order.countDocuments({
+        status: "Pending",
+      });
+  
+      console.log("Total number of canceled orders:", canceledOrdersCount);
+  
+      function countOrdersForYears(orders, ...years) {
+        const yearCounts = Object.fromEntries(years.map((year) => [year, 0]));
+  
+        orders.forEach((order) => {
+          const orderDate = new Date(order.orderDate);
+          const year = orderDate.getFullYear();
+  
+          if (years.includes(year)) {
+            yearCounts[year]++;
+          }
+        });
+  
+        // Convert the yearCounts object to an array
+        const resultArray = years.map((year) => yearCounts[year]);
+  
+        return resultArray;
+      }
+  
+      // Example usage to get the count of orders for each specific year as an array
+      const ordersCountForYears = countOrdersForYears(
+        Orders,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2022,
+        2023
+      );
+  
+      console.log("Orders count for each year (as array):", ordersCountForYears);
+  
+      // Example usage to get counts for each day
+      const ordersCountForDays = countOrdersForDay(Orders);
+      console.log("Orders count for each day of the week:", ordersCountForDays);
+  
+      const returnOrders = await Order.countDocuments({ returned: true });
+      const categoryCount = await Category.countDocuments();
+      console.log("categoryCount", categoryCount);
+      const totalPriceOfDeliveredOrders =
+        aggregationResult.length > 0 ? aggregationResult[0].totalPrice : 0;
    
-    const products = await Product.find().populate('category','description'); 
-    // Populate the 'category' field with 'name'
-    res.render('adminProductList', { products });
-    console.log(products); // Render the view with the products
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to retrieve product list' });
-  }
-};
-
-
-const updateProduct = async (req, res) => {
-  try {
-    const productId = req.params.id;
-    const { name, description, price } = req.body;
-    const image = req.file.filename;
-
-    const product = await Product.findById(productId);
-
-    if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
+  
+      // Log the count of orders for each month (replace this with your actual code to display or use the counts)
+      console.log("Orders count per month:", ordersCountForMonths);
+  
+      const razorpayOrderCount = await Order.countDocuments({ paymentMethod: 'razorpay' });
+  
+      const refundedOrders = await Order.find({ status: 'refunded' });
+  
+      const totalRefundedPrice = refundedOrders.reduce((total, order) => total + order.totalPrice, 0);
+      const canceledOrderCount = await Order.countDocuments({ canceled: true });
+      console.log(`Total Price of Refunded Orders: ${canceledOrderCount}`);
+      res.render("adminDash", {
+        Orders,
+        Products,
+        totalPriceOfDeliveredOrders,
+        returnOrders,
+        ordersCountForDays,
+        ordersCountForMonths,
+        ordersCountForYears,
+        canceledOrdersCount,
+        deliveredOrdersCount,
+        pendingOrdersCount,
+        categoryCount,
+        razorpayOrderCount,
+        totalRefundedPrice,
+        canceledOrderCount,
+      });
     }
 
-    product.name = name;
-    product.description = description;
-    product.price = price;
-    
-    product.image = image;
+  
+}
 
-    await product.save();
-
-    res.redirect('/adminEditProduct'); // Redirect to the product list page
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to update the product' });
-  }
-};
-
-const editProduct = async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id);
-    res.render('adminEditProduct', { product }); // Remove the leading slash
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to retrieve product for editing' });
-  }
-};
-
-const deleteProduct = async (req, res) => {
-  const productId = req.params.productId;
-  try {
-    // Find the product by ID and remove it
-    await Product.findByIdAndRemove(productId);
-
-    // Redirect to the product list page or respond with a success message
-    res.redirect('/admin/products'); // Replace 'products' with the correct route
-  } catch (error) {
-    res.status(500).json({ error: 'Product deletion failed' });
-  }
-};
-
-
-
-
-
-
+function escapeRegex(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+}
 
 module.exports = {
+  getAdminDashboard,
   renderHomepage,
   renderAdminLoginPage,
   handleAdminLogin,
@@ -316,10 +312,6 @@ module.exports = {
   renderUserManager,
   blockUser,
   unblockUser,
-  listProducts,
-  editProduct,
-  updateProduct,
-  deleteProduct,
-  addProduct,
-  
+  adminDashReport,
+
 };
