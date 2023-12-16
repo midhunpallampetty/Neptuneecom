@@ -1,7 +1,7 @@
 const express = require("express");
 const User = require("../models/userModel");
 const Banner=require('../models/bannerModel');
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const otpGenerator = require("otp-generator");
 const randomstring = require("randomstring");
 const session = require("express-session");

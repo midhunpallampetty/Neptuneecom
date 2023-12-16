@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const bannerController = require('../controllers/bannerController');
 const orderManagementRoutes=require('./orderManagementRoutes');
 const flash = require("connect-flash");
