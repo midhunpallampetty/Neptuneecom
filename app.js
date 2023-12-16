@@ -6,7 +6,6 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const path = require("path");
-require("dotenv").config();
 const userRoutes = require("./routes/userRoutes");
 const orderManagementRoutes = require("./routes/orderManagementRoutes");
 const adminRoutes = require("./routes/adminRoutes");
@@ -15,9 +14,14 @@ const Category = require("./models/Category");
 const Order = require("./models/order");
 const Product = require("./models/Product");
 
+require("dotenv").config();
+
+
 const { v4: uuidv4 } = require("uuid");
 
 const app = express();
+
+app.use("/user", require("./routes/userRoutes"));
 app.use(nocache());
 app.use(
   session({
@@ -41,6 +45,8 @@ app.post("/razorpay-webhook", (req, res) => {
 
   res.json({ received: true });
 });
+
+
 app.use("/orders", orderManagementRoutes);
 const port = process.env.PORT || 4000;
 const connectionString = process.env.MONGOCONNECTIONSTRING;
@@ -61,7 +67,6 @@ app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/user", userRoutes);
 
-app.use("/user", require("./routes/userRoutes"));
 
 app.use("/category", require("./routes/category"));
 
@@ -83,33 +88,28 @@ app.use("/sales-report", salesReportRoutes);
 
 app.use("/", userRoutes);
 
-
 app.use("/user", userRoutes);
 app.use("/admin", adminRoutes);
-app.use((req, res, next) => {
-  console.log(`Request received for ${req.url}`);
-  next();
-});
+
+app.use((req, res, next) => {  console.log(`Request received for ${req.url}`); next(); });
+
 app.use(express.json());
-app.use("/admin", adminRoutes);
 
 app.use("/wishlist", userRoutes);
-
-app.use("/userManager", adminRoutes);
-app.use("/adminAddProduct", adminRoutes);
 app.use("/userSignup", userRoutes);
-app.get("/registration", (req, res) => {
-  res.render("registration");
-});
-app.get("/userSignup", userController.renderUserSignup);
-app.post("/userSignup", userController.handleUserSignup);
-app.use("/adminSignup", adminRoutes);
 
+app.use("/admin", adminRoutes);
 app.get("/adminSignup", adminRoutes);
 app.post("/adminSignup", adminRoutes);
+app.use("/userManager", adminRoutes);
+app.use("/adminAddProduct", adminRoutes);
+app.use("/adminSignup", adminRoutes);
 
+app.get("/registration", (req, res) => { res.render("registration");
+});
 
-
+app.get("/userSignup", userController.renderUserSignup);
+app.post("/userSignup", userController.handleUserSignup);
 
 app.get("/mainpage", userController.getProducts);
 

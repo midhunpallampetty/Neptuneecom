@@ -451,12 +451,34 @@
           isValid = false;
         }
     
-        // Selling Price validation
         const price = document.getElementById('price').value.trim();
-        if (!price) {
-          displayError('price', 'Selling Price is required.');
-          isValid = false;
-        }
+  if (!price) {
+    displayError('price', 'Selling Price is required.');
+    isValid = false;
+  } else if (parseFloat(price) <= 0) {
+    displayError('price', 'Selling Price must be a positive number and cannot be zero.');
+    isValid = false;
+  }
+
+  // List Price validation
+  const listPrice = document.getElementById('listprice').value.trim();
+  if (!listPrice) {
+    displayError('listprice', 'List Price is required.');
+    isValid = false;
+  } else if (parseFloat(listPrice) <= 0) {
+    displayError('listprice', 'List Price must be a positive number and cannot be zero.');
+    isValid = false;
+  }
+
+  // Stock validation
+  const stock = document.getElementById('stock').value.trim();
+  if (!stock) {
+    displayError('stock', 'Stock quantity is required.');
+    isValid = false;
+  } else if (!/^[1-9]\d*$/.test(stock)) {
+    displayError('stock', 'Stock quantity must be a positive integer greater than zero.');
+    isValid = false;
+  }
     
         // Material validation
         const material = document.getElementById('material').value;
@@ -473,18 +495,10 @@
         }
     
         // Stock validation
-        const stock = document.getElementById('stock').value.trim();
-        if (!/^[1-9]\d*$/.test(stock)) {
-          displayError('stock', 'Stock quantity must be 1 or greater.');
-          isValid = false;
-        }
+      
     
         // List Price validation
-        const listPrice = document.getElementById('listprice').value.trim();
-        if (!listPrice) {
-          displayError('listprice', 'List Price is required.');
-          isValid = false;
-        }
+     
     
         // Color validation
         const color = document.getElementById('color').value;

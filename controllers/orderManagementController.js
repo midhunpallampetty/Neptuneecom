@@ -262,13 +262,21 @@ exports.createOrder = async (req, res) => {
       product: item.product._id,
       quantity: item.quantity,
     }));
-    const discount=req.session.discountAmount||0;
-    const totalPrice = req.session.totalPriceAfterCoupon !== null
-    ? req.session.totalPriceAfterCoupon
-    : req.session.totalPrice;
-  
-  // Now you can use the totalPrice in your code as needed
-  console.log('Total Price:', totalPrice);
+    const discount = req.session.discountAmount || 0;
+    let totalPrice;
+
+    if (req.session.totalPriceAfterCoupon !== null && req.session.totalPriceAfterCoupon !== false && req.session.totalPriceAfterCoupon !== undefined) {
+      totalPrice = req.session.totalPriceAfterCoupon;
+    } else {
+      totalPrice = req.session.totalPrice || 0;
+    }
+    const selectedAddressIndex = req.body.selectedAddressIndex;
+    console.log('Selected Address Index:', selectedAddressIndex);
+    
+
+    // Now you can use the totalPrice in your code as needed
+    console.log('Total Price:', totalPrice);
+
     const paymentMethod = req.body.paymentMethod;
     const generatedUUID = uuid.v4();
     const orderId = `NTN${generatedUUID}`;
@@ -303,13 +311,21 @@ exports.createOrder = async (req, res) => {
 
     // Set Addresschoose based on selectedAddressSet
     let Addresschoose;
-    if (selectedAddressSet === 'addressSet2') {
-      Addresschoose = 'addressSet2';
-    } else if (selectedAddressSet === 'addressSet1') {
-      Addresschoose = 'addressSet1';
-    } else {
+
+    for (let i = 1; i <= 10; i++) {
+      const addressSetKey = `addressSet${i}`;
+    
+      if (selectedAddressSet === addressSetKey) {
+        Addresschoose = addressSetKey;
+        break;
+      }
+    }
+    
+    // If none of the address sets match, set Addresschoose to null
+    if (!Addresschoose) {
       Addresschoose = null;
     }
+    
 
     const order = new Order({
       user,
@@ -323,8 +339,9 @@ exports.createOrder = async (req, res) => {
     });
 
     await order.save();
-    req.session.discountAmount=false;
-    req.session.totalPriceAfterCoupon=false;
+    req.session.discountAmount = false;
+    req.session.totalPriceAfterCoupon = false;
+
     if (paymentMethod === 'razorpay') {
       return res.json({
         razorpayOrder,
@@ -342,17 +359,17 @@ exports.createOrder = async (req, res) => {
 };
 
 // Helper function to reduce product stock
-// Helper function to reduce product stock
 async function reduceProductStock(products) {
   try {
     for (const data of products) {
-      await Product.findByIdAndUpdate(data.product,{$inc:{stock:-data.quantity}})
+      await Product.findByIdAndUpdate(data.product, { $inc: { stock: -data.quantity } });
     }
   } catch (error) {
     console.error("Error reducing stock:", error);
     // Handle the error as needed
   }
 }
+
 
 // Add a new function to handle Razorpay success and update the 'paid' field
 exports.handleRazorpaySuccess = async (req, res) => {

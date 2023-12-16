@@ -8,7 +8,8 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const router = require("../routes/adminRoutes");
 const userRoutes = require("../routes/adminRoutes");
-
+const PDFDocument = require('pdfkit');
+const fs = require('fs');
 const Router = express.Router();
 const Product = require("../models/Product");
 const saltRounds = 10;
@@ -18,18 +19,66 @@ const Cart = require("../models/Cart");
 const Order = require("../models/order");
 const Wishlist = require("../models/Wishlist");
 const Category = require("../models/Category");
+const mongoose=require('mongoose');
 // Create a Twilio client
 const accountSid = "ACa46dba17ac0e44e04353b02210d1c95c";
 const authToken = "87cb986fc6a51b1966aea5fadef48bc8";
 const client = twilio(accountSid, authToken);
 const twilioPhoneNumber = "+12053950807";
-
+const easyinvoice = require('easyinvoice');
 // Use connect-flash for flash messages
 router.use(flash());
+// orderController.js
+
+// Import any necessary modules/models
+// For example, if you need to fetch order details from the database
+
+
+function generateInviteLink(username) {
+  const uniqueId = Math.random().toString(36).substr(2, 8);
+  return `http://localhost:4000/invite/${uniqueId}?ref=${username}`;
+}
+const userInviteLinks = {};
 
 
 
 const userController = {
+ 
+
+// Generate a unique invite link with the username
+
+
+// Controller function to generate an invite link for a given username
+generateInviteLinkController : async (req, res) => {
+  const userId = req.query.userid;
+
+  try {
+    // Check if the user with the given userId already has a referral link
+    const existingUser = await User.findOne({ _id: userId });
+
+    if (existingUser && existingUser.referralLink) {
+      return res.status(400).json({ error: 'Referral link already generated for this user.' });
+    }
+
+    // Generate a unique invite link
+    const inviteLink = generateInviteLink(userId);
+
+    // Store the invite link in memory
+    userInviteLinks[userId] = inviteLink;
+
+    // Save the generated referral link to the user's referralLink field in the database
+    await User.updateOne(
+      { _id: userId },
+      { $set: { referralLink: inviteLink } }
+    );
+
+    // Respond with the invite link
+    res.json({ inviteLink });
+  } catch (error) {
+    console.error('Error generating or saving referral link:', error);
+    res.status(500).json({ error: 'Internal server error.' });
+  }
+},
   registerUser: async (req, res) => {
     try {
       const { email, password, otp } = req.body; // Add OTP field to your registration form
@@ -54,7 +103,7 @@ const userController = {
       // Redirect to a success page or do something else
       res.status(200).json({
         success: true,
-        message: "User registered successfully",
+        message: "User registehtrhtrhred successfully",
       });
     } catch (error) {
       console.error(error.message);
@@ -135,7 +184,80 @@ const userController = {
   renderUserSignup: (req, res) => {
     res.render("userSignup"); // Render the 'userSignup.ejs' view
   },
+ 
+  renderOrderDetail : async (req, res) => {
+    // Add your logic here, such as fetching order details from the database
+  const order=req.query.orderid;
+  console.log(order,'rgyfbeyhfgbesuyhfgbewuyfgewy');
+  const detailsOfOrder=await Order.findOne({ orderId: order });
 
+  const usersid=detailsOfOrder.user;
+  const userOrder=await User.findById(usersid)
+
+    // Render the orderdetail.ejs page with the necessary data
+    res.render('orderdetail', { detailsOfOrder,userOrder });
+  }, 
+
+
+// ... your other imports and middleware ...
+
+renderOrderDetailPdf: async (req, res) => {
+  const order = req.query.orderNo;
+  console.log(order, 'rgyfbeyhfgbesuyhfgbewuyfgewy');
+  const detailsOfOrder = await Order.findOne({ orderId: order });
+  const usersid = detailsOfOrder.user;
+  const userOrder = await User.findById(usersid);
+  console.log('orderdetaillllllllssssssss', detailsOfOrder.Addresschoose);
+
+  // Prepare data for the invoice
+  const data = {
+    documentTitle: 'Order Details',
+    currency: 'USD', // Set your desired currency
+    taxNotation: 'vat', // or 'vat' or 'gst' depending on your country
+    marginTop: 25,
+    marginRight: 25,
+    marginLeft: 25,
+    marginBottom: 25,
+    logo: 'https://logos-world.net/wp-content/uploads/2020/11/Airtel-Logo-1995-2010.png', // URL or base64-encoded image
+    sender: {
+      company: 'Neptune Musics',
+      address: 'Neptune music Inc,Bangalore ,No 23 street,KA',
+      zip: '12345',
+      city: 'Greater Bangalore',
+      country: 'India',
+      website: 'www.neptunemusics.shop'
+    },
+    client: {
+      company: userOrder.FullName,
+      address: 'User Address', // Replace with actual user address
+      zip: 'User Zip', // Replace with actual user ZIP
+      city: 'User City', // Replace with actual user city
+      country: 'India', // Replace with actual user country
+    },
+    items: [
+      {
+        description: 'Product 1',
+        quantity: 1,
+        tax: 0, // Tax percentage
+        price: detailsOfOrder.productPrice, // Replace with actual product price
+      },
+      // Add other items as needed
+    ],
+    bottomNotice: 'Thank you for your order!',
+  };
+
+  // Generate the invoice
+  const result = await easyinvoice.createInvoice(data);
+
+  // Set the response headers
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', 'inline; filename=order_detail.pdf');
+
+  // Send the PDF as the response
+  res.send(Buffer.from(result.pdf, 'base64'));
+},
+
+  
   handleUserSignup: async (req, res) => {
     try {
       const { email, password, username } = req.body;
@@ -169,7 +291,7 @@ const userController = {
       // You can add more actions here if needed, e.g., sending a confirmation email
       req.session.user = user;
       req.session.userId = user._id;
-      const successMessage = "User registered successfully!";
+      const successMessage = "User registerertgreghreghrd successfully!";
       return res.send(`
         <script>
           alert('${successMessage}');
@@ -284,24 +406,27 @@ const userController = {
   viewProfile: async (req, res) => {
     try {
       console.log("profile view");
-
+  
       const userId = req.session.userId;
-
+  
       // Check if the user is logged in (userId exists in the session)
       if (!userId) {
         res.status(404).render("404"); // Redirect to the 404 error page
         return;
       }
-
+  
       const user = await User.findById(userId);
-
+  
       // If the user is not found, display a 404 error page
       if (!user) {
         res.status(404).render("404");
         return;
       }
-
-      res.render("profile", { user, userOrders });
+  
+      // Assuming your User model has a 'referralId' field
+      const referralLink = `http://localhost:4000/copy/${user.referralId}`;
+  console.log(referralLink,'referal link :');
+      res.render("profile", { user, referralLink });
     } catch (error) {
       console.error(error);
       res.status(500).send("Internal Server Error"); // Handle other errors with a 500 error page

@@ -1,10 +1,9 @@
 // addressController.js
 
-const User = require('../models/userModel');
-
+const User = require("../models/userModel");
 async function addAdditionalAddress(req, res) {
-  const { userId } = req.params; // Assuming you pass the user ID in the request parameters
-  const { address, fromPage } = req.body;
+  const { userId } = req.session;
+  const { Name, House, phone, pincode, fromPage } = req.body;
 
   try {
     const user = await User.findById(userId);
@@ -13,10 +12,20 @@ async function addAdditionalAddress(req, res) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    if (fromPage === 'profile') {
-      user.additionalAddresses.push(address);
-    } else if (fromPage === 'checkout') {
-      user.checkoutAddresses.push(address);
+    // Ensure that additionalAddresses is initialized as an array
+    if (!user.additionalAddresses) {
+      user.additionalAddresses = [];
+    }
+
+    if (fromPage === 'profile' || fromPage === 'checkout') {
+      const newAddress = {
+        Name,
+        House,
+        phone,
+        pincode,
+      };
+
+      user.additionalAddresses.push(newAddress);
     } else {
       return res.status(400).json({ message: 'Invalid request' });
     }
@@ -29,6 +38,7 @@ async function addAdditionalAddress(req, res) {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 }
+
 
 module.exports = {
   addAdditionalAddress,

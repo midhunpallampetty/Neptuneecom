@@ -1,5 +1,6 @@
 // userRoutes.js
 const express = require("express");
+const blockedCheck=require('../middleware/isBlocked');
 const router = express.Router();
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
@@ -74,27 +75,20 @@ router.post("/resend-otp", async (req, res) => {
   }
 });
 
-// Function to verify OTP (simplified; adapt as needed)
-// A simple OTP verification function
+
 function verifyOTP(storedOTP, enteredOTP) {
   return storedOTP === enteredOTP;
 }
 
-// Route for verifying OTP
-// Your Express route for user registration with OTP verification
-// Route for verifying OTP
-// Your Express route for user registration with OTP verification
 router.post("/register", async (req, res) => {
-  // This code does not check for the existence of a user with the provided email
-
-  // Get the email, phone, or other user details from the request body
+ 
   const { email, password } = req.body;
 
   try {
-    // Create a new user record with the provided details
+   
     const newUser = new User({ email, password, wallet: 0 });
 
-    // Save the new user to the database
+   
     await newUser.save();
 
     console.log("User registered successfully");
@@ -120,7 +114,7 @@ function generateOTP() {
 
 // Display all products
 router.use("/checkout",checkoutRoutes);
-router.get("/mainpage", userController.getProducts); //thisone
+router.get("/mainpage", blockedCheck.checkBlockedStatus,userController.getProducts); //thisone
 router.get('/registration'),userController.registrationUser;
 router.post("/verify-otp", (req, res) => {
   const userEnteredOtp = req.body.otp;
@@ -131,21 +125,20 @@ router.post("/verify-otp", (req, res) => {
     res.status(201).json({ status: true });
   }
 });
+
 router.get("/userSignup", userController.renderUserSignup);
-//user Profile Routes
-// router.get('/banner',bannerController.renderMainPage);//this two
-// Handle user registration
+router.get('/generate-invite', userController.generateInviteLinkController);
 router.post("/userSignup", userController.handleUserSignup);
-// Handle user registration
+
 router.post("/userSignup", async (req, res) => {
   try {
     const { username, email, password } = req.body;
     console.log(req.body);
-    // Check if the user already exists
+    
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      // User with the same email already exists
+      
       const errorMessage = "User With This Email already reggitered!";
       res.send(`
             <script>
@@ -155,10 +148,10 @@ router.post("/userSignup", async (req, res) => {
           `);
     }
 
-    // If the user does not exist, create a new user in the database
+    
     const user = await User.create({ username, email, password });
 
-    // You can add more actions here if needed, e.g., sending a confirmation email
+    
     const successMessage = "User registered successfully!";
     res.send(`
       <script>
@@ -198,10 +191,10 @@ router.get("/", async (req, res) => {
   }
 });
 // Profile page route
-router.post('/users/:userId/additional-addresses/profile', addressController.addAdditionalAddress);
+router.post('/users/:userId/additional-addresses/profile',blockedCheck.checkBlockedStatus,addressController.addAdditionalAddress);
 
 // Checkout page route
-router.post('/checkoutAddress', addressController.addAdditionalAddress);
+router.post('/checkoutAddress', blockedCheck.checkBlockedStatus,addressController.addAdditionalAddress);
 //Profile add Address and Update/delete
 
 // Inside your route handler for the login route (e.g., /userLogin)
@@ -318,37 +311,36 @@ router.get("/logout", (req, res) => {
   });
 });
 
-// User Login Page
+
 router.get("/userLogin", (req, res) => {
   res.render("userLogin");
 });
-router.use("/cart", userAuth.isUserLogged,cartRoutes);
+router.use("/cart", blockedCheck.checkBlockedStatus,userAuth.isUserLogged,cartRoutes);
 
-//Wishlist Routes
-router.post("/wishlist/add", userAuth.isUserLogged,wishlistController.addToWishlist);
+router.post("/wishlist/add",blockedCheck.checkBlockedStatus ,userAuth.isUserLogged,wishlistController.addToWishlist);
 
-router.get("/wishlist-cart/add", userAuth.isUserLogged,wishlistController.addToCartFromWishlist);
+router.get("/wishlist-cart/add", blockedCheck.checkBlockedStatus,userAuth.isUserLogged,wishlistController.addToCartFromWishlist);
 
-router.get("/wishlist", userAuth.isUserLogged,wishlistController.showWishlist);
+router.get("/wishlist", blockedCheck.checkBlockedStatus, userAuth.isUserLogged,wishlistController.showWishlist);
 router.post(
   "/wishlist/remove/:productId",
-  userAuth.isUserLogged,wishlistController.removeFromWishlist
+  userAuth.isUserLogged,blockedCheck.checkBlockedStatus,wishlistController.removeFromWishlist
 );
-  router.use("/ordersuser", userAuth.isUserLogged,orderManagemnetRoutes);
-  router.post('/apply-coupon', userCouponController.applyCoupon);
+  router.use("/ordersuser", blockedCheck.checkBlockedStatus,userAuth.isUserLogged,orderManagemnetRoutes);
+  router.post('/apply-coupon', blockedCheck.checkBlockedStatus,userCouponController.applyCoupon);
 
+  router.post('/orderdetail', blockedCheck.checkBlockedStatus,userController.renderOrderDetail);
 
-//Profile Routes
-router.get("/profile", userAuth.isUserLogged,profileController.viewProfile);
+router.get("/profile", blockedCheck.checkBlockedStatus,userAuth.isUserLogged,profileController.viewProfile);
 
-router.post("/profile/add", userAuth.isUserLogged,profileController.addDetail);
+router.post("/profile/add", blockedCheck.checkBlockedStatus,userAuth.isUserLogged,profileController.addDetail);
 
-router.put("/update", userAuth.isUserLogged,profileController.updateDetail);
-
-router.delete("/delete", userAuth.isUserLogged,profileController.deleteDetail);
-router.get("/shopping", userController.displayShoppingPage);
-router.use('/api/orders', userAuth.isUserLogged,orderManagemnetRoutes);
-router.use("/ordersuser", userAuth.isUserLogged,orderManagemnetRoutes);
+router.put("/update", blockedCheck.checkBlockedStatus,userAuth.isUserLogged,profileController.updateDetail);
+router.post('/download-invoice',userController.renderOrderDetailPdf);
+router.delete("/delete", blockedCheck.checkBlockedStatus,userAuth.isUserLogged,profileController.deleteDetail);
+router.get("/shopping", blockedCheck.checkBlockedStatus,userController.displayShoppingPage);
+router.use('/api/orders', blockedCheck.checkBlockedStatus,userAuth.isUserLogged,orderManagemnetRoutes);
+router.use("/ordersuser", blockedCheck.checkBlockedStatus,userAuth.isUserLogged,orderManagemnetRoutes);
 
 
 module.exports = router;

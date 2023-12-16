@@ -95,7 +95,12 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-
+.skeleton-loader-background {
+  width: 100%;
+  height: 15px;
+  display: block;
+  background: lightgray;       
+}
 img {
   max-width: 100%;
 }
@@ -2391,31 +2396,10 @@ label {
 }
 
 /*page loading*/
-.preloader {
-  background-color: #f7f7f7;
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 999999;
-  -webkit-transition: .6s;
-  transition: .6s;
-  margin: 0 auto;
-}
 
-.preloader img.jump {
-  max-height: 100px;
-}
 
 /*custom amine*/
-.loader,
-.bar {
-  width: 100px;
-  height: 20px;
-}
+
 
 .bar {
   position: absolute;

@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
 const addressSchema = new mongoose.Schema({
-  Name: { type: String, required: true },
-  House: { type: String, required: true },
-  email: { type: String, required: true },
-  phone:{ type: Number, required: true },
-  pincode:{ type: Number, required: true },
+  Name: { type: String, },
+  House: { type: String,  },
+ 
+  phone:{ type: Number, },
+  pincode:{ type: Number, },
   // Add other address fields as needed
 });
 
@@ -25,6 +25,7 @@ const userSchema = new mongoose.Schema({
   PhoneNum: Number,
   companyName: String,
   Zipcode: String,
+  referralLink: { type: String, unique: true },
   couponsApplied: [
     {
       type: mongoose.Schema.Types.ObjectId,

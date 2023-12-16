@@ -1,0 +1,406 @@
+<!-- editCoupon.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Coupon</title>
+  <!-- Include Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link href="/css2/main.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+
+</head>
+<body>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="index.html" class="brand-wrap">
+                <img src="/imgs/logo.png" class="logo" alt="Evara Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item active">
+                    <a class="menu-link" href="/adminDash"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="page-products-list.html"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/adminAddProduct">Add products</a>
+                        <a id="search-link" href="/admin/products">Product Edit and Delete</a>
+
+                     
+                    </div>
+                    
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="page-orders-1.html"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/ordersadmin">Order Manage</a>
+                        
+<a href="/ordersadmin/returnOrders">Return Request</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="/admin/userManager"> <i class="icon material-icons md-store"></i>
+                        <span class="text">Users</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/userManager">Block/UnBlock Users</a>
+                       
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="/admin/listCategory"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Categories</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/category">Manage Categories</a>
+                       
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="page-transactions-1.html"> <i class="icon material-icons md-monetization_on"></i>
+                        <span class="text">Coupons</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/create-coupon">Generate a Coupon</a>
+                        
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-person"></i>
+                        <span class="text">Account</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="page-account-login.html">User login</a>
+                        <a href="page-account-register.html">User registration</a>
+                        <a href="page-error-404.html">Error 404</a>
+                    </div>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
+                        <span class="text">Reviews</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="admin/userManager"> <i class="icon material-icons md-stars"></i>
+                        <span class="text">Brands</span> </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
+                        <span class="text">Statistics</span>
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <ul class="menu-aside">
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
+                        <span class="text">Settings</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="page-settings-1.html">Setting sample 1</a>
+                        <a href="page-settings-2.html">Setting sample 2</a>
+                    </div>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/logoutAdmin"><svg xmlns="http://www.w3.org/2000/svg" fill="grey" height="1.6em" viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M208 96a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM123.7 200.5c1-.4 1.9-.8 2.9-1.2l-16.9 63.5c-5.6 21.1-.1 43.6 14.7 59.7l70.7 77.1 22 88.1c4.3 17.1 21.7 27.6 38.8 23.3s27.6-21.7 23.3-38.8l-23-92.1c-1.9-7.8-5.8-14.9-11.2-20.8l-49.5-54 19.3-65.5 9.6 23c4.4 10.6 12.5 19.3 22.8 24.5l26.7 13.3c15.8 7.9 35 1.5 42.9-14.3s1.5-35-14.3-42.9L281 232.7l-15.3-36.8C248.5 154.8 208.3 128 163.7 128c-22.8 0-45.3 4.8-66.1 14l-8 3.5c-32.9 14.6-58.1 42.4-69.4 76.5l-2.6 7.8c-5.6 16.8 3.5 34.9 20.2 40.5s34.9-3.5 40.5-20.2l2.6-7.8c5.7-17.1 18.3-30.9 34.7-38.2l8-3.5zm-30 135.1L68.7 398 9.4 457.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L116.3 441c4.6-4.6 8.2-10.1 10.6-16.1l14.5-36.2-40.7-44.4c-2.5-2.7-4.8-5.6-7-8.6zM550.6 153.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L530.7 224H384c-17.7 0-32 14.3-32 32s14.3 32 32 32H530.7l-25.4 25.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l80-80c12.5-12.5 12.5-32.8 0-45.3l-80-80z"/></svg>&nbsp;
+                        <span class="text"> Logout</span>
+                    </a>
+                </li>
+            </ul>
+            <br>
+            <br>
+        </nav>
+    </aside>
+    <div class="container mt-5">
+        <h1>Edit Coupon</h1>
+        <form  method="post" class="needs-validation" novalidate>
+          <div class="form-group">
+            <div class="form-group">
+                <label for="code">Coupon Code:</label>
+                <input type="text" id="code" name="code" value="<%= coupon.code %>" class="form-control" required oninput="formatCouponCode(this)">
+                <div class="invalid-feedback">
+                  Please enter a valid coupon code with capital letters and numbers only.
+                </div>
+              </div>
+            <label for="type">Coupon Type:</label>
+            <select id="type" name="type" class="form-control" required>
+              <option value="percentage" <%= coupon.type === 'percentage' ? 'selected' : '' %>>Percentage</option>
+              <option value="fixed" <%= coupon.type === 'fixed' ? 'selected' : '' %>>Fixed</option>
+            </select>
+            <div class="invalid-feedback">
+              Please select the coupon type.
+            </div>
+            <div class="form-group">
+                <label for="discount">Discount:</label>
+                <input type="text" id="discount" name="discount" value="<%= coupon.discount %>" class="form-control" required oninput="validateDiscount(this)">
+                <div class="invalid-feedback">
+                  Please enter a valid discount value.
+                </div>
+              </div>
+            <label for="code">Coupon Quantity:</label>
+            <input type="text" id="code" name="quantity" value="<%= coupon.quantity %>" class="form-control" required>
+            <label for="expiryDate">Coupon Expiry:</label>
+  <input type="date" id="expiryDate" name="expiryDate" class="form-control" required
+          value="<%= coupon.expiryDate.toISOString().split('T')[0] %>">
+
+        
+        <div class="invalid-feedback">
+          Please select the coupon expiry date.
+        </div>
+          </div>
+     
+          <!-- Include other Bootstrap form controls for type, discount, quantity, expiryDate -->
+          
+          <button type="submit" class="btn btn-primary" >Update Coupon</button>
+        </form>
+      </div>
+      
+      <!-- Include other Bootstrap form controls for type, discount, quantity, expiryDate -->
+      
+  
+    </form>
+  </div>
+
+  <!-- Include Bootstrap JS and Popper.js -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- Bootstrap form validation script -->
+  <script>
+    function formatCouponCode(input) {
+    // Convert small letters to capital letters
+    const formattedValue = input.value.toUpperCase();
+    input.value = formattedValue;
+  }
+
+              function formatDate(dateString) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      const date = new Date(dateString);
+      return date.toLocaleDateString(undefined, options);
+    }
+          </script>
+  <script>
+    (function () {
+      'use strict';
+
+      window.addEventListener('load', function () {
+        var forms = document.getElementsByClassName('needs-validation');
+
+        Array.prototype.filter.call(forms, function (form) {
+          form.addEventListener('submit', function (event) {
+            if (form.checkValidity() === false) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+
+            form.classList.add('was-validated');
+          }, false);
+        });
+      }, false);
+    })();
+  </script>
+  <script>
+    function validateDiscount(input) {
+      const discountValue = parseFloat(input.value);
+  
+      // Check for minus value
+      if (discountValue < 0) {
+        input.setCustomValidity('Discount cannot be a negative value.');
+      } else {
+        // Reset custom validity
+        input.setCustomValidity('');
+      }
+  
+      // Check if coupon type is percentage and value is within the range [0, 100]
+      const typeSelect = document.getElementById('type'); // Assuming you have a select element with id 'type'
+      const isPercentageType = typeSelect.value === 'percentage';
+      if (isPercentageType && (discountValue < 0 || discountValue > 100)) {
+        input.setCustomValidity('Percentage discount should be between 0 and 100.');
+      } else {
+        // Reset custom validity
+        input.setCustomValidity('');
+      }
+    }
+  </script>
+   <script>
+    function showErrorAlert(message) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: message,
+      });
+    }
+
+    function showSuccessAlert(message) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: message,
+      });
+    }
+
+
+function showSuccessAlert(message) {
+  Swal.fire({
+    icon: 'success',
+    title: 'Success!',
+    text: message,
+  });
+}
+
+function showBadRequestAlert(message) {
+  Swal.fire({
+    icon: 'error',
+    title: 'Invalid Input',
+    text: message,
+  });
+}
+
+function showNotFoundErrorAlert(message) {
+  Swal.fire({
+    icon: 'error',
+    title: 'Not Found',
+    text: message,
+  });
+}
+
+function showInternalServerErrorAlert(message) {
+  Swal.fire({
+    icon: 'error',
+    title: 'Internal Server Error',
+    text: message,
+  });
+}
+
+function showErrorAlert(message) {
+  Swal.fire({
+    icon: 'error',
+    title: 'Oops...',
+    text: message,
+  });
+}
+
+// Attach handleFormSubmission to the form's submit event
+document.getElementById('updateCouponForm').addEventListener('submit', function (event) {
+  event.preventDefault();
+  handleFormSubmission();
+});
+
+function showErrorAlert(message, notFound = false) {
+  Swal.fire({
+    icon: 'error',
+    title: notFound ? 'Not Found' : 'Oops...',
+    text: message,
+  });
+}
+
+function showSuccessAlert(message) {
+  Swal.fire({
+    icon: 'success',
+    title: 'Success!',
+    text: message,
+  });
+}
+
+// Attach handleFormSubmission to the form's submit event
+document.getElementById('updateCouponForm').addEventListener('submit', async function (event) {
+  event.preventDefault();
+  await handleFormSubmission();
+});
+
+document.getElementById('updateCouponForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+    handleFormSubmission();
+  }); 
+
+
+ 
+
+  </script>
+  
+</body>
+<script src="/js2/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/js2/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/js2/vendors/select2.min.js"></script>
+    <script src="/js2/vendors/perfect-scrollbar.js"></script>
+    <script src="/js2/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="/js2/main.js" type="text/javascript"></script>
+    <style>
+        container {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100vh;
+          margin: 0;
+        }
+    
+        .container {
+          max-width: 400px;
+        }
+      </style>
+      <script>
+        async function handleFormSubmission() {
+  try {
+    const formData = new FormData(document.getElementById('updateCouponForm'));
+
+    const response = await fetch('/coupons/<%= coupon._id %>/edit', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (response.ok) {
+      const responseData = await response.json();
+      const { alert, message } = responseData;
+
+      if (alert === 'success') {
+        showSuccessAlert(message);
+      } else {
+        showErrorAlert(message);
+      }
+    } else {
+      showErrorAlert('Unexpected error. Please try again.');
+    }
+  } catch (error) {
+    console.error(error);
+    showErrorAlert('Unexpected error. Please try again.');
+  }
+}
+
+function showSuccessAlert(message) {
+  Swal.fire({
+    icon: 'success',
+    title: 'Success!',
+    text: message,
+  });
+}
+
+function showErrorAlert(message) {
+  Swal.fire({
+    icon: 'error',
+    title: 'Oops...',
+    text: message,
+  });
+}
+
+document.getElementById('updateCouponForm').addEventListener('submit', function (event) {
+  event.preventDefault();
+  handleFormSubmission();
+});
+
+      </script>
+</html>

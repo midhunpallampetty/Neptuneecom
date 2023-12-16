@@ -17,6 +17,8 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <link rel="shortcut icon" type="image/x-icon" href="imgs/theme/favicon.svg">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
     <!-- Template CSS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -503,9 +505,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6 mb-sm-15">
-                        <div class="toggle_info">
-                            <span><i class="fi-rs-user mr-10"></i><span class="text-muted">Already have an account?</span> <a href="#loginform" data-bs-toggle="collapse" class="collapsed" aria-expanded="false">Click here to login</a></span>
-                        </div>
+                      
                         <div class="panel-collapse collapse login_form" id="loginform">
                             <div class="panel-body">
                                 <p class="mb-30 font-sm">If you have shopped with us before, please enter your details below. If you are a new customer, please proceed to the Billing &amp; Shipping section.</p>
@@ -532,24 +532,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="toggle_info">
-                            <span><i class="fi-rs-label mr-10"></i><span class="text-muted">Have a coupon?</span> <a href="#coupon" data-bs-toggle="collapse" class="collapsed" aria-expanded="false">Click here to enter your code</a></span>
-                        </div>
-                        <div class="panel-collapse collapse coupon_form " id="coupon">
-                            <div class="panel-body">
-                                <p class="mb-30 font-sm">If you have a coupon code, please apply it below.</p>
-                                <form method="post">
-                                    <div class="form-group">
-                                        <input type="text" placeholder="Enter Coupon Code...">
-                                    </div>
-                                    <div class="form-group">
-                                        <button class="btn  btn-md" style="background-color: #28a745;color: white;border: none;border-radius: 15;" name="login">Apply Coupon</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                
                 </div>
                 <div class="row">
                     <div class="col-12">
@@ -627,63 +610,79 @@
 
     <button type="submit" class="btn btn-fill-out submit">Save</button>
 </form>
-<div class="address-container">
-    <!-- Display additional addresses -->
-    <% user.additionalAddresses.forEach((address, index) => { %>
-      <div class="address-box">
-        <label>
-          <input type="radio" style="margin-left: 10px; color: blue;" name="addressSelection" value="<%= 'additionalAddress' + index %>" onclick="toggleFormVisibility('edit-form-additionalAddress<%= index %>', this)">
-        </label> <h4>Additional Address <%= index + 1 %></h4>
-        <p>
-          <strong>Full Name:</strong> <%= address.Name %><br>
-          <strong>Phone:</strong> <%= address.phone %><br>
-          <strong>House Name:</strong> <%= address.House %><br>
-          <strong>Pincode:</strong> <%= address.pincode %><br>
-          <!-- Add other address fields as needed -->
-        </p>
-        <button class="edit-button" onclick="toggleFormVisibility('edit-form-additionalAddress<%= index %>', radioButtonId)">Edit</button>
-      </div>
-    <% }); %>
-  
-    <!-- Display "plus" icon if no additional addresses or after the last additional address -->
-    <div style="width: 100%;align-items: center;width: 50px;font-size: larger;" class="add-address-box" onclick="addAdditionalAddress()">
-      <span style="align-items: center;">Add</span>
-    </div>
-  </div>
+
 <!-- Add this form in your checkout page HTML -->
-<form id="additionalAddressForm">
-    <label for="fullName">Full Name:</label>
-    <input type="text" id="fullName" name="fullName" required>
+<!-- Add this form in your HTML file (e.g., checkout page) -->
+<button id="showFormBtn" class="btn btn-primary">Add Address</button>
+
+<form id="addressForm" action="/checkoutAddress" method="POST">
+    <label for="Name">Name:</label>
+    <input type="text" id="Name" name="Name" required>
+
+    <label for="House">House:</label>
+    <input type="text" id="House" name="House" required>
 
     <label for="phone">Phone:</label>
     <input type="text" id="phone" name="phone" required>
-
-    <label for="house">House Name:</label>
-    <input type="text" id="house" name="house" required>
 
     <label for="pincode">Pincode:</label>
     <input type="text" id="pincode" name="pincode" required>
 
     <!-- Add other address fields as needed -->
 
-    <button type="button" onclick="submitAdditionalAddress()">Add Address</button>
+    <label for="fromPage">From Page:</label>
+    <select id="fromPage" name="fromPage">
+        <option value="profile">Profile</option>
+        <option value="checkout">Checkout</option>
+    </select>
+
+    <button type="submit">Add Address</button>
 </form>
 
-<script>
+
+<div class="container">
+    <div class="row">
+     
+      <% foundUser.additionalAddresses.forEach(function(address, index) { %>
+        <div class="col-md-4 mb-4">
+          <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title"><%= address.Name %></h5>
+              <p class="card-text"><%= address.House %></p>
+              <p class="card-text"><%= address.phone %></p>
+              <p class="card-text"><%= address.pincode %></p>
+              <label>
+                <input type="radio" style="margin-left: 10px; color: blue;" name="addressSelection" value="<%= 'addressSet' + (index + 3) %>" onclick="toggleFormVisibility('edit-form-addressSet1', this)">
+              </label>
+            </div>
+          </div>
+        </div>
+        <% if ((index + 1) % 3 === 0) { %>
+          </div>
+          <div class="row">
+        <% } %>
+      <% }); %>
+    </div>
+  </div>
+  
+  
+
+
+<!-- <script>
     async function submitAdditionalAddress() {
-        const userId = 'your_user_id'; // Replace with the actual user ID
+        const userId = req.session.user._id; // Replace with the actual user ID
         const form = document.getElementById('additionalAddressForm');
 
         const address = {
-            fullName: form.elements['fullName'].value,
+            Name: form.elements['Name'].value,
             phone: form.elements['phone'].value,
-            house: form.elements['house'].value,
+            House: form.elements['House'].value,
             pincode: form.elements['pincode'].value,
             // Add other address fields as needed
         };
 
         try {
-            const response = await fetch(`/checkoutAddress`, {
+            const response = await fetch(``, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -705,7 +704,7 @@
             // Handle other errors, if any
         }
     }
-</script>
+</script> -->
 
 
 
@@ -715,17 +714,6 @@
 </script>
 
 <script>
-function toggleFormVisibility(formId, radioButton) {
-    var form = document.getElementById(formId);
-    const selectedAddressInput = form.querySelector('input[name="selectedAddress"]');
-    const radioButtonValue = radioButton.value;
-    // Check if the radio button is checked
-    if (radioButton.checked) {
-        form.style.display = 'none'; // Hide the form
-    } else {
-        form.style.display = (form.style.display === 'none') ? 'block' : 'none';
-    }
-}
 
 
 // Add a click event listener to your radio button
@@ -1033,6 +1021,29 @@ function addAdditionalAddress() {
     <!-- Template  JS -->
     <script src="./js/main.js?v=3.4"></script>
     <script src="./js/shop.js?v=3.4"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script>
+    function validateAddressSelection() {
+    const selectedAddress = document.querySelector('input[name="addressSelection"]:checked');
+
+    if (!selectedAddress) {
+      alert('Please select an address before placing the order.');
+      return;
+    }
+
+    // Proceed with placing the order or perform any other actions as needed
+    // ...
+  }
+  $(document).ready(function() {
+    // Hide the form initially
+    $('#addressForm').hide();
+
+    // Show the form when the button is clicked
+    $('#showFormBtn').click(function() {
+      $('#addressForm').show();
+    });
+  });
+</script>
     <script>
        document.addEventListener('DOMContentLoaded', () => {
   const applyCouponButton = document.getElementById('applyCouponButton');

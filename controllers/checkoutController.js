@@ -20,8 +20,10 @@ exports.getCheckoutPage = async (req, res) => {
   try {
     // Retrieve user details from the request (assumes you have the user data)
     const user = req.session.user; // Adjust this based on your authentication logic
-    console.log(user);
-
+   let  userid=user._id;
+   
+    const foundUser = await User.findOne({ _id:userid }).exec();
+console.log(foundUser,'i need');
     // Fetch the user's cart items
     const cartItems = await Cart.findOne({ user }).populate('items.product');
 
@@ -47,9 +49,9 @@ exports.getCheckoutPage = async (req, res) => {
     const totalPrice = calculateTotalPrice(cartItems.items);
     req.session.totalPrice = totalPrice;
     req.session.cartItems = cartItems.items;
-
+console.log(user,'yfuhgewyfgewyftgewyfgtew');
     res.render('checkout', {
-      user,
+      user,additionalAddresses:user.additionalAddresses,foundUser,
       cartItems: cartItems.items,
       totalPrice,
       // Include additional fields in the template

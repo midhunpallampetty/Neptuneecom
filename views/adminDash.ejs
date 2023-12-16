@@ -95,6 +95,8 @@
                     <div class="submenu">
                         <a href="/admin/create-coupon">Generate a Coupon</a>
                         <a href="/admin/coupon-list">Generated  Coupons</a>
+                        <a href="/admin/coupons/edit">Edit  Coupons</a>
+                       
 
                         
                     </div>
@@ -473,7 +475,7 @@
         pointStyle: 'circle',
       pointRadius: 10,
       pointHoverRadius: 10,
-      tension: 0.4
+      tension: 0.1
       }]
     },
     options: {
@@ -484,15 +486,7 @@
           text: 'Point Style: ' + 'pointStyle', // You can customize this part
         },
       },
-      animations: {
-      tension: {
-        duration: 1000,
-        easing: 'linear',
-        from: 1,
-        to: 0,
-        loop: true
-      }
-    },
+  
       scales: {
         x: {
           type: 'category',
@@ -523,7 +517,7 @@
             pointStyle: 'circle',
       pointRadius: 10,
       pointHoverRadius: 10,
-      tension: 0.4
+      tension: 0.1
             
           }]
         },
@@ -538,15 +532,7 @@
               beginAtZero: true
             }
           },
-          animations: {
-      tension: {
-        duration: 1000,
-        easing: 'linear',
-        from: 1,
-        to: 0,
-        loop: true
-      }
-    },
+ 
         }
       });
     }
@@ -565,7 +551,7 @@
       pointStyle: 'circle',
       pointRadius: 10,
       pointHoverRadius: 10,
-      tension: 0.4
+      tension: 0.1
     }]
   },
   options: {
@@ -579,15 +565,7 @@
         beginAtZero: true
       }
     },
-    animations: {
-      tension: {
-        duration: 1000,
-        easing: 'linear',
-        from: 1,
-        to: 0,
-        loop: true
-      }
-    },
+
     plugins: {
       customCanvasBackgroundColor: {
         color: 'lightGreen',

@@ -197,7 +197,7 @@ rel="stylesheet"
 
                
                             
-  <form method="POST" action="/admin/products" style="align-items: center; margin-left: 250px;" enctype="multipart/form-data" onsubmit="return validateForm()">
+  <form method="POST" action="/admin/products" style="align-items: center; " enctype="multipart/form-data" onsubmit="return validateForm()">
     <div class="mb-1">
       <label for="name" class="form-label">Product title</label>
       <input type="text" name="name" id="name" placeholder="Type here" class="form-control">
@@ -230,53 +230,55 @@ rel="stylesheet"
         </select>
         <span class="error-message" id="category-error"></span>
       </div>
+      <div class="col-lg-4">
+        <label for="material" class="form-label">Material</label>
+        <select id="material" name="material" class="form-select">
+          <option value="" disabled selected>Select a material</option>
+          <option value="Steel">Steel</option>
+          <option value="Wood">Wood</option>
+          <option value="Plastic">Plastic</option>
+          <option value="Other">Other</option>
+        </select>
+        <span class="error-message" id="material-error"></span>
+      </div>
+      <div class="col-lg-4"><label for="color" class="form-label">Color</label>
+        <select id="color" name="color" class="form-select">
+          <option value="" disabled selected>Select a color</option>
+          <option value="Black">Black</option>
+          <option value="Green">Green</option>
+          <option value="Rainbow">Rainbow</option>
+          <option value="Brown">Brown</option>
+          <option value="White">White</option>
+          <option value="Red">Red</option>
+          <option value="Grey">Grey</option>
+          <option value="Other">Other</option>
+        </select>
+        <span class="error-message" id="color-error"></span></div>
     </div>
 
-    <div class="mb-1">
-      <label class="form-label">Selling Price</label>
-      <input type="number" name="price" id="price" placeholder="$" class="form-control">
-      <span class="error-message" id="price-error"></span>
-    </div>
-
-    <div class="mb-1">
-      <label for="material" class="form-label">Material</label>
-      <select id="material" name="material" class="form-select">
-        <option value="" disabled selected>Select a material</option>
-        <option value="Steel">Steel</option>
-        <option value="Wood">Wood</option>
-        <option value="Plastic">Plastic</option>
-        <option value="Other">Other</option>
-      </select>
-      <span class="error-message" id="material-error"></span>
-    </div>
-
-    <div class="mb-1">
-      <label for="weight" class="form-label">Weight</label>
+   
+    <div class="row">
+      <div class="col-lg-4">
+        <label class="form-label">Selling Price</label>
+        <input type="number" name="price" id="price" placeholder="$" class="form-control">
+        <span class="error-message" id="price-error"></span>
+      </div>
+      <div class="col-lg-4">
+        <label for="weight" class="form-label">Weight</label>
       <input type="text" name="weight" id="weight" placeholder="Enter weight" class="form-control">
       <span class="error-message" id="weight-error"></span>
+      </div>
+      <div class="col-lg-4"> <label for="listprice" class="form-label">List Price</label>
+        <input type="number" name="listprice" id="listprice" placeholder="$" class="form-control">
+        <span class="error-message" id="listprice-error"></span>
     </div>
+   
 
-    <div class="mb-1">
-      <label for="color" class="form-label">Color</label>
-      <select id="color" name="color" class="form-select">
-        <option value="" disabled selected>Select a color</option>
-        <option value="Black">Black</option>
-        <option value="Green">Green</option>
-        <option value="Rainbow">Rainbow</option>
-        <option value="Brown">Brown</option>
-        <option value="White">White</option>
-        <option value="Red">Red</option>
-        <option value="Grey">Grey</option>
-        <option value="Other">Other</option>
-      </select>
-      <span class="error-message" id="color-error"></span>
-    </div>
+   
 
-    <div class="mb-1">
-      <label for="listprice" class="form-label">List Price</label>
-      <input type="number" name="listprice" id="listprice" placeholder="$" class="form-control">
-      <span class="error-message" id="listprice-error"></span>
-    </div>
+  
+
+   
 
     <div class="mb-1">
       <label for="stock" class="form-label">Stock</label>
@@ -306,12 +308,12 @@ rel="stylesheet"
       <div>
         <img id="cropImage" src="" alt="Crop Preview" style="max-width: 40%;">
       </div>
-      <button type="button" style="background-color: #007BFF; margin-top10px: white;border: none;border-radius: 10px;width: 100px;height: 50px;font-size: medium;" id="applyCrop">Apply Crop</button>
+      <button type="button" style="background-color: #007BFF; margin-top:10px;border: none;border-radius: 10px;width: 100px;height: 50px;font-size: medium;" id="applyCrop">Apply Crop</button>
     </div>
   </div>
 </div>
 
-    <button type="submit" class="btn add-btn btn-primary">Add Product</button>
+    <button type="submit" class="btn  btn-primary">Add Product</button>
   </form>
                               
                               
@@ -389,10 +391,10 @@ rel="stylesheet"
     
         // Selling Price validation
         const price = document.getElementById('price').value.trim();
-        if (!price) {
-          displayError('price', 'Selling Price is required.');
-          isValid = false;
-        }
+if (!price || parseFloat(price) <= 0) {
+  displayError('price', 'Selling Price must be a positive number.');
+  isValid = false;
+}
     
         // Material validation
         const material = document.getElementById('material').value;
@@ -423,11 +425,13 @@ rel="stylesheet"
         }
     
         // List Price validation
-        const listPrice = document.getElementById('listprice').value.trim();
-        if (!listPrice) {
-          displayError('listprice', 'List Price is required.');
-          isValid = false;
-        }
+     // List Price validation
+const listPrice = document.getElementById('listprice').value.trim();
+if (!listPrice || parseFloat(listPrice) <= 0) {
+  displayError('listprice', 'List Price must be a positive number.');
+  isValid = false;
+}
+
     
         // Main Image validation
         const mainImage = document.getElementById('mainImage').value.trim();

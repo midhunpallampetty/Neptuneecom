@@ -250,6 +250,9 @@ router.get("/logoutAdmin", (req, res) => {
 
 
   router.post('/coupon', adminAuth.isAdminLogged,adminCouponController.createCoupon);
+  router.get('/coupons/:id/edit', adminCouponController.getEditCoupon);
+  router.post('/coupons/:id/edit', adminCouponController.postEditCoupon);
+
 
   // Delete a coupon
   router.get('/coupon/delete', adminAuth.isAdminLogged,adminCouponController.deleteCoupon);

@@ -249,6 +249,8 @@
                                             (Expires in <%= Math.ceil((new Date(coupon.expiryDate) - new Date()) / (1000 * 3600 * 24)) %> days)
                                          </p>   
                                          <button class="remove-btn"  onclick="confirmDelete('<%= coupon._id%>')">Remove</button>
+                                         <a href="/coupons/<%= coupon._id %>/edit">Edit</a>
+                                        
                                     </div>
                                 </div>
                             </div>

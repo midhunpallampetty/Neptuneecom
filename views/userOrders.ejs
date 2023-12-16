@@ -718,9 +718,18 @@
                                                       </td>
                                                       <td>
                                                         
-                                                        <button style="background-color: #2ed8b6;border: none;color: white;height: 40px;border-radius: 10px;font-weight: 6000;" onclick="moredetailorder('<%= order.user.FullName %>', '<%= order.user.HouseName %>','<%= order.user.Phone%>','<%= order.user.Pincode%>','<%=order.totalPrice%>','<%=order.paymentMethod %>','<%=order.Addresschoose %>','<%=order.user.CustName %>','<%=order.user.PhoneNum %>','<%=order.user.Zipcode %>','<%=order.user.companyName %>')">More Details</button>
+                                                       <!-- Your HTML page with the form and button -->
+<form action="/orderdetail?orderid=<%= order.orderId %>" method="post">
+    
+    <button type="submit" style="background-color: #2ed8b6; border: none; color: white; height: 40px; border-radius: 10px; font-weight: 6000;">
+      More Details
+    </button>
+    
+</form>
+  
 
                                                       </td>
+                                                      
                                                       
                                                       
                                                     </tr>
