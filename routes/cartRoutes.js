@@ -17,6 +17,7 @@ router.get('/remove', userAuth.isUserLogged,cartController.removeItemFromCart);
 
 // Get the user's cart
 router.get('/', userAuth.isUserLogged,blockCheck.checkBlockedStatus,cartController.getUserCart);
+router.post('/clear-user-cart', cartController.clearUserCart);
 
 module.exports = router;
 

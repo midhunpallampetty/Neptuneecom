@@ -4,12 +4,17 @@ const Order = require("../models/order"); // Create an Order model if you haven'
 const uuid = require("uuid");
 const mongoose = require("mongoose");
 const Razorpay = require("razorpay");
+const Cart=require('../models/Cart');
 // Generate a new UUID
 require("dotenv").config();
 
 const orderManagementRoutes = require("../routes/orderManagementRoutes");
 // Assuming you have a model named Order and a view named adminOrders
-
+function clearCart() {
+  // Clear the items in the session or perform any other necessary actions
+  req.session.cartItems = [];
+  req.session.totalPrice = 0;
+}
  // Number of orders to display per page
 
 exports.adminOrders = async (req, res) => {
@@ -244,12 +249,18 @@ exports.getUserOrderHistory = async (req, res) => {
 
 exports.createOrder = async (req, res) => {
   try {
+
+
     const { FullName, email, Phone, Pincode } = req.session.user;
     const selectedAddressSet = req.body.selectedAddressSet;
-    console.log(selectedAddressSet, 'we need this ');
-    let user = req.session.user;
 
+    let user = req.session.user;
+    console.log(user, 'we need this ');
+    let Cartdetail=await Cart.findOne({user:user._id});
+    console.log(Cartdetail,'vbdfvgvbdvhdfbvhvbhvbfhvbfhbvdfhvbhvfvbhbvhb');
+    const useride=user._id;
     const existingUser = await User.findOne({ email });
+   
 
     if (existingUser) {
       user = existingUser;
@@ -337,8 +348,13 @@ exports.createOrder = async (req, res) => {
       Addresschoose,
       discount,
     });
+    const id=user._id;
+
 
     await order.save();
+    Cartdetail.items=[];
+    await Cartdetail.save();
+
     req.session.discountAmount = false;
     req.session.totalPriceAfterCoupon = false;
 
@@ -359,7 +375,7 @@ exports.createOrder = async (req, res) => {
 };
 
 // Helper function to reduce product stock
-async function reduceProductStock(products) {
+async function reduceProductStock(products) {    
   try {
     for (const data of products) {
       await Product.findByIdAndUpdate(data.product, { $inc: { stock: -data.quantity } });

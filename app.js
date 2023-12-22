@@ -51,7 +51,7 @@ app.use("/orders", orderManagementRoutes);
 const port = process.env.PORT || 4000;
 const connectionString = process.env.MONGOCONNECTIONSTRING;
 app.use(bodyParser.urlencoded({ extended: false }));
-app.get("/product/:productId", userController.showProductDetailsWithZoom);
+
 app.use(bodyParser.json());
 mongoose.connect(connectionString, {
   useNewUrlParser: true,

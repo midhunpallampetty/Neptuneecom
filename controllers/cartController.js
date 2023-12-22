@@ -130,6 +130,34 @@ const cartController = {
       res.render("404");
     }
   },
+   clearUserCart : async (req, res) => {
+    try {
+      const user = req.session.user;
+  
+      // Find the user's cart
+      let cart = await Cart.findOne({ user: user._id }).populate('items.product');
+  
+      if (cart) {
+        // Clear the items array
+        cart.items = [];
+  
+        // Reset the total to zero (if needed)
+        cart.total = 0;
+  
+        // Save the updated cart
+        await cart.save();
+  
+        console.log('Cart cleared successfully');
+        res.redirect('/cart'); // Redirect to the cart page or any other desired route after clearing
+      } else {
+        console.log('Cart not found');
+        res.render('404'); // Render a 404 page or handle accordingly if the cart is not found
+      }
+    } catch (err) {
+      console.error(err);
+      res.render('500'); // Render a 500 internal server error page or handle accordingly
+    }
+  },
 };
 
 module.exports = cartController;

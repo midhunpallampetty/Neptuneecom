@@ -154,6 +154,14 @@ router.get('/add-banner', bannerController.renderAddBannerForm);
 router.post('/add-bannerdetail', upload.single('image'), bannerController.addBanner);
 router.get('/adminDash', adminController.getAdminDashboard);
 
+router.get('/offer-form', adminController.showOfferForm);
+router.get('/category-offer', adminController.showcatOfferForm);
+
+// Create product offer
+router.post('/product-offer', adminController.createProductOffer);
+
+// Create category offer
+router.post('/category-offer', adminController.createCategoryOffer);
 // Handle Admin Signup
 router.post("/adminSignup", async (req, res) => {
   const { email, password, isAdmin } = req.body;

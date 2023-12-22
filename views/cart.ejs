@@ -37,7 +37,7 @@
             <div class="container">
                 <div class="header-wrap">
                     <div class="logo logo-width-1">
-                        <a href="index.html"><img src="/imgs/logo.png" alt="logo"></a>
+                        <a href="/cart"><img src="/imgs/logo.png" alt="logo"></a>
                         
                     </div>
                     <div class="header-right">
@@ -100,7 +100,7 @@
             <div class="container">
                 <div class="header-wrap header-space-between position-relative">
                     <div class="logo logo-width-1 d-block d-lg-none">
-                        <a href="index.html"><img src="imgs/theme/logo.svg" alt="logo"></a>
+                        <a href="/cart"><img src="imgs/theme/logo.svg" alt="logo"></a>
                     </div>
                     <div class="header-nav d-none d-lg-flex">
                         <div class="main-categori-wrap d-none d-lg-block">
@@ -371,7 +371,7 @@
         <div class="mobile-header-wrapper-inner">
             <div class="mobile-header-top">
                 <div class="mobile-header-logo">
-                    <a href="index.html"><img src="imgs/theme/logo.svg" alt="logo"></a>
+                    <a href="/cart"><img src="imgs/theme/logo.svg" alt="logo"></a>
                 </div>
                 <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
                     <button class="close-style search-close">
@@ -409,9 +409,9 @@
                     <!-- mobile menu start -->
                     <nav>
                         <ul class="mobile-menu">
-                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="index.html">Home</a>
+                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="/cart">Home</a>
                                 <ul class="dropdown">
-                                    <li><a href="index.html">Home 1</a></li>
+                                    <li><a href="/cart">Home 1</a></li>
                                     <li><a href="index-2.html">Home 2</a></li>
                                     <li><a href="index-3.html">Home 3</a></li>
                                     <li><a href="index-4.html">Home 4</a></li>
@@ -549,6 +549,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    
+                                    <% if (cart?.items.length > 0) { %>
                                     <% cart?.items.forEach(item => { %>
                                     <tr>
 
@@ -603,11 +605,17 @@
                                             
                                     </tr>
                                     <% }); %>
-                                   
+                                    <% }else { %>
+                                        <!-- Display a message when the cart is empty -->
+                                        <td colspan="6" class="text-center">
+                                            <img src="/imgs/empty-cart.png" alt="Empty Cart Image" style="max-width: 30%;">
+                                            <!-- Replace "/path/to/empty-cart-image.jpg" with the actual path to your empty cart image -->
+                                          </td>
+                                      <% } %>
                                     <tr>
-                                        <td colspan="6" class="text-end">
-                                            <a href="#" class="text-muted"> <i class="fi-rs-cross-small"></i> Clear Cart</a>
-                                        </td>
+                                        <form action="/cart/clear-user-cart" method="post">
+                                            <button type="submit">Clear Cart</button>
+                                        </form>
                                     </tr>
                                 </tbody>
                             </table>
@@ -616,7 +624,7 @@
 
                         <div class="cart-action text-end">
                             <a class="btn  mr-10 mb-sm-15" href="/checkout"><svg xmlns="http://www.w3.org/2000/svg" height="1em" fill="white" viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M48 0C21.5 0 0 21.5 0 48V368c0 26.5 21.5 48 48 48H64c0 53 43 96 96 96s96-43 96-96H384c0 53 43 96 96 96s96-43 96-96h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V288 256 237.3c0-17-6.7-33.3-18.7-45.3L512 114.7c-12-12-28.3-18.7-45.3-18.7H416V48c0-26.5-21.5-48-48-48H48zM416 160h50.7L544 237.3V256H416V160zM112 416a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm368-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/></svg>CheckOut</a>
-                            <a class="btn "><svg xmlns="http://www.w3.org/2000/svg" fill="white" height="1em" viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M36.8 192H603.2c20.3 0 36.8-16.5 36.8-36.8c0-7.3-2.2-14.4-6.2-20.4L558.2 21.4C549.3 8 534.4 0 518.3 0H121.7c-16 0-31 8-39.9 21.4L6.2 134.7c-4 6.1-6.2 13.2-6.2 20.4C0 175.5 16.5 192 36.8 192zM64 224V384v80c0 26.5 21.5 48 48 48H336c26.5 0 48-21.5 48-48V384 224H320V384H128V224H64zm448 0V480c0 17.7 14.3 32 32 32s32-14.3 32-32V224H512z"/></svg>Continue Shopping</a>
+                          
                         </div>
                         <div class="divider center_icon mt-50 mb-50"><i class="fi-rs-fingerprint"></i></div>
                         <div class="row mb-50">
@@ -677,7 +685,7 @@
                     <div class="col-lg-4 col-md-6">
                         <div class="widget-about font-md mb-md-5 mb-lg-0">
                             <div class="logo logo-width-1 wow fadeIn animated">
-                                <a href="index.html"><img src="/imgs/logo.png" alt="logo"></a>
+                                <a href="/cart"><img src="/imgs/logo.png" alt="logo"></a>
                             </div>
                             <h5 class="mt-20 mb-10 fw-600 text-grey-4 wow fadeIn animated">Contact</h5>
                             <p class="wow fadeIn animated">

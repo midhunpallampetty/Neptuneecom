@@ -126,7 +126,7 @@ router.post("/verify-otp", (req, res) => {
   }
 });
 
-router.get("/userSignup", userController.renderUserSignup);
+router.get("/userSignup/:payload?", userController.renderUserSignup);
 router.get('/generate-invite', userController.generateInviteLinkController);
 router.post("/userSignup", userController.handleUserSignup);
 
@@ -270,25 +270,8 @@ router.post("/blockUser/:userId", async (req, res) => {
   }
 });
 
-// Product details route with image zoom
-router.get("/admin/product/:productId", async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.productId);
-    if (!product) {
-      // Handle product not found
-      res
-        .status(404)
-        .render("product-not-found", { productId: req.params.productId });
-    } else {
-      // Render the product details view with image zoom
-      res.render("/admin/productdetails", { product });
-    }
-  } catch (error) {
-    // Handle errors
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
+
+
 
 router.get("/adminSignup", (req, res) => {
   res.render("adminSignup");
@@ -315,6 +298,7 @@ router.get("/logout", (req, res) => {
 router.get("/userLogin", (req, res) => {
   res.render("userLogin");
 });
+router.get("/product/:productId", userController.showProductDetailsWithZoom);
 router.use("/cart", blockedCheck.checkBlockedStatus,userAuth.isUserLogged,cartRoutes);
 
 router.post("/wishlist/add",blockedCheck.checkBlockedStatus ,userAuth.isUserLogged,wishlistController.addToWishlist);

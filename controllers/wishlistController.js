@@ -43,8 +43,7 @@ addToWishlist : async (req, res) => {
   
   showWishlist: async (req, res) => {
     try {
-      const user = req.session.user; // Assuming you have user authentication
-      console.log(user, "testtttttttttttttttttttttttttttttttttt");
+      const user = req.session.user;
   
       // Check if the user is authenticated
       if (!user) {
@@ -56,7 +55,7 @@ addToWishlist : async (req, res) => {
       let wishlist = await Wishlist.findOne({ user }).populate('items.product');
   
       if (!wishlist) {
-        res.redirect('/mainpage'); // Redirect to the main page if the wishlist doesn't exist
+        res.redirect('/wishlist'); // Redirect to the main page if the wishlist doesn't exist
         return;
       }
   
@@ -65,13 +64,17 @@ addToWishlist : async (req, res) => {
   
       // Save the updated wishlist (if needed)
       await wishlist.save(); // Save the document instance, not the Wishlist model
-      console.log(wishlist);
-      res.render('wishlist', { wishlist });
+  
+      // Check if the wishlist is empty
+      const isWishlistEmpty = wishlist.items.length === 0;
+  
+      res.render('wishlist', { wishlist, isWishlistEmpty });
     } catch (err) {
       console.error(err);
       res.render('404'); // Render an error page if there's an issue
     }
   },
+  
   
   
   removeFromWishlist : async (req, res) => {

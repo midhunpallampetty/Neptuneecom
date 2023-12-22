@@ -314,19 +314,13 @@
               <% if (product.mainImage) { %>
                 <img src="<%= product.mainImage %>" alt="Current Image" width="200">
               <% } %>
-              <div id="cropContainer" style="display: none;width: 300px;height: 250px;">
-                <label>Crop Image:</label>
-                <div>
-                  <img id="cropImage" src="" alt="Crop Preview" style="max-width: 40%;">
-                </div>
-                <button type="button" style="background-color: #007BFF; margin-top: 10px; border: none; border-radius: 10px; width: 100px; height: 50px; font-size: medium;" id="applyCrop">Apply Crop</button>
-              </div>
+            
               <!-- Upload New Main Image (if needed) -->
               <div class="form-group">
                 <label for="newMainImage">New Main Image (optional)</label>
                 <input type="file" name="mainImage" id="newMainImage" class="custom-file-input">
                 <label class="custom-file-label" for="newMainImage">Choose file</label>
-              </div>
+            </div>
               
               <!-- Your existing form fields go here -->
 
@@ -546,52 +540,7 @@
 
 
 
-      document.addEventListener('DOMContentLoaded', function () {
-  const input = document.getElementById('mainImage');
-  const image = document.getElementById('cropImage');
-  const container = document.getElementById('cropContainer');
-  const applyCropBtn = document.getElementById('applyCrop');
-  let cropper;
-
-  input.addEventListener('change', function () {
-    const file = this.files[0];
-
-    if (file) {
-      // Destroy the existing Cropper instance if it exists
-      if (cropper) {
-        cropper.destroy();
-      }
-
-      const reader = new FileReader();
-
-      reader.onload = function (e) {
-        image.src = e.target.result;
-        container.style.display = 'block';
-
-        // Initialize Cropper.js
-        cropper = new Cropper(image, {
-          aspectRatio: 1, // Set your desired aspect ratio
-          viewMode: 2,    // Set your desired view mode
-        });
-      };
-
-      reader.readAsDataURL(file);
-    }
-  });
-
-  applyCropBtn.addEventListener('click', function () {
-    if (cropper) {
-      // Get the cropped data (base64 format)
-      const croppedData = cropper.getCroppedCanvas().toDataURL();
-
-      // Update the mainImage input value with the cropped data
-      document.getElementById('mainImage').value = croppedData;
-
-      // Hide the crop container
-      container.style.display = 'none';
-    }
-  });
-});
+      
 
     </script>
     

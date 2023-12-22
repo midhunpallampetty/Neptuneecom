@@ -15,7 +15,7 @@
     <!-- Add this in the head of your HTML file -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="shortcut icon" type="image/x-icon" href="imgs/theme/favicon.svg">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
@@ -556,7 +556,7 @@
 </div>
 
 <!-- Edit Form for Address Set 1 -->
-<form action="/checkout/updateDetailCheckout" method="POST" id="edit-form-addressSet1" style="display: none;">
+<form action="/checkout/updateDetailCheckout" method="POST" id="edit-form-addressSet1"style="display: none;">
     <!-- Hidden field to indicate the field to update -->
     <input type="hidden" name="fieldToUpdate" value="addressSet1">
     
@@ -613,9 +613,10 @@
 
 <!-- Add this form in your checkout page HTML -->
 <!-- Add this form in your HTML file (e.g., checkout page) -->
-<button id="showFormBtn" class="btn btn-primary">Add Address</button>
+<button id="showFormBtn" class="btn btn-primary" onclick="toggleAdd()">Add Address</button>
 
-<form id="addressForm" action="/checkoutAddress" method="POST">
+
+<form id="addressForm" action="/checkoutAddress" method="POST" style="  display: none;">
     <label for="Name">Name:</label>
     <input type="text" id="Name" name="Name" required>
 
@@ -630,8 +631,8 @@
 
     <!-- Add other address fields as needed -->
 
-    <label for="fromPage">From Page:</label>
-    <select id="fromPage" name="fromPage">
+    
+    <select id="fromPage" name="fromPage" hidden>
         <option value="profile">Profile</option>
         <option value="checkout">Checkout</option>
     </select>
@@ -729,15 +730,22 @@ function addAdditionalAddress() {
     // You can implement this based on your application's requirements
   }
 
-  function toggleFormVisibility(formId, radioButton) {
-    // Your existing logic...
+  
+  function toggleFormVisibility(formId, radioButtonId) {
+    var form = document.getElementById(formId);
+    var radioButton = document.getElementById(radioButtonId);
 
-    // Example: If the formId is 'edit-form-additionalAddress0', extract the index
-    const index = parseInt(formId.match(/\d+/)[0]);
-
-    // Add logic to toggle visibility of the corresponding form based on the index
-    // Example: document.getElementById(`edit-form-additionalAddress${index}`).style.display = 'block';
+    if (form.style.display === 'none') {
+      // Show the form
+      form.style.display = 'block';
+      radioButton.checked = true; // Optional: Set the radio button as checked
+    } else {
+      // Hide the form
+      form.style.display = 'none';
+    }
   }
+
+
     
     function showAddressSet(addressSet) {
         document.getElementById(`edit-form-${addressSet}`).style.display = 'block';
@@ -792,7 +800,52 @@ function addAdditionalAddress() {
 
 <!-- Button to apply the coupon -->
 <button id="applyCouponButton" style="background-color: green;color: white;border: none;border-radius: 15px;margin: 20px;width: 100px;height: 30px;font-weight: 800;">Apply Coupon</button>
+<tr>
 
+    <div class="container">
+        <div class="row">
+     
+            <% allCoupon.forEach((coupon, index) => { %>
+          <div class="col-lg-4">
+            <div class="coupon__wrap">
+                <div class="coupon__title">
+                  <div class="couple__category"><%= coupon.type.toUpperCase() %></div>
+                  <div class="coupon__max">
+                    <% if (coupon.type === 'percentage') { %>
+                      <%= coupon.discount %><span class="coupon__symbol">%</span>
+                    <% } else if (coupon.type === 'fixed') { %>
+                      ₹<%= coupon.discount %>
+                    <% } %>
+                  </div>
+                  
+                </div>
+                <div class="coupon__detail">
+                  <!-- Add id to coupon__price -->
+<div class="coupon__price" id="couponCode<%= index %>"><%= coupon.code %></div>
+
+
+                  <div class="coupon__info">
+                 
+                    <span style="color: red;"><%= new Date(coupon.expiryDate).toLocaleString() %></span>
+
+                  </div>
+                  <div class="coupon__footer">
+                    
+                    <div class="coupon__btn">
+                      <a href="#" id="copyCoupon1">Copy</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="coupon__border"></div>
+              </div>
+          </div>
+          <% }); %>
+        </div>
+      
+        <!-- Repeat the above structure for additional rows of coupons -->
+      </div>
+        
+</tr>
                                         <tr>
                                             <th>SubTotal</th>
                                             <td class="product-subtotal" colspan="2">₹<%= totalPrice %></td>
@@ -1122,6 +1175,25 @@ function addAdditionalAddress() {
 
 
 <script>
+    function toggleAdd(){
+       
+    var showFormBtn = document.getElementById('showFormBtn');
+    var addressForm = document.getElementById('addressForm');
+
+    showFormBtn.addEventListener('click', function () {
+      if (addressForm.style.display === 'none') {
+        // Show the form
+        addressForm.style.display = 'block';
+      } else {
+        // Hide the form
+        addressForm.style.display = 'none';
+      }
+    });
+
+
+    }
+
+
 document.addEventListener('DOMContentLoaded', () => {
   const placeOrderButton = document.getElementById('placeOrderButton');
   const codRadio = document.getElementById('codRadio');
@@ -1211,7 +1283,9 @@ document.addEventListener('DOMContentLoaded', () => {
                   }
 
                   // Continue with the rest of the Razorpay success handling
-                  Swal.fire('Success', 'Payment successful. Continue processing.', 'success');
+                  Swal.fire('Success', 'Payment successful. Continue processing.', 'success').then(()=>{
+                    location.href = "/ordersuser/user"
+                  });
                   
                 } else {
                   console.log('Payment failed.');
@@ -1242,6 +1316,46 @@ document.addEventListener('DOMContentLoaded', () => {
 var radioOption1 = document.getElementById('codRadio');
     radioOption1.checked = true;
   </script>
+  <!-- Include SweetAlert from CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Function to copy text to clipboard
+    function copyToClipboard(text) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+    }
+
+    // Event listener for copy button click
+    document.querySelectorAll('.coupon__btn a').forEach(function (copyButton, index) {
+      copyButton.addEventListener('click', function (event) {
+        event.preventDefault();
+
+        // Get the coupon code based on the index
+        const couponCode = document.getElementById('couponCode' + index).innerText;
+
+        // Copy the coupon code to the clipboard
+        copyToClipboard(couponCode);
+
+        // Show a SweetAlert notification
+        Swal.fire({
+          icon: 'success',
+          title: 'Copied!',
+          text: 'Coupon code has been copied to the clipboard.',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      });
+    });
+  });
+</script>
+
+  
   <style>
     /* Style for Address Boxes */
 .address-box {
@@ -1303,5 +1417,76 @@ var radioOption1 = document.getElementById('codRadio');
 .hide-display-button {
   display: none;
 }
+.coupon__wrap {
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 15px 0;
+      padding: 15px;
+      box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5);
+    }
 
+    .coupon__title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .coupon__max {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .coupon__detail {
+      margin-top: 15px;
+    }
+
+    .coupon__price {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .coupon__info span {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .coupon__footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 15px;
+    }
+
+    .coupon__condition a,
+    .coupon__btn a {
+      display: block;
+      padding: 8px 15px;
+      text-align: center;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+
+    .coupon__condition a:hover,
+    .coupon__btn a:hover {
+      background-color: #0056b3;
+    }
+  
   </style>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
+  <!-- Clipboard.js for copy to clipboard functionality -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.10/clipboard.min.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Initialize Clipboard.js
+      new ClipboardJS('#copyCoupon1');
+      // Add more clipboard initialization for other coupons if needed
+    });
+  </script>

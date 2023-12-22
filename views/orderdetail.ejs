@@ -80,7 +80,7 @@
   
               <div class="row my-4">
                 <div class="col-md-4 offset-md-8 col-lg-3 offset-lg-9">
-                  <p class="lead fw-bold mb-0" style="color: #f37a27;">£262.99</p>
+                  <p class="lead fw-bold mb-0" style="color: #f37a27;"> ₹<%= detailsOfOrder.totalPrice %></p>
                 </div>
               </div>
   
@@ -113,7 +113,7 @@
   
                 </div>
               </div>
-              <form action="/download-invoice?orderNo=<%= detailsOfOrder.orderId %>" method="post">
+              <form action="/download-invoice?orderNo=<%= detailsOfOrder.orderId %>" method="post" target="_blank">
     
                 <button type="submit" style="background-color: #2ed8b6; border: none; color: white; height: 40px; border-radius: 10px; font-weight: 6000;">
                 Invoice

@@ -17,6 +17,13 @@ const productSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Category', // Reference to the Category model
   },
+  offer: {
+    discountPercentage: {
+        type: Number,
+        default: 0,
+    },
+    // You can add more fields related to the offer if needed
+},
 });
 
 module.exports = mongoose.model('Product', productSchema);

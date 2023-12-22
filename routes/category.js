@@ -15,7 +15,7 @@ router.post('/:id/list', adminAuth.isAdminLogged,categoryController.listCategory
 router.get('/edit', adminAuth.isAdminLogged,categoryController.getEditCategory);
 router.post('/update', adminAuth.isAdminLogged,categoryController.postEditCategory);
 // Route to delete a category
-router.delete('/:categoryid', adminAuth.isAdminLogged,categoryController.deleteCategory);
+router.delete('/:categoryid', adminAuth.isAdminLogged,categoryController.deleteCategory);  
 
 module.exports = router;
 // router.get('/delete-product/:productId', adminController.deleteProduct);

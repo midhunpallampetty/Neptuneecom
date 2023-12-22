@@ -1,4 +1,5 @@
 const express = require("express");
+const { ObjectId } = require('mongodb');
 const User = require("../models/userModel");
 const Banner=require('../models/bannerModel');
 const bcrypt = require("bcryptjs");
@@ -26,6 +27,7 @@ const authToken = "87cb986fc6a51b1966aea5fadef48bc8";
 const client = twilio(accountSid, authToken);
 const twilioPhoneNumber = "+12053950807";
 const easyinvoice = require('easyinvoice');
+
 // Use connect-flash for flash messages
 router.use(flash());
 // orderController.js
@@ -36,7 +38,7 @@ router.use(flash());
 
 function generateInviteLink(username) {
   const uniqueId = Math.random().toString(36).substr(2, 8);
-  return `http://localhost:4000/invite/${uniqueId}?ref=${username}`;
+  return `http://localhost:4000/userSignup/${uniqueId}?ref=${username}`;
 }
 const userInviteLinks = {};
 
@@ -49,7 +51,7 @@ const userController = {
 
 
 // Controller function to generate an invite link for a given username
-generateInviteLinkController : async (req, res) => {
+generateInviteLinkController: async (req, res) => {
   const userId = req.query.userid;
 
   try {
@@ -72,13 +74,15 @@ generateInviteLinkController : async (req, res) => {
       { $set: { referralLink: inviteLink } }
     );
 
-    // Respond with the invite link
-    res.json({ inviteLink });
+    // Redirect to the userSignup page with the invite link as a query parameter
+    const redirectUrl = `http://localhost:4000/userSignup?inviteLink=${encodeURIComponent(inviteLink)}`;
+    res.redirect(redirectUrl);
   } catch (error) {
     console.error('Error generating or saving referral link:', error);
     res.status(500).json({ error: 'Internal server error.' });
   }
 },
+
   registerUser: async (req, res) => {
     try {
       const { email, password, otp } = req.body; // Add OTP field to your registration form
@@ -182,7 +186,13 @@ generateInviteLinkController : async (req, res) => {
   },
   
   renderUserSignup: (req, res) => {
-    res.render("userSignup"); // Render the 'userSignup.ejs' view
+    const payload = req.query;
+   
+   req.session.payload=payload.ref;
+
+ 
+console.log( payload.ref,'payload of the link');
+    res.render("userSignup",{payload}); // Render the 'userSignup.ejs' view
   },
  
   renderOrderDetail : async (req, res) => {
@@ -202,23 +212,41 @@ generateInviteLinkController : async (req, res) => {
 // ... your other imports and middleware ...
 
 renderOrderDetailPdf: async (req, res) => {
+
+  
   const order = req.query.orderNo;
   console.log(order, 'rgyfbeyhfgbesuyhfgbewuyfgewy');
   const detailsOfOrder = await Order.findOne({ orderId: order });
   const usersid = detailsOfOrder.user;
   const userOrder = await User.findById(usersid);
-  console.log('orderdetaillllllllssssssss', detailsOfOrder.Addresschoose);
+  const product = await Order.findOne(detailsOfOrder._id)
+  console.log(product,'yhgfeyfgeyef');
+  const proArray = await Promise.all(product.product.map(async(item)=>{
+    return await Product.findById(item.product)
+  }))
+  console.log('test',proArray);
+  let detailOfProduct;
+ 
+  for(let i=0;i< detailsOfOrder.product.length;i++){
 
+    console.log(detailsOfOrder.product[i]._id);
+    const Id=detailsOfOrder.product[i].product;
+ 
+    let detailOfProduct=await Product.findById(Id);
+    console.log('detailOfProduct',detailOfProduct.name);
+  }
+const user=await User.findById(usersid);
   // Prepare data for the invoice
   const data = {
     documentTitle: 'Order Details',
-    currency: 'USD', // Set your desired currency
+    currency: 'INR', // Set your desired currency
     taxNotation: 'vat', // or 'vat' or 'gst' depending on your country
     marginTop: 25,
     marginRight: 25,
     marginLeft: 25,
     marginBottom: 25,
-    logo: 'https://logos-world.net/wp-content/uploads/2020/11/Airtel-Logo-1995-2010.png', // URL or base64-encoded image
+    logo: '',
+ // URL or base64-encoded image
     sender: {
       company: 'Neptune Musics',
       address: 'Neptune music Inc,Bangalore ,No 23 street,KA',
@@ -227,24 +255,74 @@ renderOrderDetailPdf: async (req, res) => {
       country: 'India',
       website: 'www.neptunemusics.shop'
     },
-    client: {
-      company: userOrder.FullName,
-      address: 'User Address', // Replace with actual user address
-      zip: 'User Zip', // Replace with actual user ZIP
-      city: 'User City', // Replace with actual user city
-      country: 'India', // Replace with actual user country
-    },
-    items: [
-      {
-        description: 'Product 1',
-        quantity: 1,
-        tax: 0, // Tax percentage
-        price: detailsOfOrder.productPrice, // Replace with actual product price
-      },
-      // Add other items as needed
-    ],
+    client: [],
+    invoiceNumber: '123456',
+    invoiceDate: '01-01-2023',
+    products: [],
     bottomNotice: 'Thank you for your order!',
   };
+  let products = [];
+
+for (let i = 0; i < detailsOfOrder.product.length; i++) {
+    console.log(detailsOfOrder.product[i]._id);
+    const Id = detailsOfOrder.product[i].product;
+
+    let detailOfProduct = await Product.findById(Id);
+
+    if (detailOfProduct) {
+        // Create a new product object for each product
+        let product = {
+            quantity: detailsOfOrder.product[i].quantity,
+            description: detailOfProduct.name,
+            tax: detailsOfOrder.product[i].taxPercentage,
+            price: detailOfProduct.price,
+        };
+
+        // Add the product to the array
+        products.push(product);
+    } else {
+        console.log('Product details not found for id', Id);
+    }
+}
+
+// Assign the array of products to data.products
+data.products = products;
+
+  
+let client = {};
+if (detailsOfOrder.Addresschoose === 'addressSet1') {
+    client = {
+        company: user.FullName,
+        address: user.Phone,
+        city: user.HouseName,
+        zip: user.Pincode,
+        country:'India',
+    };
+} else if (detailsOfOrder.Addresschoose === 'addressSet2') {
+    client = {
+      company: user.CustName,
+      address: user.PhoneNum,
+      city: user.companyName,
+        zip: user.Zipcode,
+        country:'India',
+    };
+}
+data.client=client;
+// Now 'client' object is populated based on the conditions.
+console.log(client,':client');
+  const orderProducts = detailsOfOrder.product;
+
+// Map order products to the format expected by easyinvoice
+const invoiceItems = orderProducts.map(product => ({
+  description: product.product.name,
+  quantity: product.quantity,
+  tax: product.taxPercentage,
+  price:'' ,
+  
+}));
+console.log('invoiceItems',invoiceItems);
+// Update the 'items' property in the 'data' object
+data.items = invoiceItems;
 
   // Generate the invoice
   const result = await easyinvoice.createInvoice(data);
@@ -260,14 +338,19 @@ renderOrderDetailPdf: async (req, res) => {
   
   handleUserSignup: async (req, res) => {
     try {
-      const { email, password, username } = req.body;
+      let { email, password, username } = req.body;
+
+let userIdStr=req.session.payload;
+console.log(userIdStr,'ghgvfhvfvfvjldhvjdfvvdhvvbbvvvdvndhrghrg');
+console.log(typeof userIdStr,'ghgvfhvfvfvjldhvjdfvvdhvvbbvvvdvndhrghrg');
 
       // Check if the user already exists
-      const existingUser = await User.findOne({ email });
-
+      let existingUser = await User.findOne({ email });
+const refUser=await User.findById(userIdStr);
+console.log(refUser,'gvfrdfvgbjhfvgbsdjcvbnsdfvsdhvgbsdfcgjhfgvydvhcsdjkfbgedjhfgbedjvbsdjhv');
       if (existingUser) {
         // User with the same email already exists
-        const errorMessage =
+        let errorMessage =
           "User with this email already exists. Please use a different email.";
         return res.send(`
           <script>
@@ -278,20 +361,24 @@ renderOrderDetailPdf: async (req, res) => {
       }
 
       // Hash the password
-      const hashedPassword = await bcrypt.hash(password, saltRounds);
+      let hashedPassword = await bcrypt.hash(password, saltRounds);
 
       // Create a new user in the database with the hashed password
-      const user = await User.create({
+      let user = await User.create({
         email,
         password: hashedPassword,
         username,
-        wallet: 0,
+        wallet: userIdStr ? 50 : 0,
       });
-
+      if (refUser) {
+        refUser.wallet += 200;
+        await refUser.save();
+      }
+      userIdStr=null;
       // You can add more actions here if needed, e.g., sending a confirmation email
       req.session.user = user;
       req.session.userId = user._id;
-      const successMessage = "User registerertgreghreghrd successfully!";
+      const successMessage = "User registered successfully!";
       return res.send(`
         <script>
           alert('${successMessage}');

@@ -68,6 +68,10 @@
     </style>
   </head>
   <body>
+    <% if (typeof payload !== 'undefined') { %>
+      <!-- Display the payload if available -->
+      <p>Payload: <%= payload %></p>
+  <% } %>
     <form action="#">
       <h1 style="color: rgb(0, 0, 0)">User Registration</h1>
       <div id="otpNum">

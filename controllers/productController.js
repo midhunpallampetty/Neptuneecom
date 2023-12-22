@@ -117,54 +117,60 @@ const listProducts = async (req, res) => {
   
   const postEditProduct = async (req, res) => {
     try {
-      const productId = req.body.productId;
-  
-      // Retrieve the existing product data
-      const existingProduct = await Product.findById(productId);
-  
-      if (!existingProduct) {
-        res.status(404).send('Product not found');
-        return;
-      }
-  
-      // Handle the main image cropping
-      const mainImage = req.body.croppedImage || existingProduct.mainImage;
-  
-      // Handle additional images
-      let additionalImages = existingProduct.additionalImages;
-      if (req.files.additionalImages) {
-        additionalImages = req.files.additionalImages.map(file => file.path.replace('public', ''));
-      }
-  
-      // Create an object with the updated data
-      const updatedData = {
-        name: req.body.name,
-        brand: req.body.brand,
-        description: req.body.description,
-        price: req.body.price,
-        mainImage,
-        additionalImages,
-        category: req.body.category,
-        material: req.body.material,
-        weight: req.body.weight,
-        color: req.body.color,
-        listprice: req.body.listprice,
-        stock: req.body.stock,
-      };
-  
-      // Update the product with the new data from the form
-      const updatedProduct = await Product.findByIdAndUpdate(productId, updatedData);
-  
-      if (!updatedProduct) {
-        res.status(500).send('Product update failed');
-      } else {
-        res.redirect('/adminDash');
-      }
+        const productId = req.body.productId;
+
+        // Retrieve the existing product data
+        const existingProduct = await Product.findById(productId);
+
+        if (!existingProduct) {
+            res.status(404).send('Product not found');
+            return;
+        }
+
+        // Handle the main image
+        let mainImage;
+        if (req.files.mainImage) {
+            mainImage = req.files.mainImage[0].path.replace('public', '');
+        } else {
+            mainImage = existingProduct.mainImage;
+        }
+
+        // Handle additional images
+        let additionalImages = existingProduct.additionalImages;
+        if (req.files.additionalImages) {
+            additionalImages = req.files.additionalImages.map(file => file.path.replace('public', ''));
+        }
+
+        // Create an object with the updated data
+        const updatedData = {
+            name: req.body.name,
+            brand: req.body.brand,
+            description: req.body.description,
+            price: req.body.price,
+            mainImage,
+            additionalImages,
+            category: req.body.category,
+            material: req.body.material,
+            weight: req.body.weight,
+            color: req.body.color,
+            listprice: req.body.listprice,
+            stock: req.body.stock,
+        };
+
+        // Update the product with the new data from the form
+        const updatedProduct = await Product.findByIdAndUpdate(productId, updatedData);
+
+        if (!updatedProduct) {
+            res.status(500).send('Product update failed');
+        } else {
+            res.redirect('/adminDash');
+        }
     } catch (err) {
-      console.error(err);
-      res.status(500).send('An error occurred while updating the product.');
+        console.error(err);
+        res.status(500).send('An error occurred while updating the product.');
     }
-  };
+};
+
   
   
   const deleteProduct = async (req, res) => {

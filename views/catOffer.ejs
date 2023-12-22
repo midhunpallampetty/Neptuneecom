@@ -1,0 +1,209 @@
+<link href="css2/main.css" rel="stylesheet" type="text/css" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<aside class="navbar-aside" id="offcanvas_aside">
+    <div class="aside-top">
+        <a href="index.html" class="brand-wrap">
+            <img src="/imgs/logo.png" class="logo" alt="Evara Dashboard">
+        </a>
+        <div>
+            <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+        </div>
+    </div>
+    <nav>
+        <ul class="menu-aside">
+            <li class="menu-item active">
+                <a class="menu-link" href="/adminDash"> <i class="icon material-icons md-home"></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li class="menu-item has-submenu">
+                <a class="menu-link" href="page-products-list.html"> <i class="icon material-icons md-shopping_bag"></i>
+                    <span class="text">Products</span>
+                </a>
+                <div class="submenu">
+                    <a href="/adminAddProduct">Add products</a>
+                    <a id="search-link" href="/admin/products">Product Edit and Delete</a>
+
+                 
+                </div>
+                
+            </li>
+            <li class="menu-item has-submenu">
+                <a class="menu-link" href="page-orders-1.html"> <i class="icon material-icons md-shopping_cart"></i>
+                    <span class="text">Orders</span>
+                </a>
+                <div class="submenu">
+                    <a href="/ordersadmin">Order Manage</a>
+                    
+<a href="/ordersadmin/returnOrders">Return Request</a>
+                </div>
+            </li>
+            <li class="menu-item has-submenu">
+                <a class="menu-link" href="/admin/userManager"> <i class="icon material-icons md-store"></i>
+                    <span class="text">Users</span>
+                </a>
+                <div class="submenu">
+                    <a href="/admin/userManager">Block/UnBlock Users</a>
+                   
+                </div>
+            </li>
+            <li class="menu-item has-submenu">
+                <a class="menu-link" href="/admin/listCategory"> <i class="icon material-icons md-add_box"></i>
+                    <span class="text">Categories</span>
+                </a>
+                <div class="submenu">
+                    <a href="/category">Manage Categories</a>
+                   
+                </div>
+            </li>
+            <li class="menu-item has-submenu">
+                <a class="menu-link" href="page-transactions-1.html"> <i class="icon material-icons md-monetization_on"></i>
+                    <span class="text">Coupons</span>
+                </a>
+                <div class="submenu">
+                    <a href="/admin/create-coupon">Generate a Coupon</a>
+                    <a href="/admin/coupon-list">Generated  Coupons</a>
+                    <a href="/admin/coupons/edit">Edit  Coupons</a>
+                   
+
+                    
+                </div>
+            </li>
+            <li class="menu-item has-submenu">
+                <a class="menu-link" href="#"> <i class="icon material-icons md-person"></i>
+                    <span class="text">Banner Manager</span>
+                </a>
+                <div class="submenu">
+                    <a href="/add-banner">Add Banner</a>
+                    <a href="/manage-banners">Banners Listing</a>
+                  
+                </div>
+            </li>
+            <li class="menu-item has-submenu">
+              <a class="menu-link" href="#"> <i class="icon material-icons md-person"></i>
+                  <span class="text">Offers</span>
+              </a>
+              <div class="submenu">
+                  <a href="/offer-form">Product Offer</a>
+                  <a href="/manage-banners">Category Offer</a>
+                
+              </div>
+          </li>
+           
+            <li class="menu-item">
+                <a class="menu-link" href="/category-offer"> <i class="icon material-icons md-stars"></i>
+                    <span class="text">Category Offer</span> </a>
+            </li>
+         
+        </ul>
+        <hr>
+        <ul class="menu-aside">
+            <li class="menu-item has-submenu">
+                <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
+                    <span class="text">Settings</span>
+                </a>
+                <div class="submenu">
+                    <a href="page-settings-1.html">Setting sample 1</a>
+                    <a href="page-settings-2.html">Setting sample 2</a>
+                </div>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link" href="/logoutAdmin"><svg xmlns="http://www.w3.org/2000/svg" fill="grey" height="1.6em" viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M208 96a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM123.7 200.5c1-.4 1.9-.8 2.9-1.2l-16.9 63.5c-5.6 21.1-.1 43.6 14.7 59.7l70.7 77.1 22 88.1c4.3 17.1 21.7 27.6 38.8 23.3s27.6-21.7 23.3-38.8l-23-92.1c-1.9-7.8-5.8-14.9-11.2-20.8l-49.5-54 19.3-65.5 9.6 23c4.4 10.6 12.5 19.3 22.8 24.5l26.7 13.3c15.8 7.9 35 1.5 42.9-14.3s1.5-35-14.3-42.9L281 232.7l-15.3-36.8C248.5 154.8 208.3 128 163.7 128c-22.8 0-45.3 4.8-66.1 14l-8 3.5c-32.9 14.6-58.1 42.4-69.4 76.5l-2.6 7.8c-5.6 16.8 3.5 34.9 20.2 40.5s34.9-3.5 40.5-20.2l2.6-7.8c5.7-17.1 18.3-30.9 34.7-38.2l8-3.5zm-30 135.1L68.7 398 9.4 457.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L116.3 441c4.6-4.6 8.2-10.1 10.6-16.1l14.5-36.2-40.7-44.4c-2.5-2.7-4.8-5.6-7-8.6zM550.6 153.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L530.7 224H384c-17.7 0-32 14.3-32 32s14.3 32 32 32H530.7l-25.4 25.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l80-80c12.5-12.5 12.5-32.8 0-45.3l-80-80z"/></svg>&nbsp;
+                    <span class="text"> Logout</span>
+                </a>
+            </li>
+        </ul>
+        <br>
+        <br>
+    </nav>
+</aside>
+
+    <style>
+     
+
+        form {
+            float: right;
+            width: 100%px;
+            padding: 400px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f8f8f8;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <form style="margin-top: 50px;" action="/category-offer" method="post" onsubmit="return validateForm()">
+        <!-- Dropdown for selecting a category by name -->
+        <label for="categoryId">Select Category:</label>
+        <select id="categoryIdSelect" name="categoryId" onchange="updateCategoryIdInput(this)" required>
+            <% const listedCategories = categories.filter(category => category.listed); %>
+            <% if (listedCategories.length > 0) { %>
+                <% listedCategories.forEach((category) => { %>
+                    <option value="<%= category._id %>"> <%= category.name %></option>
+                <% }); %>
+            <% } else { %>
+                <option value="" disabled>No categories found</option>
+            <% } %>
+        </select>
+        
+        
+        <!-- Other input fields for the category offer details -->
+        <input type="text" id="categoryId" value="<%= categories[0]._id %>" hidden>
+        <label for="discountPercentage">Discount Percentage:</label>
+        <input type="number" id="discount" name="discountPercentage" required>
+        <span class="error-message" id="discount-error"></span>
+
+        <button type="submit">Create Category Offer</button>
+    </form>
+
+    <script>
+        function validateForm() {
+            const discountInput = document.getElementById('discount');
+            const discountError = document.getElementById('discount-error');
+
+            const discountValue = parseFloat(discountInput.value);
+
+            if (isNaN(discountValue) || discountValue < 0 || discountValue > 100) {
+                discountError.textContent = 'Percentage must be between 0 and 100';
+                return false;
+            } else {
+                discountError.textContent = '';
+                return true;
+            }
+        }
+    </script>
+</body>
+</html>
+
+ 
+<script src="js2/vendors/jquery-3.6.0.min.js"></script>
+<script src="js2/vendors/bootstrap.bundle.min.js"></script>
+<script src="js2/vendors/select2.min.js"></script>
+<script src="js2/vendors/perfect-scrollbar.js"></script>
+<script src="js2/vendors/jquery.fullscreen.min.js"></script>
+<script src="js2/vendors/chart.js"></script>
+<!-- Main Script -->
+<script src="js2/main.js" type="text/javascript"></script>
+<script src="js2/custom-chart.js" type="text/javascript"></script>

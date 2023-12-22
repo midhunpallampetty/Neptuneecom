@@ -312,11 +312,14 @@
     <input type="text" style="display:none;" id="usernameInput" placeholder="Username">
   
    <!-- Assuming this is part of your HTML or template file -->
-<button class="btn btn-primary" onclick="generateReferralLink()">Generate Referral Link</button>
+<button class="btn btn-primary" id="generateLinkBtn" onclick="generateReferralLink()">Generate Referral Link</button>
 
     <p id="referralLink"></p>
   
     <script>
+      
+
+  
       async function generateReferralLink() {
         const username = document.getElementById('usernameInput').value;
   
@@ -325,6 +328,7 @@
           const data = await response.json();
   
           if (response.ok) {
+            
             document.getElementById('referralLink').innerHTML = `Your referral link: ${data.inviteLink}`;
           } else {
             document.getElementById('referralLink').innerHTML = `Error: ${data.error}`;
