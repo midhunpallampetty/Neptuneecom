@@ -250,10 +250,12 @@ exports.getUserOrderHistory = async (req, res) => {
 exports.createOrder = async (req, res) => {
   try {
 
+const test =req.body.totalPriceOffer;
 
     const { FullName, email, Phone, Pincode } = req.session.user;
     const selectedAddressSet = req.body.selectedAddressSet;
-
+const body=req.body;
+console.log(body,'body is found here');
     let user = req.session.user;
     console.log(user, 'we need this ');
     let Cartdetail=await Cart.findOne({user:user._id});

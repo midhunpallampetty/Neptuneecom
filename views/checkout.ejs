@@ -848,7 +848,21 @@ function addAdditionalAddress() {
 </tr>
                                         <tr>
                                             <th>SubTotal</th>
-                                            <td class="product-subtotal" colspan="2">₹<%= totalPrice %></td>
+                                            <td class="product-subtotal" colspan="2">               <% let total = 0; %>
+
+                                                <% cartItems.forEach(item => { %>
+                                                    <% 
+                                                    const originalPrice = parseFloat(item.product.price); 
+                                                    const discountPercentage = parseFloat(item.product.offer.discountPercentage);
+                                                    const discountedPrice = originalPrice - (originalPrice * discountPercentage / 100);
+                                                  %>
+                                                  <% const itemTotal = discountedPrice * item.quantity; %>
+                                                  <% total += itemTotal; %>
+                                                  <!-- Render the cart item here, and you can also display itemTotal -->
+                                                <% }); %>
+                                                
+                                                <!-- Display the total price based on quantity -->
+                                                Total Price:  ₹<%= total %></td>
                                         </tr>
                                         <tr>
                                             <th>Shipping</th>
@@ -856,7 +870,7 @@ function addAdditionalAddress() {
                                         </tr>
                                         <tr>
                                             <th>Total</th>
-                                            <td colspan="2" class="product-subtotal"><span class="font-xl text-brand fw-900" id="totalPrice">₹<%= totalPrice %></span></td>
+                                            <td colspan="2" class="product-subtotal"><span class="font-xl text-brand fw-900" id="totalPrice">₹<%= total %></span></td>
                                         </tr>
                                     </tbody>
                                 </table>

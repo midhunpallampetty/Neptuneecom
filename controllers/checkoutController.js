@@ -3,16 +3,19 @@ const Cart=require('../models/Cart');
 const Coupon=require('../models/Coupon');
 const User=require('../models/userModel');
 // Define the calculateTotalPrice function
-function calculateTotalPrice(cartItems) {
-  let totalPrice = 0;
+const calculateTotalPrice = (cartItems) => {
+  let total = 0;
 
-  // Iterate through the cart items and calculate the total price
-  for (const cartItem of cartItems) {
-    totalPrice += cartItem.quantity * cartItem.product.price;
-  }
+  cartItems.forEach((item) => {
+    const originalPrice = parseFloat(item.product.price);
+    const discountPercentage = parseFloat(item.product.offer.discountPercentage);
+    const discountedPrice = originalPrice - (originalPrice * discountPercentage / 100);
+    const itemTotal = discountedPrice * item.quantity;
+    total += itemTotal;
+  });
 
-  return totalPrice;
-}
+  return total;
+};
 
 
 
@@ -74,7 +77,7 @@ console.log('All items in the cart have sufficient stock.');
     const totalPrice = calculateTotalPrice(cartItems.items);
     req.session.totalPrice = totalPrice;
     req.session.cartItems = cartItems.items;
-    
+    console.log(req.session.totalPrice ,'total priceeeeeeeeeeeeeeeeeeeeee');
 console.log(user,'yfuhgewyfgewyftgewyfgtew');
     res.render('checkout', {
       user,additionalAddresses:user.additionalAddresses,foundUser,

@@ -19,7 +19,7 @@ const cartController = {
 
       // Find the product
       const product = await Product.findById(productId);
-
+console.log(product,'vdgscvsdhgvsdghvsdgfd');
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
       }

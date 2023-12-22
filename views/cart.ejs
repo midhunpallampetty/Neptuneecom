@@ -563,7 +563,14 @@
                                             <p class="font-xs"><%= item.product.description %>
                                             </p>
                                         </td>
-                                        <td class="price" data-title="Price"><span> ₹<%= item.product.price %></span></td>
+                                        <td class="price" data-title="Price"><span> 
+                                            <% 
+                                              const originalPrice = parseFloat(item.product.price); 
+                                              const discountPercentage = parseFloat(item.product.offer.discountPercentage);
+                                              let discountedPrice = originalPrice - (originalPrice * discountPercentage / 100);
+                                            %>
+                                         ₹<%= discountedPrice.toFixed(2) %>
+                                          </span></td>
                                         <td class="text-center" data-title="Stock">
                                             <% if (item.product.stock < 1) { %>
                                                 <span class="text-danger">Out of Stock</span>
@@ -591,7 +598,7 @@
                         <td class="text-right" data-title="Cart" id="cartTotal">
                             <span>
                                 <% let total = 0; %>
-                                <% total += item.product.price * item.quantity; %>
+                                <% total += discountedPrice * item.quantity; %>
                                 <!-- Render the cart item here, along with its individual price -->
                                 <!-- Display the total price -->
                                 ₹<%= total %>
@@ -643,7 +650,12 @@
                                                         <% let total = 0; %>
 
                                                         <% cart.items.forEach(item => { %>
-                                                          <% const itemTotal = item.product.price * item.quantity; %>
+                                                            <% 
+                                                            const originalPrice = parseFloat(item.product.price); 
+                                                            const discountPercentage = parseFloat(item.product.offer.discountPercentage);
+                                                            const discountedPrice = originalPrice - (originalPrice * discountPercentage / 100);
+                                                          %>
+                                                          <% const itemTotal = discountedPrice * item.quantity; %>
                                                           <% total += itemTotal; %>
                                                           <!-- Render the cart item here, and you can also display itemTotal -->
                                                         <% }); %>
