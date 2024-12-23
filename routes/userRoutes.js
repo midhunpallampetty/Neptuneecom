@@ -26,7 +26,7 @@ const accountSid = process.env.ACCOUNTSID;
 const authToken = process.env.AUTHTOKEN;
 const client = twilio(accountSid, authToken);
 const twilioPhoneNumber = "+12053950807";
-
+const { sendOtp, verifyOtp ,registerUser} = require("../controllers/otpController");
 // Function to send OTP via Twilio
 function sendOTP(phoneNumber, otp) {
   return client.messages.create({
@@ -35,24 +35,28 @@ function sendOTP(phoneNumber, otp) {
     to: phoneNumber,
   });
 }
+router.post("/send-otp", sendOtp);
 
+// Route to verify OTP
+router.post("/verify-otps", verifyOtp);
+router.post("/register-user", registerUser);
 // Route for sending OTP
-router.post("/send-otp", async (req, res) => {
-  console.log(req.body);
-  const phoneNumber = req.body.num; // The recipient's phone number
-  const otp = generateOTP(); // Implement your OTP generation logic
-  req.session.otp = otp;
-  try {
-    const message = await sendOTP(phoneNumber, otp);
-    const successMessage = "Otp successfully!";
-    res.status(200).json({ status: true });
-    // Respond with a success message
-  } catch (error) {
-    console.error("Error sending OTP:", error);
-    const errorMessage = "Error Sending OTP!";
-    res.status(400).json({ status: true });
-  }
-});
+// router.post("/send-otp", async (req, res) => {
+//   console.log(req.body);
+//   const phoneNumber = req.body.num; // The recipient's phone number
+//   const otp = generateOTP(); // Implement your OTP generation logic
+//   req.session.otp = otp;
+//   try {
+//     const message = await sendOTP(phoneNumber, otp);
+//     const successMessage = "Otp successfully!";
+//     res.status(200).json({ status: true });
+//     // Respond with a success message
+//   } catch (error) {
+//     console.error("Error sending OTP:", error);
+//     const errorMessage = "Error Sending OTP!";
+//     res.status(400).json({ status: true });
+//   }
+// });
 router.post("/resend-otp", async (req, res) => {
   console.log(req.body);
   const phoneNumber = req.body.num; // The recipient's phone number
@@ -80,30 +84,7 @@ function verifyOTP(storedOTP, enteredOTP) {
   return storedOTP === enteredOTP;
 }
 
-router.post("/register", async (req, res) => {
- 
-  const { email, password } = req.body;
 
-  try {
-   
-    const newUser = new User({ email, password, wallet: 0 });
-
-   
-    await newUser.save();
-
-    console.log("User registered successfully");
-    const successMessage = "User Registration Success!";
-    res.send(`
-      <script>
-        alert('${successMessage}');
-        window.location.href = '/userLogin'; // Redirect to the desired page
-      </script>
-    `);
-  } catch (error) {
-    console.error("Error registering user:", error);
-    res.status(500).json({ message: "Error registering user" });
-  }
-});
 
 // Implement your OTP generation logic here
 function generateOTP() {
