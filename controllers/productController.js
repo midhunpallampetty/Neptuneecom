@@ -16,6 +16,8 @@ const storage = multer.diskStorage({
     },
   });
   const addProduct = async (req, res) => {
+    console.log(req.body,'ddas');
+    
     try {
       const { name,brand, description, price, category, material, weight, color, listprice, stock } = req.body;
   
