@@ -14,17 +14,20 @@ const multer = require("multer");
 const adminAuth = require('../middleware/adminAuth'); // Example adminAuth middleware file
 
 const Order=require('../models/order');
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    console.log("zzzzzzzzzzzzzzzzzzzzzzzzzz");
-    cb(null, "public/uploads/"); // Define the directory for storing uploaded files
+    console.log("Uploading file...");
+    cb(null, "public/uploads/"); // Directory for storing uploaded files
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname); // Define the file name for the uploaded file
+    cb(null, Date.now() + "-" + file.originalname); // Define the file name
   },
 });
-
-const upload = multer({ storage }); // Create the multer upload middleware
+const upload = multer({
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB file size limit
+});
 
 // Configure express-session middleware
 
