@@ -105,7 +105,7 @@
                         </p>
                       </li>
                       <li class="list-inline-item items-list text-end" style="margin-right: 8px;">
-                        <p style="margin-right: -8px;">Delivered</p>
+                        <p style="margin-right: -8px;"><%= detailsOfOrder.status %></p>
                       </li>
                     </ul>
   
@@ -115,9 +115,16 @@
               </div>
               <form action="/download-invoice?orderNo=<%= detailsOfOrder.orderId %>" method="post" target="_blank">
     
-                <button type="submit" style="background-color: #2ed8b6; border: none; color: white; height: 40px; border-radius: 10px; font-weight: 6000;">
+                <button 
+                type="submit" 
+                style="border: none; color: white; height: 40px; border-radius: 10px; font-weight: 600; 
+                background-color: <%= detailsOfOrder.status === 'delivered' ? '#2ed8b6' : 'grey' %>;"
+                <%= detailsOfOrder.status === 'delivered' ? '' : 'disabled' %>
+            >
                 Invoice
-                </button>
+            </button>
+            
+            
                 
             </form>
               <p class="mt-4 pt-2 mb-0">Want any help? <a href="#!" style="color: #f37a27;">Please contact
