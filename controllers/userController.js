@@ -38,7 +38,7 @@ router.use(flash());
 
 function generateInviteLink(username) {
   const uniqueId = Math.random().toString(36).substr(2, 8);
-  return `http://localhost:4000/userSignup/${uniqueId}?ref=${username}`;
+  return `https://perfect-pitch-api.site/userSignup/${uniqueId}?ref=${username}`;
 }
 const userInviteLinks = {};
 
@@ -75,7 +75,7 @@ generateInviteLinkController: async (req, res) => {
     );
 
     // Redirect to the userSignup page with the invite link as a query parameter
-    const redirectUrl = `http://localhost:4000/userSignup?inviteLink=${encodeURIComponent(inviteLink)}`;
+    const redirectUrl = `https://perfect-pitch-api.site/userSignup?inviteLink=${encodeURIComponent(inviteLink)}`;
     res.redirect(redirectUrl);
   } catch (error) {
     console.error('Error generating or saving referral link:', error);
@@ -550,7 +550,7 @@ console.log(refUser,'gvfrdfvgbjhfvgbsdjcvbnsdfvsdhvgbsdfcgjhfgvydvhcsdjkfbgedjhf
       }
   
       // Assuming your User model has a 'referralId' field
-      const referralLink = `http://localhost:4000/copy/${user.referralId}`;
+      const referralLink = `https://perfect-pitch-api.site/copy/${user.referralId}`;
   console.log(referralLink,'referal link :');
       res.render("profile", { user, referralLink });
     } catch (error) {
