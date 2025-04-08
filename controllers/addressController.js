@@ -1,5 +1,3 @@
-// addressController.js
-
 const User = require("../models/userModel");
 async function addAdditionalAddress(req, res) {
   const { userId } = req.session;

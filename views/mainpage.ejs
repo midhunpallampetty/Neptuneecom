@@ -674,19 +674,28 @@ rel="stylesheet"
                                                             <div class="d-flex justify-content-between">
                                                               <p class="small"><a href="#!" class="text-muted">Music</a></p>
                                                             </div>
-                                                            <div class="d-flex justify-content-between mb-3">
-                                                              <h5 class="mb-0"><%= product.name %></h5>
-                                                              <div style="color: red;" class="price mb-2"><del>₹<%= product.price %></del>&nbsp;&nbsp;<span style="color: green;"><%= product.offer.discountPercentage %> %</span></div> 
-                                                              <h6 style="font-size: 0.6rem; font-weight: 800;">
-                                                                <% 
-                                                                  const originalPrice = parseFloat(product.price); 
-                                                                  const discountPercentage = parseFloat(product.offer.discountPercentage);
-                                                                  const discountedPrice = originalPrice - (originalPrice * discountPercentage / 100);
-                                                                %>
-                                                             ₹ <%= discountedPrice.toFixed(2) %>
-                                                              </h6>
-                                                            
-                                                            </div>
+                                                            <div class="d-flex flex-column mb-4 p-3 border rounded shadow-sm bg-light">
+                                                                <h5 class="mb-2 text-dark fw-semibold"><%= product.name %></h5>
+                                                              
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                  <!-- Price Section -->
+                                                                  <div>
+                                                                    <small class="text-muted me-2" style="text-decoration: line-through;">₹<%= product.price %></small>
+                                                                    <span class="badge bg-success text-light"><%= product.offer.discountPercentage %>% OFF</span>
+                                                                  </div>
+                                                              
+                                                                  <!-- Discounted Price -->
+                                                                  <div>
+                                                                    <% 
+                                                                      const originalPrice = parseFloat(product.price); 
+                                                                      const discountPercentage = parseFloat(product.offer.discountPercentage);
+                                                                      const discountedPrice = originalPrice - (originalPrice * discountPercentage / 100);
+                                                                    %>
+                                                                    <h6 class="text-primary fw-bold mb-0">₹ <%= discountedPrice.toFixed(2) %></h6>
+                                                                  </div>
+                                                                </div>
+                                                              </div>
+                                                              
                                                             <div class="d-flex justify-content-between mb-2">
                                                               <p class="text-muted mb-0">Available: <span class="fw-bold"><%= product.stock %></span></p>
                                                               <div class="ms-auto text-warning">

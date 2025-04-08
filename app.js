@@ -53,16 +53,15 @@ const connectionString = process.env.MONGOCONNECTIONSTRING;
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());
-mongoose.connect(connectionString, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(connectionString).then(()=>{
+console.log('MongoDB Database Connected');
 
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "MongoDb connection Error"));
-db.once("open", () => {
-  console.log("Connected to MongoDB");
-});
+}).catch((err)=>{
+  console.log(err);
+  
+})
+
+
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/user", userRoutes);

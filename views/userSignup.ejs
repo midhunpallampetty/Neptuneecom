@@ -2,111 +2,118 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>User Registration</title>
-  <link rel="icon" href="/imgs/logo.png" type="image/x-icon">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.7/dist/sweetalert2.min.css">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-
-    form {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      max-width: 400px;
-      width: 100%;
-    }
-
-    input,
-    button {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-    }
-
-    button {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    #countdownTimer {
-      color: red;
-      text-align: center;
-    }
-
-    .hidden {
-      display: none;
-    }
-  </style>
+  <link rel="icon" href="/imgs/logo.png" type="image/x-icon" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.7/dist/sweetalert2.min.css" />
 </head>
 
-<body>
-  <form action="#">
-    <h1>User Registration</h1>
-    <div id="otpEmail">
-      <input type="email" id="email" name="email" placeholder="Email Address" value="" class="form__input" />
-      <span id="emailError" style="color: red"></span>
-      <button type="button" onclick="sendEmailOtp()" class="btn">Send OTP</button>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen font-sans">
+  <form action="#" class="bg-white shadow-xl rounded-xl p-8 w-full max-w-md space-y-6">
+    <h1 class="text-2xl font-bold text-center text-gray-800">User Registration</h1>
+
+    <!-- Step 1: Email + Send OTP -->
+    <div id="emailSection" class="space-y-2">
+      <input type="email" id="email" placeholder="Enter your email address"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      <span id="emailError" class="text-red-500 text-sm"></span>
+      <button type="button" onclick="sendEmailOtp()"
+        class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+        Send OTP
+      </button>
     </div>
 
-    <div style="display: none" id="remainingDiv">
-      <p id="countdownTimer" style="color: red"></p>
-
-      <input type="text" name="otp" placeholder="Enter OTP" id="otp" class="form__input" value="" />
-      <span id="otpError" style="color: red"></span>
-      <button type="button" onclick="verifyEmailOtp()" class="btn">
+    <!-- Step 2: OTP Verification -->
+    <div id="otpSection" class="space-y-2 hidden">
+      <input type="text" id="otp" placeholder="Enter OTP"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      <span id="otpError" class="text-red-500 text-sm"></span>
+      <button type="button" onclick="verifyEmailOtp()"
+        class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition">
         Verify OTP
+      </button>
+      <p id="countdownTimer" class="text-center text-sm text-red-600"></p>
+      <button id="resendBtn" type="button"
+      onclick="resendOtp()"
+      class="w-full font-medium transition disabled:cursor-not-allowed 
+             disabled:text-gray-400 disabled:bg-gray-100 text-blue-600 hover:underline hidden">
+      Resend OTP
+    </button>
+    
+
+    </div>
+
+    <!-- Step 3: Final Signup -->
+    <div id="signupForm" class="space-y-2 hidden">
+      <input type="text" id="username" placeholder="Username"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      <span id="usernameError" class="text-red-500 text-sm"></span>
+
+      <input type="password" id="password" placeholder="Password"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      <span id="passwordError" class="text-red-500 text-sm"></span>
+
+      <button type="button" onclick="completeSignup()"
+        class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition">
+        Complete Signup
       </button>
     </div>
   </form>
 
-
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.7/dist/sweetalert2.all.min.js"></script>
   <script>
-    let countdownInterval;
+    let emailGlobal = "";
+    let countdown;
 
-    function validatePhoneNumber(number) {
-      if (!number || number.length < 10 || !/^\+?\d{10,}$/.test(number)) {
-        return "Enter a valid phone number with at least 10 digits.";
-      }
-      return null;
+    function showError(id, message) {
+      document.getElementById(id).textContent = message;
     }
 
-    function startCountdown(duration, timerId) {
-      const timerElement = document.getElementById(timerId);
-      clearInterval(countdownInterval);
-
-      countdownInterval = setInterval(() => {
-        if (duration <= 0) {
-          timerElement.textContent = "OTP expired. Please resend.";
-          clearInterval(countdownInterval);
-        } else {
-          timerElement.textContent = `OTP expires in ${duration} seconds`;
-          duration--;
-        }
-      }, 1000);
+    function clearError(id) {
+      document.getElementById(id).textContent = "";
     }
+
+    function validateEmail(email) {
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return regex.test(email);
+    }
+
+    function startCountdown(duration) {
+  let timeLeft = duration;
+  const timerEl = document.getElementById("countdownTimer");
+  const resendBtn = document.getElementById("resendBtn");
+
+  resendBtn.classList.remove("hidden");
+  resendBtn.disabled = true;
+  clearInterval(countdown);
+
+  countdown = setInterval(() => {
+    if (timeLeft <= 0) {
+      clearInterval(countdown);
+      timerEl.textContent = "OTP expired. You can now resend.";
+      resendBtn.disabled = false;
+    } else {
+      timerEl.textContent = `OTP expires in ${timeLeft} seconds`;
+      timeLeft--;
+    }
+  }, 1000);
+}
+
+
+async function resendOtp() {
+  const resendBtn = document.getElementById("resendBtn");
+  resendBtn.disabled = true;
+  document.getElementById("countdownTimer").textContent = "";
+  await sendEmailOtp(); // Automatically restarts countdown
+}
+
+
     async function sendEmailOtp() {
       const email = document.getElementById("email").value.trim();
+      emailGlobal = email;
+      clearError("emailError");
 
       if (!validateEmail(email)) {
         showError("emailError", "Please enter a valid email address.");
@@ -114,29 +121,35 @@
       }
 
       try {
-        const response = await fetch("/send-otp", {
+        const res = await fetch("/send-otp", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email }),
         });
 
-        if (response.ok) {
+        const data = await res.json();
+
+        if (res.ok) {
           await Swal.fire("Success", "OTP has been sent to your email!", "success");
-          document.getElementById("otpEmail").style.display = "none";
-          document.getElementById("remainingDiv").style.display = "block";
-          startCountdown(60, "countdownTimer");
+          document.getElementById("emailSection").classList.add("hidden");
+          document.getElementById("otpSection").classList.remove("hidden");
+          startCountdown(60);
         } else {
-          const error = await response.json();
-          await Swal.fire("Error", error.message || "Failed to send OTP", "error");
+          await Swal.fire("Error", data.message || "Failed to send OTP", "error");
         }
       } catch (err) {
         await Swal.fire("Error", "Network error. Please try again later.", "error");
       }
     }
 
+    async function resendOtp() {
+      clearInterval(countdown);
+      await sendEmailOtp();
+    }
+
     async function verifyEmailOtp() {
       const otp = document.getElementById("otp").value.trim();
-      console.log(otp, 'otdp');
+      clearError("otpError");
 
       if (!otp) {
         showError("otpError", "Please enter the OTP.");
@@ -144,60 +157,67 @@
       }
 
       try {
-        const response = await fetch("/verify-otps", {
+        const res = await fetch("/verify-otps", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ otp }),
         });
-        console.log('response');
 
-        if (response.ok) {
+        const data = await res.json();
+
+        if (res.ok) {
+          clearInterval(countdown);
           await Swal.fire("Success", "Email verified successfully!", "success");
+
+          document.getElementById("otpSection").classList.add("hidden");
+          document.getElementById("signupForm").classList.remove("hidden");
         } else {
-          const error = await response.json();
-          await Swal.fire("Error", error.message || "Invalid OTP", "error");
+          await Swal.fire("Error", data.message || "Invalid OTP", "error");
         }
       } catch (err) {
         await Swal.fire("Error", "Network error. Please try again later.", "error");
       }
     }
 
-    // Utility to validate email
-    function validateEmail(email) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(email);
-    }
+    async function completeSignup() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
 
-    // Countdown Timer Function
-    function startCountdown(duration, timerElementId) {
-      const timerElement = document.getElementById(timerElementId);
-      let timer = duration;
+      let hasError = false;
+      clearError("usernameError");
+      clearError("passwordError");
 
-      clearInterval(window.countdown);
-      window.countdown = setInterval(() => {
-        if (timer <= 0) {
-          timerElement.textContent = "OTP Expired";
-          clearInterval(window.countdown);
+      if (!username) {
+        showError("usernameError", "Username is required.");
+        hasError = true;
+      }
+
+      if (!password || password.length < 6) {
+        showError("passwordError", "Password must be at least 6 characters.");
+        hasError = true;
+      }
+
+      if (hasError) return;
+
+      try {
+        const res = await fetch("/register-user", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password, email: emailGlobal }),
+        });
+
+        const data = await res.json();
+        console.log(res, 'data response');
+
+        if (res.ok) {
+          await Swal.fire("Success", "Account created successfully!", "success");
+          window.location.href = "/mainpage";
         } else {
-          timerElement.textContent = `OTP Expires in ${timer} seconds`;
-          timer--;
+          await Swal.fire("Error", data.message || "Failed to register user", "error");
         }
-      }, 1000);
-    }
-
-    // Utility to display error messages
-    function showError(fieldId, errorMessage) {
-      const errorSpan = document.getElementById(fieldId);
-      errorSpan.textContent = errorMessage;
-    }
-
-
-
-
-
-    async function resendOtp() {
-      clearInterval(countdownInterval);
-      await sendEmailOtp();
+      } catch (err) {
+        await Swal.fire("Error", "Network error. Please try again later.", "error");
+      }
     }
   </script>
 </body>

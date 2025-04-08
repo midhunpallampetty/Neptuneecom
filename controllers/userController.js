@@ -187,6 +187,7 @@ generateInviteLinkController: async (req, res) => {
   
   renderUserSignup: (req, res) => {
     const payload = req.query;
+   console.log(payload,'payload');
    
    req.session.payload=payload.ref;
 
@@ -194,7 +195,45 @@ generateInviteLinkController: async (req, res) => {
 console.log( payload.ref,'payload of the link');
     res.render("userSignup",{payload}); // Render the 'userSignup.ejs' view
   },
- 
+   userLogin : async (req, res) => {
+    const { email, password } = req.body;
+  
+    try {
+      const user = await User.findOne({ email });
+  
+      if (!user) {
+        return res.render("userLogin", { error: "User not found." });
+      }
+  
+      if (user.isBlocked) {
+        return res.render("userLogin", { error: "Account is blocked." });
+      }
+  
+      if (user.isadmin) {
+        return res.render("userLogin", { error: "Admin login not allowed." });
+      }
+  
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (passwordMatch) {
+        req.session.user = user;
+        req.session.userId = user._id;
+  
+        console.log(user, "Authentication successful");
+        console.log(req.session.user._id, "User ID stored in session");
+  
+        // You already fetch products here, but you're not sending them to the view.
+        // You can choose to pass them if you want:
+        // const products = await Product.find();
+  
+        return res.redirect("/mainpage");
+      } else {
+        return res.render("userLogin", { error: "Incorrect password." });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Login failed.");
+    }
+  },
   renderOrderDetail : async (req, res) => {
     // Add your logic here, such as fetching order details from the database
   const order=req.query.orderid;

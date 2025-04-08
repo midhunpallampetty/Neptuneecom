@@ -40,111 +40,13 @@ router.post("/send-otp", sendOtp);
 // Route to verify OTP
 router.post("/verify-otps", verifyOtp);
 router.post("/register-user", registerUser);
-// Route for sending OTP
-// router.post("/send-otp", async (req, res) => {
-//   console.log(req.body);
-//   const phoneNumber = req.body.num; // The recipient's phone number
-//   const otp = generateOTP(); // Implement your OTP generation logic
-//   req.session.otp = otp;
-//   try {
-//     const message = await sendOTP(phoneNumber, otp);
-//     const successMessage = "Otp successfully!";
-//     res.status(200).json({ status: true });
-//     // Respond with a success message
-//   } catch (error) {
-//     console.error("Error sending OTP:", error);
-//     const errorMessage = "Error Sending OTP!";
-//     res.status(400).json({ status: true });
-//   }
-// });
-router.post("/resend-otp", async (req, res) => {
-  console.log(req.body);
-  const phoneNumber = req.body.num; // The recipient's phone number
-  const otp = generateOTP(); // Implement your OTP generation logic
-  req.session.otp = otp; // Store the new OTP in the session
-  try {
-    const message = await sendOTP(phoneNumber, otp); // Send the new OTP
-    const successMessage = "OTP successfully resent!";
-    res.status(200).json({ status: true });
-    // Respond with a success message
-  } catch (error) {
-    console.error("Error resending OTP:", error);
-    const errorMessage = "Error Resending OTP!";
-    res.send(`
-      <script>
-        alert('${errorMessage}');
-        window.location.href = '/userSignup'; // Redirect to the desired page
-      </script>
-    `);
-  }
-});
-
-
-function verifyOTP(storedOTP, enteredOTP) {
-  return storedOTP === enteredOTP;
-}
-
-
-
-// Implement your OTP generation logic here
-function generateOTP() {
-  const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  console.log("Generated OTP:", otp);
-  return otp;
-}
-
-// Display all products
 router.use("/checkout",checkoutRoutes);
 router.get("/mainpage", blockedCheck.checkBlockedStatus,userController.getProducts); //thisone
 router.get('/registration'),userController.registrationUser;
-router.post("/verify-otp", (req, res) => {
-  const userEnteredOtp = req.body.otp;
-  const storedOtp = req.session.otp;
-  if (userEnteredOtp === storedOtp) {
-    res.status(200).json({ status: true });
-  } else {
-    res.status(201).json({ status: true });
-  }
-});
-
 router.get("/userSignup/:payload?", userController.renderUserSignup);
 router.get('/generate-invite', userController.generateInviteLinkController);
-router.post("/userSignup", userController.handleUserSignup);
 
-router.post("/userSignup", async (req, res) => {
-  try {
-    const { username, email, password } = req.body;
-    console.log(req.body);
-    
-    const existingUser = await User.findOne({ email });
 
-    if (existingUser) {
-      
-      const errorMessage = "User With This Email already reggitered!";
-      res.send(`
-            <script>
-              alert('${errorMessage}');
-              window.location.href = '/userSignup'; // Redirect to the desired page
-            </script>
-          `);
-    }
-
-    
-    const user = await User.create({ username, email, password });
-
-    
-    const successMessage = "User registered successfully!";
-    res.send(`
-      <script>
-        alert('${successMessage}');
-        window.location.href = '/userLogin'; // Redirect to the desired page
-      </script>
-    `);
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ success: false, error: error.message });
-  }
-});
 
 router.use(flash());
 
@@ -185,46 +87,7 @@ router.get("/userLogin", (req, res) => {
 });
 
 // Handle User Login
-router.post("/userLogin", async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const user = await User.findOne({ email });
 
-    if (!user) {
-      return res.render("userLogin", { error: "User not found." });
-    }
-
-    // Check if the user is blocked
-    if (user.isBlocked) {
-      return res.render("userLogin", { error: "Account is blocked." });
-    }
-
-    // Check if the user has isadmin set to true
-    if (user.isadmin) {
-      return res.render("userLogin", { error: "Admin login not allowed." });
-    }
-
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    if (passwordMatch) {
-      // Store the authenticated user in the session
-      req.session.user = user;
-      req.session.userId = user._id;
-
-      console.log(user, "Authentication successful");
-      console.log(req.session.user._id, "User ID stored in session");
-
-      let products = await Product.find();
-
-      // Redirect to mainpage with the user data
-      return res.redirect("/mainpage");
-    } else {
-      return res.render("userLogin", { error: "Incorrect password." });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Login failed.");
-  }
-});
 
 // Add a new route for blocking/unblocking users
 router.post("/blockUser/:userId", async (req, res) => {
@@ -275,7 +138,7 @@ router.get("/logout", (req, res) => {
   });
 });
 
-
+router.post("/userLogin", userController.userLogin);
 router.get("/userLogin", (req, res) => {
   res.render("userLogin");
 });

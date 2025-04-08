@@ -45,35 +45,36 @@ addToWishlist : async (req, res) => {
     try {
       const user = req.session.user;
   
-      // Check if the user is authenticated
+      // If user is not authenticated
       if (!user) {
-        res.render('404'); // Redirect to the login page or any other appropriate page
-        return;
+        return res.render('404'); 
       }
   
-      // Find the user's wishlist
+      // Try to find the wishlist
       let wishlist = await Wishlist.findOne({ user }).populate('items.product');
   
+      // If no wishlist found, render page with empty wishlist
       if (!wishlist) {
-        res.redirect('/wishlist'); // Redirect to the main page if the wishlist doesn't exist
-        return;
+        return res.render('wishlist', { wishlist: null, isWishlistEmpty: true });
       }
   
-      // Remove items with a null product (if any)
+      // Remove invalid product references
       wishlist.items = wishlist.items.filter(item => item.product !== null);
   
-      // Save the updated wishlist (if needed)
-      await wishlist.save(); // Save the document instance, not the Wishlist model
+      // Save the cleaned-up wishlist
+      await wishlist.save();
   
-      // Check if the wishlist is empty
+      // Determine if wishlist has any items
       const isWishlistEmpty = wishlist.items.length === 0;
   
+      // Always render the wishlist page, even if it's empty
       res.render('wishlist', { wishlist, isWishlistEmpty });
     } catch (err) {
       console.error(err);
-      res.render('404'); // Render an error page if there's an issue
+      res.render('404');
     }
   },
+  
   
   
   

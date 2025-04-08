@@ -2,17 +2,23 @@
 
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcryptjs");
-const User = require("../models/userModel"); // Replace with the correct path to your User model
-// Configure Nodemailer transporter
+const User = require("../models/userModel");
+
 const transporter = nodemailer.createTransport({
-  service: "gmail", // Use your email service (e.g., Gmail, Outlook)
+  service: "gmail",
   auth: {
-    user: "midhunpallampetty@gmail.com", // Replace with your email
-    pass: "acjr jvev anap xhag", // Replace with your email app password
+    user: process.env.NODEMAILER_USER,
+    pass: process.env.NODEMAILER_PASSWORD,
   },
 });
-let checkOtp=0;
-// Function to send OTP via email
+
+// In-memory store for OTP and timestamp (will reset on server restart, which is fine for dev)
+let otpStore = {
+  otp: null,
+  generatedAt: null,
+};
+
+// Function to send OTP
 const sendOtp = async (req, res) => {
   const { email } = req.body;
 
@@ -20,16 +26,29 @@ const sendOtp = async (req, res) => {
     return res.status(400).json({ message: "Invalid email address." });
   }
 
-  // Generate a 6-digit OTP
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  checkOtp=otp;
+  otpStore = {
+    otp,
+    generatedAt: Date.now(), // store timestamp in ms
+  };
+
   try {
-    // Send OTP via email
     await transporter.sendMail({
-      from: '"Your App Name" <your-email@gmail.com>', // Sender address
-      to: email, // Recipient email
-      subject: "Your OTP Code", // Subject line
-      text: `Your OTP code is ${otp}. It is valid for 10 minutes.`, // Plain text body
+      from: '"Neptune Music" <midhunpallampetty@gmail.com>',
+      to: email,
+      subject: "Your OTP to Register User",
+      text: `
+      Hello,
+      
+      Your OTP code for Neptune Music is: ${otp}
+      This OTP is valid for only 1 minute.
+      
+      If you did not request this, please ignore this email.
+      
+      Thank you,
+      Neptune Music Team
+      `
+      
     });
 
     console.log(`OTP ${otp} sent to ${email}`);
@@ -42,71 +61,68 @@ const sendOtp = async (req, res) => {
 };
 
 // Function to verify OTP
-const verifyOtp = async (req, res) => {
+const verifyOtp = (req, res) => {
   const { otp } = req.body;
-console.log('user typed',otp);
+
+  console.log("User entered OTP:", otp);
+
+  const currentTime = Date.now();
+  const otpAge = (currentTime - otpStore.generatedAt) / 1000; // in seconds
 
   if (!otp || otp.length !== 6 || isNaN(otp)) {
-    return res.status(400).json({ message: "Invalid OTP." });
+    return res.status(400).json({ message: "Invalid OTP format." });
   }
 
-  // Simulate OTP verification logic
-  const isValid = otp === checkOtp; // Replace with your verification logic
+  if (!otpStore.otp) {
+    return res.status(400).json({ message: "OTP not found. Please request a new one." });
+  }
 
-  if (isValid) {
-    res.status(200).json({ message: "OTP verified successfully." });
+  if (otpAge > 60) {
+    otpStore = { otp: null, generatedAt: null }; // reset
+    return res.status(400).json({ message: "OTP expired. Please request a new one." });
+  }
+
+  if (otp === otpStore.otp) {
+    otpStore = { otp: null, generatedAt: null }; // reset after success
+    return res.status(200).json({ message: "OTP verified successfully." });
   } else {
-    res.status(400).json({ message: "Incorrect OTP." });
+    return res.status(400).json({ message: "Incorrect OTP." });
   }
 };
 
-
-// Controller to handle user registration
+// Register controller
 const registerUser = async (req, res) => {
-    const { email, password, username } = req.body;
-  
-    try {
-      // Check if required fields are provided
-      if (!email || !password || !username) {
-        return res.status(400).json({ message: "All fields are required." });
-      }
-  
-      // Check if user already exists
-      const existingUser = await User.findOne({ email });
-      if (existingUser) {
-        return res.status(400).json({ message: "Email is already in use." });
-      }
-  
-      // Hash the password
-      const saltRounds = 10;
-      const hashedPassword = await bcrypt.hash(password, saltRounds);
-  
-      // Create a new user instance with the hashed password
-      const newUser = new User({ 
-        email, 
-        password: hashedPassword, 
-        username, 
-        wallet: 0 
-      });
-  
-      // Save the user to the database
-      await newUser.save();
-  
-      console.log("User registered successfully");
-      const successMessage = "User Registration Success!";
-  
-      // Respond with a script for a client-side redirect
-      res.send(`
-        <script>
-          alert('${successMessage}');
-          window.location.href = '/userLogin'; // Redirect to the desired page
-        </script>
-      `);
-    } catch (error) {
-      console.error("Error registering user:", error);
-      res.status(500).json({ message: "Error registering user" });
+  const { email, password, username } = req.body;
+
+  try {
+    if (!email || !password || !username) {
+      return res.status(400).json({ message: "All fields are required." });
     }
-  };
 
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "Email is already in use." });
+    }
 
-module.exports = { sendOtp, verifyOtp,registerUser };
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new User({
+      email,
+      password: hashedPassword,
+      username,
+      wallet: 0,
+    });
+
+    await newUser.save();
+
+    req.session.user = newUser;
+    req.session.userId = newUser._id;
+
+    return res.status(200).json({ message: "User registered and logged in successfully." });
+  } catch (error) {
+    console.error("Error registering user:", error);
+    return res.status(500).json({ message: "Error registering user" });
+  }
+};
+
+module.exports = { sendOtp, verifyOtp, registerUser };

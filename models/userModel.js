@@ -10,8 +10,8 @@ const addressSchema = new mongoose.Schema({
 });
 
 const userSchema = new mongoose.Schema({
-  username: { type: String, required: true, unique: true },
-  email: { type: String, required: true, unique: true },
+  username: { type: String, required: true },
+  email: { type: String, required: true },
   password: { type: String, required: true },
   role: { type: String, default: 'user' },
   isBlocked: { type: Boolean, default: false },
@@ -25,7 +25,13 @@ const userSchema = new mongoose.Schema({
   PhoneNum: Number,
   companyName: String,
   Zipcode: String,
-  referralLink: { type: String, unique: true },
+  referralLink: {
+    type: String,
+    unique: true, // Ensure Mongoose creates the index
+    default: function() {
+      return `REF-${Math.random().toString(36).substr(2, 9)}`;
+    }
+  },
   couponsApplied: [
     {
       type: mongoose.Schema.Types.ObjectId,

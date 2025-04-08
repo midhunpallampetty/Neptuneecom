@@ -86,18 +86,17 @@ const blockUser = async (req, res) => {
     }
 
     user.isBlocked = true;
-
     await user.save();
 
     res.json({ message: "User blocked successfully." });
   } catch (error) {
-    console.error(error);
+    console.error("Error blocking user:", error);
     res.status(500).json({ message: "Error blocking user." });
   }
 };
-
 const unblockUser = async (req, res) => {
   const userId = req.params.userId;
+
   try {
     const user = await User.findById(userId);
 
@@ -106,12 +105,11 @@ const unblockUser = async (req, res) => {
     }
 
     user.isBlocked = false;
-
     await user.save();
 
     res.json({ message: "User unblocked successfully." });
   } catch (error) {
-    console.error(error);
+    console.error("Error unblocking user:", error);
     res.status(500).json({ message: "Error unblocking user." });
   }
 };
@@ -378,6 +376,82 @@ const createCategoryOffer = async (req, res) => {
     `);
   }
 };
+const adminLogin = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const admin = await Admin.findOne({ email });
+
+    if (!admin) {
+      req.flash("message", "Admin not found");
+      return res.redirect("/admin/adminLogin");
+    }
+
+    const passwordMatch = await bcrypt.compare(password, admin.password);
+
+    if (passwordMatch) {
+      req.session.admin = admin;
+      const orderDetail = await Order.find(); // If you're using it, otherwise remove it
+
+      return res.redirect("/adminDash");
+    } else {
+      req.flash("message", "Incorrect password");
+      return res.redirect("/admin/adminLogin");
+    }
+  } catch (error) {
+    console.error("Admin login error:", error);
+    res.status(500).send("Login failed.");
+  }
+};
+const getUserManagerPage = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const perPage = 8;
+    const searchQuery = req.query.search || '';
+    const searchRegex = new RegExp(searchQuery, 'i');
+    const skip = (page - 1) * perPage;
+
+    const users = await User.find({ username: searchRegex })
+      .skip(skip)
+      .limit(perPage);
+
+    const totalUsers = await User.countDocuments({ username: searchRegex });
+    const totalPages = Math.ceil(totalUsers / perPage);
+
+    res.render("userManager", {
+      users,
+      page,
+      totalPages,
+      searchQuery
+    });
+  } catch (error) {
+    console.error("Error in user manager route:", error);
+    res.status(500).send("An error occurred");
+  }
+};
+const adminSignup = async (req, res) => {
+  const { email, password, isAdmin } = req.body;
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newAdmin = new Admin({
+      email,
+      password: hashedPassword,
+      isAdmin: isAdmin === "on",
+    });
+
+    await newAdmin.save();
+
+    console.log("Admin signup successful");
+    res.render("adminLogin", {
+      success: "Admin signup successful. You can now login.",
+    });
+  } catch (error) {
+    console.error("Admin signup error:", error);
+    res.status(500).send("Signup failed.");
+  }
+};
 
 function escapeRegex(text) {
   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
@@ -391,8 +465,11 @@ module.exports = {
   renderAdminSignupPage,
   handleAdminSignup,
   renderUserManager,
+  getUserManagerPage,
   blockUser,
   unblockUser,
+  adminSignup,
+  adminLogin,
   adminDashReport,
   showOfferForm,
   createCategoryOffer,

@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 
@@ -46,13 +38,17 @@
                                         <img class="svgInject" alt="Evara" src="imgs/theme/icons/icon-heart.svg">
                                         
 <!-- Add this code before your loop through wishlist items -->
-<% const numberOfItems = wishlist.items.length; %>
-
-<span class="pro-count blue"> <%= numberOfItems %></span>
-<% wishlist.items.forEach(wishlistItem => { %>
-  <!-- Your existing code for displaying wishlist items goes here -->
-<% }); %>
-
+<% if (wishlist) { %>
+    <% const numberOfItems = wishlist.items.length; %>
+    <span class="pro-count blue"> <%= numberOfItems %></span>
+  
+    <% wishlist.items.forEach(wishlistItem => { %>
+      <!-- render item -->
+    <% }) %>
+  <% } else { %>
+    <p class="text-center text-gray-500">Your wishlist is empty.</p>
+  <% } %>
+  
 
                                     </a>
                                 </div>
