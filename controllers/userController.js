@@ -55,20 +55,13 @@ generateInviteLinkController: async (req, res) => {
   const userId = req.query.userid;
 
   try {
-    // Check if the user with the given userId already has a referral link
-    const existingUser = await User.findOne({ _id: userId });
-
-    if (existingUser && existingUser.referralLink) {
-      return res.status(400).json({ error: 'Referral link already generated for this user.' });
-    }
-
-    // Generate a unique invite link
+    // Always generate a new referral link
     const inviteLink = generateInviteLink(userId);
 
-    // Store the invite link in memory
+    // Store the invite link in memory (optional, remove if not needed)
     userInviteLinks[userId] = inviteLink;
 
-    // Save the generated referral link to the user's referralLink field in the database
+    // Update the user's referralLink in the database
     await User.updateOne(
       { _id: userId },
       { $set: { referralLink: inviteLink } }
